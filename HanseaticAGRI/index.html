@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanseatic AGRI - Digitale Transformation durch Automatisierung</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .edit-selection-button {
+            background: transparent;
+            color: #2F7D32;
+            border: 2px solid #2F7D32;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .edit-selection-button:hover {
+            background: #2F7D32;
+            color: white;
+        }
+
+        /* ROI Calculator */
+        .roi-calculator {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .roi-calculator h3 {
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .roi-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            align-items: center;
+        }
+
+        .roi-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Theme Selection Screen */
+        .theme-selection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
+        }
+
+        .theme-selection.hidden {
+            display: none;
+        }
+
+        .logo-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo-header img {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .company-name {
+            font-size: 3em;
+            color: #2F7D32;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .selection-title {
+            font-size: 2.2em;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .selection-subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 50px;
+        }
+
+        .theme-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .theme-card:hover {
+            border-color: #2F7D32;
+            box-shadow: 0 8px 24px rgba(47, 125, 50, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .theme-card.selected {
+            border-color: #2F7D32;
+            background: #f1f8f4;
+            box-shadow: 0 4px 20px rgba(47, 125, 50, 0.2);
+        }
+
+        .theme-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #2F7D32;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .theme-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .theme-title {
+            font-size: 1.4em;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .theme-description {
+            color: #666;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+
+        .start-button {
+            background: #2F7D32;
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .start-button:hover {
+            background: #1e5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(47, 125, 50, 0.3);
+        }
+
+        .start-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Slides */
+        .slide {
+            display: none;
+            padding: 60px 80px 120px 80px; /* More padding at bottom for navigation */
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .slide.available {
+            /* Slides that are available for viewing based on theme selection */
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* McKinsey Style Typography */
+        .slide-header {
+            border-bottom: 3px solid #2F7D32;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .slide-number {
+            color: #2F7D32;
+            font-size: 1em;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            color: #1a1a1a;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .slide-subtitle {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 300;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #1a1a1a;
+            font-weight: 400;
+            margin: 40px 0 20px 0;
+            padding-left: 20px;
+            border-left: 4px solid #2F7D32;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #2F7D32;
+            font-weight: 500;
+            margin: 30px 0 15px 0;
+        }
+
+        /* Content Elements */
+        .key-message {
+            background: #f8f9fa;
+            border-left: 5px solid #2F7D32;
+            padding: 25px 30px;
+            margin: 30px 0;
+            font-size: 1.2em;
+            color: #1a1a1a;
+        }
+
+        .insight-box {
+            background: #f1f8f4;
+            border: 1px solid #c8e6c9;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .metric-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            border-color: #2F7D32;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .metric-value {
+            font-size: 3em;
+            color: #2F7D32;
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 1.1em;
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Process Cards */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .process-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .process-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transform: translateY(-3px);
+        }
+
+        .process-header {
+            background: #2F7D32;
+            color: white;
+            padding: 20px 25px;
+            font-size: 1.3em;
+            font-weight: 500;
+        }
+
+        .process-content {
+            padding: 25px;
+        }
+
+        .process-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+
+        .process-item:last-child {
+            border-bottom: none;
+        }
+
+        .process-item::before {
+            content: "→";
+            color: #2F7D32;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Value Proposition */
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .value-card {
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .value-card h4 {
+            color: #2F7D32;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .value-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .value-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .value-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2F7D32;
+            font-weight: bold;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-marker {
+            width: 60px;
+            height: 60px;
+            background: #2F7D32;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            margin-left: 30px;
+            flex-grow: 1;
+        }
+
+        .timeline-title {
+            font-size: 1.4em;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .timeline-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 20px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: #2F7D32;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-button:hover {
+            background: #1e5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(47, 125, 50, 0.3);
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-indicator {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: #2F7D32;
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cta-title {
+            font-size: 2em;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .cta-subtitle {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: white;
+            color: #2F7D32;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .edit-selection-button {
+            background: transparent;
+            color: #2F7D32;
+            border: 2px solid #2F7D32;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .edit-selection-button:hover {
+            background: #2F7D32;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Versteckter Kontext für Claude API -->
+    <script type="text/template" id="hanseaticContext" style="display: none;">
+Alles klar. Ich recherchiere umfassend über die Hanseatic AGRI GmbH von Carl Graf zu Eulenburg – insbesondere im Hinblick auf Geschäftsmodell, Unternehmensstruktur, aktuelle Herausforderungen (z. B. Fachkräftemangel), wiederkehrende Arbeitsprozesse sowie öffentlich erkennbare Schwachstellen oder Engpässe. Ziel ist es, daraus konkrete Automatisierungspotenziale für dein Unternehmen prozessagent.de abzuleiten. Ich melde mich, sobald ich eine strukturierte Analyse zusammengestellt habe.
+
+
+# Betriebsanalyse: Hanseatic Agri GmbH und Automatisierungspotenziale
+
+## Unternehmensprofil der Hanseatic Agri GmbH
+
+Die **CCE Hanseatic Agri GmbH** (geführt von Carl Graf zu Eulenburg) ist ein *dynamisch wachsendes, inhabergeführtes, international tätiges Handelsunternehmen mit Sitz in Hamburg*. Das Unternehmen beliefert die **Agrar-, Pet-Food-, Futtermittel- und Düngemittelindustrie** in Deutschland und Europa mit innovativen und etablierten Rohstoffen. Insbesondere ist Hanseatic Agri als *Spezialist für hochwertige und nachhaltige Rohstoffe in der Heimtiernahrung* (Pet-Food) positioniert. Zum Sortiment gehören u.a. **pflanzliche Proteine, tierische Proteine/Fischmehle, Hefeprodukte sowie Futterfette**. Mit **vier Lagerstandorten in Deutschland** und einem Büro in Hamburg gewährleistet die Firma eine zuverlässige Lieferkette und Qualitätskontrolle vom **Wareneinkauf bis zur Auslieferung**.
+
+Hanseatic Agri wurde 2013 gegründet und hat sich seitdem kontinuierlich entwickelt. Heute zählt das Unternehmen zu den mittelständischen Betrieben mit etwa *10–24 Beschäftigten*. Das Team umfasst Fachleute für **Logistik**, **Vertrieb**, **Produktmanagement** und **Qualität**, sowie **Backoffice-Personal** für Verwaltung und Buchhaltung. Diese schlanke Personalstruktur erfordert effiziente Prozesse, da jeder Mitarbeiter ein breites Aufgabenspektrum abdeckt. Hanseatic Agri strebt hohe Qualitäts- und Servicestandards an, was in einer branchenüblichen Zertifizierung (z.B. QS/GMP+ und EU-Bio-Zertifizierung) und strikten Qualitätskontrollen entlang der Lieferkette zum Ausdruck kommt. Gleichzeitig befindet sich die Firma in einer Wachstumsphase – erkennbar auch an aktuellen Stellenausschreibungen (z.B. **Qualitätsmanager und Sales Manager**) –, was darauf hindeutet, dass interne Abläufe skaliert werden müssen.
+
+## Herausforderungen und Wachstumstreiber
+
+Als wachsendes Unternehmen sieht sich Hanseatic Agri mit typischen **Herausforderungen im Mittelstand** konfrontiert: begrenzte personelle Ressourcen, steigende Auftragsvolumina und wachsende Anforderungen an Dokumentation und Qualitätssicherung. Gerade **kleine und mittlere Unternehmen (KMU)** zögern häufig bei der Prozess-Digitalisierung aus Sorge vor Kosten oder Komplexität. Doch effiziente **Automatisierungslösungen** bieten deutliche Vorteile: *Zeitersparnis, Kostenreduktion, höhere Produktivität, bessere Skalierbarkeit und verbesserter Kundenservice*. Bei Hanseatic Agri – mit seinem kleinen Team und hoher Aufgabenvielfalt – dürfte die Automatisierung repetitiver Routineaufgaben ein erheblicher Hebel sein, um Mitarbeiter zu entlasten und Wachstum zu ermöglichen. Insbesondere weil die Firma **personell expandiert**, aber gleichzeitig in Bereichen wie Qualitätsmanagement oder Vertrieb Fachkräfte sucht, kann klug eingesetzte Automatisierung helfen, den *Fachkräftemangel* zu kompensieren. Studien zeigen, dass RPA (**Robotic Process Automation**) primär dazu dient, Effizienz zu steigern und Mitarbeiter von Routinearbeit zu entlasten, nicht um Personal abzubauen. Angesichts des branchenweiten Mangels an qualifizierten Arbeitskräften und immer neuer regulatorischer Pflichten steht die Entlastung des Teams im Vordergrund. Automatisierte Prozesse erlauben es den vorhandenen Mitarbeitern, sich stärker auf **wertschöpfende Aufgaben** zu konzentrieren, etwa den Ausbau von Kundenbeziehungen, die Lieferantenauswahl oder die Lösung komplexer Kundenanforderungen.
+
+Nachfolgend werden die **Schwachstellen und Automatisierungspotenziale** bei Hanseatic Agri betrachtet – also Bereiche, in denen *eine Firma wie Prozessagent.de* durch **Prozessautomatisierung** erheblich *Zeit und Kosten einsparen* könnte. Im Fokus stehen vor allem repetitive Verwaltungsarbeiten (z.B. in Buchhaltung und Auftragsabwicklung), die derzeit manuell von Sachbearbeitern erledigt werden und die **pro Woche am meisten Zeit binden**.
+
+## Automatisierbare Prozesse und Einsparpotenziale
+
+### Verwaltung & Buchhaltung
+
+In der Verwaltung fallen zahlreiche **routinehafte Bürotätigkeiten** an, die mit softwaregestützter Automatisierung deutlich effizienter gestaltet werden können. Insbesondere in der **Buchhaltung** – einem Bereich, in dem RPA im Mittelstand bereits häufig erfolgreich eingesetzt wird – gibt es hohes Potenzial für Zeit- und Kosteneinsparung. Typische Automatisierungsansätze in diesem Bereich sind:
+
+* **Rechnungsverarbeitung (Eingang)**: Eingehende **Lieferantenrechnungen** können per OCR und RPA automatisch ausgelesen und in das Buchhaltungs- oder ERP-System gebucht werden. Dies eliminiert manuelle Dateneingabe und Tippfehler. Laut einer PwC-Studie sind *Zeitersparnis* und *Effizienzgewinne* die häufigsten Gründe für RPA-Einführung – über **83 %** der Unternehmen berichten von deutlichen Zeitgewinnen durch Automatisierung. Bots können dabei Aufgaben in Minuten erledigen, für die menschliche Mitarbeiter Stunden oder Tage benötigen würden.
+
+* **Rechnungsstellung & Zahlungserinnerungen**: Auch der **Ausgangsrechnungsprozess** lässt sich beschleunigen. Wenn Hanseatic Agri Kundenbestellungen erhält, kann ein Bot automatisch eine Rechnung erstellen und verschicken. Ebenso lassen sich **Zahlungserinnerungen** bei überfälligen Zahlungen automatisiert per E-Mail versenden. Solche Automatisierungen stellen sicher, dass nichts "durchrutscht" und verbessern den Cashflow, ohne dass Sachbearbeiter jeden Vorgang manuell nachhalten müssen. Praxisbeispiele im Mittelstand zeigen etwa, dass durch Tools wie n8n Rechnungsdaten direkt aus dem Posteingang in die Finanzsoftware (z.B. Datev) übertragen und Mahnungen termingerecht versendet werden. Dies spart Sachbearbeitern viele Arbeitsschritte und reduziert menschliche Fehler bei der Fristenüberwachung.
+
+* **Datenabgleich und Reporting**: Die Abstimmung von **Zahlungseingängen**, das Abgleichen von Bestellungen, Lieferscheinen und Rechnungen sowie das Erstellen regelmäßiger **Berichte** (z.B. Umsatzreports, Ausgabenübersichten) sind weitere repetitive Aufgaben. RPA-Bots können z.B. automatisch Bankzahlungseingänge mit offenen Posten abgleichen oder Finanzreportings aus verschiedenen Systemen konsolidieren. In vielen Unternehmen helfen Bots bereits beim **Abgleich von Haupt- und Nebenbüchern sowie beim Berichtswesen**, was sowohl Zeit spart als auch die Qualität der Zahlen erhöht. Für Hanseatic Agri bedeutet dies, dass die Backoffice-Mitarbeiter weniger Zeit mit Excel-Listen und Kontrollaufgaben verbringen müssen.
+
+Durch solche Automatisierungen in der Verwaltung lassen sich **Personalkosten senken** und zugleich Fehler minimieren. Die Software-Roboter können rund um die Uhr arbeiten, wodurch Prozesse beschleunigt werden und Engpässe (z.B. Monatsabschluss-Stress) entschärft werden. Insgesamt entsteht so eine spürbare *Entlastung der Buchhaltung*, während die finanzielle **Transparenz** steigt – ein wichtiger Aspekt für ein wachsendes Handelsunternehmen.
+
+### Vertrieb & Auftragsbearbeitung
+
+Im **Vertrieb** und der Kundenauftragsabwicklung gibt es bei Hanseatic Agri ebenfalls erhebliche Automatisierungspotenziale. Als Lieferant für viele Kunden (nach eigenen Angaben beliefert Hanseatic Agri Kunden in über **50 Ländern**) erhält das Unternehmen Bestellungen auf unterschiedlichen Kanälen (E-Mail, Online-Shop, Telefon). Viele der damit verbundenen Schritte sind **regelbasiert und wiederkehrend**:
+
+* **Auftragsdatenerfassung**: RPA kann die **Annahme von Bestellungen** teilweise übernehmen, indem Bestelldaten aus E-Mails oder Formularen automatisch ausgelesen und in das Auftragsverwaltungssystem eingetragen werden. Ein Software-Bot prüft z.B., ob alle relevanten Kundendaten und Artikelangaben vollständig sind, und legt dann selbstständig den Auftrag im ERP/CRM an. So wird die **Auftragsbearbeitung beschleunigt** und Fehler bei der Dateneingabe werden vermieden (kein manuelles Abtippen mehr). Laut einer Analyse von Itransition können solche RPA-Lösungen dazu führen, dass deutlich **mehr Aufträge in kürzerer Zeit** abgewickelt werden können – ein Vorteil, der gerade in Wachstumsphasen zum Tragen kommt.
+
+* **CRM-Updates und Lead-Management**: Die Vertriebsmitarbeiter von Hanseatic Agri (darunter mehrere Sales Manager für verschiedene Regionen) müssen Kundenkontakte pflegen und neue Leads verfolgen. Automatisierung kann hier Routinearbeit abnehmen: **Neue Kundenanfragen**, z.B. über das Website-Kontaktformular, lassen sich automatisch in ein CRM-System übertragen und zugeordnet werden. Follow-Up-Aufgaben – etwa das Versenden einer **Nachfass-E-Mail** einige Tage nach einem Angebot – können mittels Tools wie Zapier ebenfalls automatisch angestoßen werden. Dadurch entfallen manuelle Erinnerungen im Vertriebsteam, und potenzielle Kunden werden zeitnah und konsistent betreut, was die **Kundenerfahrung verbessert**.
+
+* **Angebots- und Preisaktualisierungen**: Hanseatic Agri operiert in rohstoffgetriebenen Märkten, wo Preise sich ändern können. Das Zusammenstellen von Angeboten oder das Aktualisieren von Preislisten sind zeitraubende Aufgaben, die sich mit Software-Unterstützung vereinfachen lassen. Beispielsweise könnten Bots automatisch **aktuelle Marktdaten** (Währungskurse, Rohstoffpreise) in Angebotsdokumente einpflegen oder Kunden über Preisänderungen informieren, basierend auf vordefinierten Regeln. Zwar erfordern Verhandlungen und individuelle Preisfindung menschliches Feingefühl, doch die *Datenaufbereitung* dafür kann automatisiert geschehen.
+
+Durch Automatisierung im Vertrieb kann Hanseatic Agri seine **Verkaufsprozesse skalieren**, ohne linear mehr Personal einstellen zu müssen. Mitarbeiter verbringen weniger Zeit mit administrativer Pflege von Daten und Routine-E-Mails und haben mehr Zeit für **persönliche Kundeninteraktion und Akquise**. Die **Kundenzufriedenheit** steigt ebenfalls, weil z.B. Auftragsbestätigungen und Antworten schneller erfolgen und stets aktuelle Informationen (z.B. Lagerbestände, Lieferzeiten) bereitstehen. Somit spart das Unternehmen nicht nur intern Aufwand, sondern stärkt auch seine Wettbewerbsfähigkeit durch schnellen, zuverlässigen Service.
+
+### Logistik & Lieferkette
+
+Die **Logistik** ist das Herzstück eines Handelsunternehmens wie Hanseatic Agri. Zwei dedizierte Mitarbeiter koordinieren hier den Warenfluss zwischen Lieferanten, Lagern und Kunden. Viele logistische Abläufe sind jedoch *standardisiert und repetitiv*, was sie zu idealen Kandidaten für eine (teil-)automatisierte Abwicklung macht. Wöchentliche Zeitfresser in der Logistik könnten durch RPA deutlich reduziert werden:
+
+* **Versandplanung und Frachtbuchung**: Für jede Kundenbestellung muss der Versand organisiert werden – vom Auswählen eines geeigneten Spediteurs über das Erstellen von Lieferpapieren (Lieferschein, CMR-Frachtbrief etc.) bis zur Buchung der Abholung. **RPA-Bots** können diese Prozesse beschleunigen, indem sie z.B. automatisch basierend auf Auftragsdaten den richtigen Versanddienstleister auswählen und die erforderlichen Versanddokumente mit den Auftrags- und Kundendaten ausfüllen. Fehler in der Versandplanung (etwa falsche Adressdaten oder unvollständige Frachtpapiere) lassen sich so minimieren – was wichtig ist, da Planungsfehler zu Lieferverzögerungen oder Zusatzkosten führen können. Ein Praxisbeispiel zeigt, dass ein Logistikunternehmen mittels RPA die **Verwaltung von Frachtpapieren (CMR-Notizen)** vollständig automatisiert hat; der Bot übernahm die Datentransfers zwischen den Systemen und führte Plausibilitätsprüfungen durch, wodurch Mitarbeiter erheblich entlastet wurden.
+
+* **Sendungsverfolgung und Status-Updates**: Das **Tracking von Lieferungen** ist oft mühsam, wenn Mitarbeiter manuell verschiedene Spediteurs-Websites prüfen oder Kunden proaktiv über Sendungsstatus informieren müssen. Hier kann ein Bot in regelmäßigen Intervallen automatisiert die *Sendungsverfolgungsdaten* abrufen und intern im System aktualisieren. Auch automatische Benachrichtigungen an Kunden (z.B. Versandbestätigung mit Trackingnummer) lassen sich einrichten. Laut einer Untersuchung erwarten über **66 %** der Supply-Chain-Experten, dass in naher Zukunft RPA verstärkt für Logistik & Lagerhaltung eingesetzt wird. Die Hälfte der Arbeitszeit in logistischen Abteilungen könnte künftig direkt durch Automatisierung beeinflusst werden – vor allem, indem Bots Routineabläufe übernehmen. Ein reales Beispiel: Bei einem Retourenlogistiker implementierte RPA **1,5-fach schnellere** Statusaktualisierungen der Lieferantendaten, was 180 Arbeitsstunden pro Jahr einsparte. Übertragen auf Hanseatic Agri bedeutet das: Statt dass Mitarbeiter täglich Dutzende Sendungen manuell nachverfolgen, würde ein Bot diese Updates liefern, und das Team kann sich um Ausnahmen oder Problemfälle kümmern.
+
+* **Bestandsverwaltung und Warenwirtschaft**: Mit vier externen Lagern muss Hanseatic Agri stets den Überblick behalten, wo welche Menge an Ware verfügbar ist. Automatisierung kann helfen, **Lagerbestände in Echtzeit** abzugleichen – z.B. indem Lagerverwaltungssysteme oder sogar Excel-Bestandslisten der Lagerpartner regelmäßig ausgelesen und in ein zentrales System übertragen werden. Dadurch reduziert sich der manuelle Abstimmungsaufwand zwischen Logistik-Team und Lagerpersonal erheblich. Zudem können Bots alarmieren, wenn Bestände unter Meldebestand fallen, und so Nachschubprozesse anstoßen.
+
+Insgesamt führt RPA in der Logistik zu **schnelleren, transparenten Abläufen**. Prozesse laufen oft *10× schneller* ab, und durch die 24/7-Verfügbarkeit automatisierter Workflows können z.B. Aufträge, die spätabends reinkommen, schon vorbereitet werden, bevor die Mitarbeiter morgens ins Büro kommen. All dies steigert die **Lieferzuverlässigkeit** und Kundenzufriedenheit – ein entscheidender Wettbewerbsvorteil in der Pet-Food-Branche, wo Kunden (z.B. Tiernahrungswerke) just-in-time Belieferung erwarten. Gleichzeitig werden **Mitarbeiter in der Logistik** von Routinearbeit entbunden und können sich intensiver der Betreuung von *Ausnahmefällen* widmen, etwa dem Lösen von Lieferproblemen oder der Optimierung von Routen und Verträgen.
+
+### Qualitätsmanagement & Dokumentation
+
+Als Anbieter von Futtermittel-Zutaten unterliegt Hanseatic Agri strengen Qualitäts- und Dokumentationspflichten (Stichwort: **Futtermittelsicherheit**, QS-Zertifizierung, Bio-Zertifikat). Auch hier gibt es Tätigkeiten, die repetitive Datenerfassung oder -prüfung erfordern, und daher automatisierbar sind:
+
+* **Qualitätsdaten erfassen und auswerten**: Jede Wareneingangscharge muss vermutlich mit Analysenzertifikaten (z.B. Nährstoffgehalt, mikrobiologische Befunde) geprüft werden. Ein Bot könnte solche **Laborberichte** automatisch aus E-Mails oder Portalen herunterladen und die relevanten Kennzahlen in eine Qualitäts-Datenbank eintragen. So hat der Qualitätsmanager stets einen aktuellen Überblick, ohne jede PDF manuell öffnen und abtippen zu müssen. RPA kommt in der **Qualitätssicherung** bislang in vielen Unternehmen noch vergleichsweise selten zum Einsatz (nur ~41 % nutzen Bots dafür) – gerade weil das Potenzial noch unterschätzt wird. Doch es gibt zahlreiche *einfach strukturierte, wiederkehrende Prozesse* in diesem Bereich, die sich für Automatisierung eignen. Hanseatic Agri könnte hier Vorreiter sein, indem es z.B. die Prüfung von Lieferantenzertifikaten oder die Verfolgung von Haltbarkeitsdaten digitalisiert.
+
+* **Compliance-Dokumentation & Audits**: Die Vorbereitung von **Audits** (intern oder extern) erfordert oft, dass Nachweise zusammengestellt werden – etwa Checklisten, dass für jede Lieferung alle erforderlichen Dokumente (Analysezertifikat, Lieferschein, Bio-Konformitätserklärung etc.) vorliegen. Ein automatisiertes System kann im Hintergrund kontinuierlich überwachen, ob alle benötigten Dateien zu einem Vorgang abgespeichert sind, und ggf. *Warnmeldungen* generieren, bevor etwas fehlt. Ebenso kann die Erstellung von regelmäßigen **Berichten** (z.B. Monatsbericht für QS oder Behördenmeldungen) durch Bots unterstützt werden, die die benötigten Daten aus verschiedenen Quellen zusammentragen. Damit wird die **Berichtserstellung beschleunigt** und menschliche Flüchtigkeitsfehler (z.B. Zahlendreher) eliminiert. RPA-gestützte Dokumentation arbeitet mit *nahezu 100 % Genauigkeit*, was hilft, die Einhaltung gesetzlicher Vorgaben sicherzustellen.
+
+* **Wissensmanagement und Produktentwicklung**: Hanseatic Agri bezeichnet sich selbst als innovativ bei neuen Rohstoffen. Das **Sichten von Fachinformationen** (neue Zutaten, Trends) könnte zum Teil automatisiert werden, etwa durch Web-Scraping relevanter Datenquellen oder automatisierte Alerts zu regulatorischen Änderungen. Zwar ist dies weniger ein klassischer RPA-Anwendungsfall als vielmehr eine KI-/Monitoring-Aufgabe, doch auch hier können digitale Assistenten Zeit sparen, indem sie dem Nutritionist/Produktentwickler z.B. täglich eine Zusammenfassung neuer Studien oder Marktpreise liefern.
+
+Im Qualitäts- und Compliance-Bereich geht es primär darum, **menschliche Fehler auszuschließen** und jederzeit auditbereit zu sein. Automatisierung schafft hier eine lückenlose, nachvollziehbare Dokumentation und gibt dem Team Sicherheit, dass Routineprüfungen zuverlässig ablaufen. So kann sich der Qualitätsmanager bei Hanseatic Agri mehr auf *präventive Qualitätsverbesserungen* und die Entwicklung neuer Konzepte konzentrieren, anstatt in Papierkram zu versinken.
+
+## Fazit: Größter Nutzen und wöchentliche Zeitersparnis
+
+Für Hanseatic Agri GmbH bieten sich durch gezielte Prozessautomatisierung erhebliche Einsparungen an **Zeit und Kosten** – insbesondere bei den **täglichen Routinearbeiten** in Administration, Auftragsabwicklung und Logistik. Gerade diese Aufgaben summieren sich über die Woche zu beträchtlichen Zeitblöcken, die heute Mitarbeiter binden. Untersuchungen belegen, dass Unternehmen mit RPA-Lösungen oft Erwartungen übertreffen: *Bots erledigen repetitive Aufgaben oft in einem Bruchteil der Zeit*, die ein Mitarbeiter benötigen würde. So können beispielsweise hunderte Rechnungen oder Aufträge, die bisher viele Stunden Sachbearbeiter-Arbeit pro Woche beanspruchen, durch Software-Roboter weitgehend „über Nacht" verarbeitet werden. Die **größten Zeitgewinne pro Woche** sind erfahrungsgemäß in Bereichen zu erzielen, die **hohe Fallzahlen und klar definierte Abläufe** haben – etwa die **Rechnungsverarbeitung und Auftragserfassung**, gefolgt von der **Versandabwicklung**. Hier fällt mit jedem automatisierten Vorgang repetitive Tipp- und Sucharbeit weg.
+
+Neben der reinen Zeitersparnis bringt die Automatisierung auch *monetäre Vorteile*: Weniger manuelle Prozesse bedeuten **geringere Personalkosten** bzw. Raum, um ohne zusätzlichen Kopfcount mehr Geschäft zu bewältigen. Fehlerkosten (z.B. aus falschen Buchungen oder Lieferfehlern) sinken durch die nahezu fehlerfreie Verarbeitung. Indirekt profitiert auch der Umsatz – durch schnellere Reaktionszeiten und höhere Kundenzufriedenheit können Aufträge gehalten oder ausgebaut werden.
+
+Für Hanseatic Agri ergibt sich so ein **doppelter Nutzen**: Intern werden wöchentlich etliche Arbeitsstunden frei, die das bestehende Team für wichtigere Aufgaben nutzen kann. Extern verbessert sich die Serviceleistung gegenüber Kunden und Lieferanten. Gerade im Kontext des Fachkräftemangels in Branche und Region ist es strategisch klug, die vorhandenen Mitarbeiter von Routinearbeiten zu entlasten und ihr **Potenzial für wertschöpfende Tätigkeiten** freizusetzen. Automatisierungspartner wie Prozessagent.de können anhand einer Prozessanalyse gezielt die größten „Pain Points" identifizieren – also dort, wo pro Woche am meisten Zeit vergeudet wird – und mit modernen, **einfach implementierbaren RPA-Tools** Abhilfe schaffen. Die oben skizzierten Ansätze zeigen, dass bei Hanseatic Agri **insbesondere die administrativen und logistischen Prozesse** reif für Automatisierung sind. Durch deren Optimierung ließen sich bereits kurzfristig signifikante Effizienzgewinne erzielen, was dem Unternehmen ermöglicht, weiter zu wachsen, ohne dass die Prozesse zum Engpass werden.
+
+**Quellen:** Die Aussagen basieren auf öffentlich verfügbaren Informationen über die CCE Hanseatic Agri GmbH (Unternehmensprofil, Stellenausschreibungen) sowie auf Studien und Fachartikel zum Einsatz von Prozessautomatisierung in KMU und Logistik. Beispielsweise betonen PwC und andere, dass **83 % der Unternehmen Zeitersparnis** als Hauptgrund für RPA nennen und *84 %* tatsächlich „viel Zeit" einsparen konnten. Branchenerfahrungen zeigen, dass **Automatisierung in Auftragsabwicklung, Buchhaltung und Versand** besonders effektiv ist. Gleichzeitig wird hervorgehoben, dass RPA **Mitarbeiter entlastet** und in den meisten Fällen nicht zu Stellenabbau führt, sondern die vorhandenen Teams unterstützt – ein wichtiger Aspekt für ein wachsendes Unternehmen wie Hanseatic Agri. Insgesamt belegt die recherchierte Fachliteratur, dass **digitale Prozessautomatisierung** gerade im Mittelstand kein Luxus mehr ist, sondern ein entscheidender Wettbewerbsfaktor, um *Zeit und Kosten zu sparen* und gleichzeitig die **Qualität sowie Mitarbeiter- und Kundenzufriedenheit** zu erhöhen.
+    </script>
+
+    <div class="presentation-container">
+        <!-- Theme Selection Screen -->
+        <div class="theme-selection" id="themeSelection">
+            <div class="logo-header">
+                <div class="company-name">HANSEATIC AGRI</div>
+                <div class="selection-title">Digitale Transformation für Ihr Wachstum</div>
+                <div class="selection-subtitle">Wählen Sie die Themen, die für Ihr Unternehmen relevant sind:</div>
+            </div>
+
+            <div class="themes-grid">
+                <div class="theme-card" data-theme="buchhaltung">
+                    <span class="theme-icon"><i class="fas fa-chart-line"></i></span>
+                    <div class="theme-title">Buchhaltung & Verwaltung</div>
+                    <div class="theme-description">Automatisierung von Rechnungsverarbeitung, Zahlungsabgleich und Reporting</div>
+                </div>
+
+                <div class="theme-card" data-theme="vertrieb">
+                    <span class="theme-icon"><i class="fas fa-briefcase"></i></span>
+                    <div class="theme-title">Vertrieb & Auftragsmanagement</div>
+                    <div class="theme-description">Digitalisierung der Auftragserfassung und CRM-Prozesse</div>
+                </div>
+
+                <div class="theme-card" data-theme="logistik">
+                    <span class="theme-icon"><i class="fas fa-truck"></i></span>
+                    <div class="theme-title">Logistik & Supply Chain</div>
+                    <div class="theme-description">Optimierung von Versandplanung und Sendungsverfolgung</div>
+                </div>
+
+                <div class="theme-card" data-theme="qualitaet">
+                    <span class="theme-icon"><i class="fas fa-check-circle"></i></span>
+                    <div class="theme-title">Qualitätsmanagement</div>
+                    <div class="theme-description">Digitale Dokumentation und Compliance-Automatisierung</div>
+                </div>
+
+                <div class="theme-card" data-theme="daten">
+                    <span class="theme-icon"><i class="fas fa-chart-bar"></i></span>
+                    <div class="theme-title">Datenanalyse & KPIs</div>
+                    <div class="theme-description">Echtzeit-Dashboards und automatisierte Berichte</div>
+                </div>
+
+                <div class="theme-card" data-theme="integration">
+                    <span class="theme-icon"><i class="fas fa-link"></i></span>
+                    <div class="theme-title">Systemintegration</div>
+                    <div class="theme-description">Nahtlose Verbindung Ihrer IT-Systeme</div>
+                </div>
+            </div>
+
+            <!-- Custom Theme Generator Section -->
+            <div id="customThemeContainer"></div>
+
+            <button class="start-button" id="startPresentation" disabled>Präsentation starten</button>
+        </div>
+
+        <!-- Slides -->
+        <div class="slides-container" id="slidesContainer">
+            <!-- Thank You Slide -->
+            <div class="slide" id="thankYouSlide">
+                <div class="slide-header">
+                    <h1>Vielen Dank für Ihre Eingabe!</h1>
+                </div>
+                <div class="key-message">
+                    <p id="selectedThemesText">Sie interessieren sich für folgende Automatisierungsbereiche:</p>
+                </div>
+                <div class="insight-box">
+                    <h3>Ihre personalisierte Präsentation</h3>
+                    <p>Basierend auf Ihrer Auswahl haben wir eine maßgeschneiderte Präsentation erstellt, die genau auf die Bedürfnisse der Hanseatic AGRI GmbH zugeschnitten ist.</p>
+                </div>
+            </div>
+
+            <!-- Slide 1: Executive Summary -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">AUTOMATISIERUNGSPOTENZIAL</div>
+                    <h1>Ihre Wachstumschance durch intelligente Prozessautomatisierung</h1>
+                    <div class="slide-subtitle">Wie Hanseatic AGRI mit modernen Technologien Zeit und Kosten spart</div>
+                </div>
+
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">30-50%</div>
+                        <div class="metric-label">Zeitersparnis bei Routineaufgaben</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">24/7</div>
+                        <div class="metric-label">Automatisierte Prozesse</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">ROI &lt;1</div>
+                        <div class="metric-label">Jahr Amortisation</div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong>Kernbotschaft:</strong> Als wachsendes Handelsunternehmen mit internationaler Ausrichtung kann Hanseatic AGRI durch gezielte Automatisierung die Effizienz steigern und gleichzeitig die hohen Qualitätsstandards sichern.
+                </div>
+            </div>
+
+            <!-- Slide 2: Aktuelle Situation -->
+            <div class="slide" data-theme="all">
+                <div class="slide-header">
+                    <div class="slide-number">AUSGANGSLAGE</div>
+                    <h1>Ihre aktuellen Herausforderungen im Wachstum</h1>
+                </div>
+
+                <div class="process-grid">
+                    <div class="process-card">
+                        <div class="process-header">Manuelle Prozesse</div>
+                        <div class="process-content">
+                            <div class="process-item">Zeitintensive Dateneingabe</div>
+                            <div class="process-item">Fehleranfällige Übertragungen</div>
+                            <div class="process-item">Verzögerte Berichterstattung</div>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-header">Wachsende Komplexität</div>
+                        <div class="process-content">
+                            <div class="process-item">50+ Länder beliefert</div>
+                            <div class="process-item">4 Lagerstandorte koordinieren</div>
+                            <div class="process-item">Steigende Dokumentationspflichten</div>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-header">Ressourcenengpässe</div>
+                        <div class="process-content">
+                            <div class="process-item">Kleines Team, viele Aufgaben</div>
+                            <div class="process-item">Fachkräftemangel am Markt</div>
+                            <div class="process-item">Zeitdruck bei Kernprozessen</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <h3>Unsere Analyse zeigt:</h3>
+                    <p>Mit Ihrem Team von 10-24 Mitarbeitern bewältigen Sie beeindruckende Aufgaben. Die richtige Automatisierung kann Ihre Mitarbeiter von Routinearbeit befreien und für wertschöpfende Tätigkeiten einsetzen.</p>
+                </div>
+            </div>
+
+            <!-- Slide 3: Buchhaltung & Verwaltung -->
+            <div class="slide" data-theme="buchhaltung">
+                <div class="slide-header">
+                    <div class="slide-number">LÖSUNG: BUCHHALTUNG</div>
+                    <h1>Automatisierte Finanzprozesse für mehr Effizienz</h1>
+                </div>
+
+                <h2>Rechnungsverarbeitung neu gedacht</h2>
+                <div class="value-grid">
+                    <div class="value-card">
+                        <h4>Eingangsrechnungen</h4>
+                        <ul class="value-list">
+                            <li>OCR-Erfassung aller Lieferantenrechnungen</li>
+                            <li>Automatische Kontierung und Buchung</li>
+                            <li>Digitaler Freigabe-Workflow</li>
+                            <li>Nahtlose ERP-Integration</li>
+                        </ul>
+                    </div>
+                    <div class="value-card">
+                        <h4>Ausgangsrechnungen</h4>
+                        <ul class="value-list">
+                            <li>Automatische Rechnungserstellung</li>
+                            <li>Intelligentes Mahnwesen</li>
+                            <li>Zahlungsabgleich in Echtzeit</li>
+                            <li>Cashflow-Optimierung</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">83%</div>
+                        <div class="metric-label">der Unternehmen sparen Zeit</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">5 Min</div>
+                        <div class="metric-label">statt 30 Min pro Rechnung</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">99,9%</div>
+                        <div class="metric-label">Genauigkeit bei Buchungen</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Vertrieb & Auftragsmanagement -->
+            <div class="slide" data-theme="vertrieb">
+                <div class="slide-header">
+                    <div class="slide-number">LÖSUNG: VERTRIEB</div>
+                    <h1>Digitaler Vertrieb für internationale Märkte</h1>
+                </div>
+
+                <h2>Von der Anfrage bis zur Lieferung</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker">1</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Automatische Auftragserfassung</div>
+                            <div class="timeline-description">E-Mail-Bestellungen werden automatisch ausgelesen, validiert und ins System übertragen. Kunden erhalten sofort eine Auftragsbestätigung.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">2</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Intelligentes CRM</div>
+                            <div class="timeline-description">Alle Kundeninteraktionen zentral erfasst. Automatische Follow-ups und personalisierte Angebote basierend auf Kaufhistorie.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">3</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Dynamische Preisgestaltung</div>
+                            <div class="timeline-description">Rohstoffpreise und Währungskurse automatisch aktualisiert. Angebote immer auf dem neuesten Stand.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong>Ihr Vorteil:</strong> Ihre Vertriebsmitarbeiter können sich auf Beziehungspflege und Neukundenakquise konzentrieren, während Routineaufgaben automatisch ablaufen.
+                </div>
+            </div>
+
+            <!-- Slide 5: Logistik & Supply Chain -->
+            <div class="slide" data-theme="logistik">
+                <div class="slide-header">
+                    <div class="slide-number">LÖSUNG: LOGISTIK</div>
+                    <h1>Intelligente Logistik für 4 Lagerstandorte</h1>
+                </div>
+
+                <h2>End-to-End Automatisierung Ihrer Lieferkette</h2>
+                <div class="process-grid">
+                    <div class="process-card">
+                        <div class="process-header">Versandoptimierung</div>
+                        <div class="process-content">
+                            <div class="process-item">Automatische Spediteurauswahl</div>
+                            <div class="process-item">Digitale Frachtdokumente</div>
+                            <div class="process-item">Optimierte Routenplanung</div>
+                            <div class="process-item">Kostenkalkulation in Echtzeit</div>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-header">Track & Trace</div>
+                        <div class="process-content">
+                            <div class="process-item">Automatisches Sendungstracking</div>
+                            <div class="process-item">Proaktive Kundeninformation</div>
+                            <div class="process-item">Ausnahmemanagement</div>
+                            <div class="process-item">Performance-Dashboards</div>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-header">Bestandsmanagement</div>
+                        <div class="process-content">
+                            <div class="process-item">Echtzeit-Lagerbestände</div>
+                            <div class="process-item">Automatische Nachbestellung</div>
+                            <div class="process-item">Standortübergreifende Sicht</div>
+                            <div class="process-item">Haltbarkeitsüberwachung</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card" style="max-width: 600px; margin: 40px auto;">
+                    <div class="metric-value">10x</div>
+                    <div class="metric-label">schnellere Prozessabwicklung möglich</div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Qualitätsmanagement -->
+            <div class="slide" data-theme="qualitaet">
+                <div class="slide-header">
+                    <div class="slide-number">LÖSUNG: QUALITÄT</div>
+                    <h1>Digitales Qualitätsmanagement für Futtermittelsicherheit</h1>
+                </div>
+
+                <h2>Compliance automatisch sicherstellen</h2>
+                <div class="insight-box">
+                    <h3>Ihre Zertifizierungen digital verwalten</h3>
+                    <p>QS, GMP+, Bio-Zertifikat - alle Anforderungen automatisch überwacht und dokumentiert.</p>
+                </div>
+
+                <div class="value-grid">
+                    <div class="value-card">
+                        <h4>Dokumentenmanagement</h4>
+                        <ul class="value-list">
+                            <li>Automatischer Import von Analysezertifikaten</li>
+                            <li>Digitale Chargenverfolgung</li>
+                            <li>Lückenlose Audit-Trails</li>
+                            <li>Automatische Ablaufüberwachung</li>
+                        </ul>
+                    </div>
+                    <div class="value-card">
+                        <h4>Qualitätssicherung</h4>
+                        <ul class="value-list">
+                            <li>Echtzeit-Qualitätsdashboards</li>
+                            <li>Automatische Warnmeldungen</li>
+                            <li>Digitale Freigabeprozesse</li>
+                            <li>KI-gestützte Anomalieerkennung</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong>Resultat:</strong> 100% Compliance bei minimalem manuellem Aufwand. Ihre Qualitätsmanager können sich auf kontinuierliche Verbesserung konzentrieren.
+                </div>
+            </div>
+
+            <!-- Slide 7: Datenanalyse & KPIs -->
+            <div class="slide" data-theme="daten">
+                <div class="slide-header">
+                    <div class="slide-number">LÖSUNG: ANALYTICS</div>
+                    <h1>Datengetriebene Entscheidungen in Echtzeit</h1>
+                </div>
+
+                <h2>Ihr Business Intelligence Dashboard</h2>
+                <div class="process-grid">
+                    <div class="process-card">
+                        <div class="process-header">Vertriebsanalysen</div>
+                        <div class="process-content">
+                            <div class="process-item">Umsatzentwicklung nach Regionen</div>
+                            <div class="process-item">Produktperformance-Tracking</div>
+                            <div class="process-item">Kundenlebenszyklusanalyse</div>
+                            <div class="process-item">Forecast-Modelle</div>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-header">Operative KPIs</div>
+                        <div class="process-content">
+                            <div class="process-item">Lagerumschlag pro Standort</div>
+                            <div class="process-item">Lieferperformance-Metriken</div>
+                            <div class="process-item">Prozesszeiten-Monitoring</div>
+                            <div class="process-item">Kostenanalysen</div>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-header">Strategische Insights</div>
+                        <div class="process-content">
+                            <div class="process-item">Markttrend-Analysen</div>
+                            <div class="process-item">Wettbewerbsbeobachtung</div>
+                            <div class="process-item">Risiko-Dashboards</div>
+                            <div class="process-item">Szenario-Planungen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Integration -->
+            <div class="slide" data-theme="integration">
+                <div class="slide-header">
+                    <div class="slide-number">LÖSUNG: INTEGRATION</div>
+                    <h1>Nahtlose Systemintegration ohne Disruption</h1>
+                </div>
+
+                <h2>Ihre bestehende IT-Landschaft optimal nutzen</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker">API</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Moderne Schnittstellen</div>
+                            <div class="timeline-description">Verbindung aller Systeme über standardisierte APIs. Keine Datensilos mehr.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">ERP</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">ERP-Integration</div>
+                            <div class="timeline-description">Nahtlose Anbindung an Ihr bestehendes ERP-System. Alle Daten zentral verfügbar.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">☁️</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Cloud-First Ansatz</div>
+                            <div class="timeline-description">Skalierbare Cloud-Lösungen für maximale Flexibilität und Sicherheit.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Implementierung -->
+            <div class="slide" data-theme="all">
+                <div class="slide-header">
+                    <div class="slide-number">UMSETZUNG</div>
+                    <h1>Ihr Weg zur digitalen Transformation</h1>
+                </div>
+
+                <h2>Unser bewährtes Vorgehen</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker">1</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Prozessanalyse (1-2 Tage)</div>
+                            <div class="timeline-description">Detaillierte Aufnahme Ihrer Ist-Prozesse und Identifikation der Quick Wins</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">2</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Konzeption (3-5 Tage)</div>
+                            <div class="timeline-description">Entwicklung der Automatisierungslösung, angepasst an Ihre Anforderungen</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">3</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Implementierung (5-10 Tage)</div>
+                            <div class="timeline-description">Schrittweise Umsetzung mit kontinuierlichem Testing und Anpassungen</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">4</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Go-Live & Optimierung</div>
+                            <div class="timeline-description">Produktivstart mit Schulung Ihrer Mitarbeiter und kontinuierlicher Betreuung</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong>Gesamtdauer:</strong> 10-20 Tage von der Analyse bis zum produktiven Betrieb
+                </div>
+            </div>
+
+            <!-- Slide 10: ROI & Nutzen -->
+            <div class="slide" data-theme="all">
+                <div class="slide-header">
+                    <div class="slide-number">BUSINESS CASE</div>
+                    <h1>Ihre Investition in die Zukunft</h1>
+                </div>
+
+                <h2>Quantifizierbarer Nutzen</h2>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">40%</div>
+                        <div class="metric-label">Reduzierung der Prozesszeiten</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">60%</div>
+                        <div class="metric-label">Weniger manuelle Fehler</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">25%</div>
+                        <div class="metric-label">Kosteneinsparung pro Jahr</div>
+                    </div>
+                </div>
+
+                <div class="value-grid">
+                    <div class="value-card">
+                        <h4>Direkte Einsparungen</h4>
+                        <ul class="value-list">
+                            <li>Reduzierte Personalkosten für Routineaufgaben</li>
+                            <li>Weniger Fehlerkosten und Nacharbeit</li>
+                            <li>Optimierte Lagerbestände</li>
+                            <li>Bessere Zahlungsmoral durch automatisches Mahnwesen</li>
+                        </ul>
+                    </div>
+                    <div class="value-card">
+                        <h4>Indirekte Vorteile</h4>
+                        <ul class="value-list">
+                            <li>Höhere Mitarbeiterzufriedenheit</li>
+                            <li>Verbesserte Kundenbeziehungen</li>
+                            <li>Schnellere Marktreaktionszeit</li>
+                            <li>Skalierbarkeit für weiteres Wachstum</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: Zeitersparnis-Kalkulator -->
+            <div class="slide" data-theme="all">
+                <div class="slide-header">
+                    <div class="slide-number">IHRE ZEITERSPARNIS</div>
+                    <h1>Konkrete Zeitersparnis für Hanseatic AGRI</h1>
+                </div>
+
+                <div class="roi-calculator">
+                    <h3>Ihre individuelle Zeitersparnis-Kalkulation</h3>
+                    <div id="roi-items-container">
+                        <div class="roi-item">
+                            <span>1. Rechnungsverarbeitung automatisieren:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input1" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(1)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>2. Auftragsmanagement digitalisieren:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input2" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(2)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>3. Versandabwicklung optimieren:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input3" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(3)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>4. Qualitätsdokumentation automatisieren:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input4" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(4)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>5. Berichtswesen & KPIs automatisieren:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input5" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(5)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>6. Bestandsmanagement optimieren:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input6" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(6)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>7. Systemintegration & Datenpflege:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input7" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(7)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Add custom process section -->
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px dashed #ccc;">
+                        <h4 style="color: #2F7D32; margin-bottom: 15px;">Eigenen Prozess hinzufügen:</h4>
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <input type="text" id="customProcessName" placeholder="Prozessname eingeben..." style="flex: 1; min-width: 200px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                            <button onclick="addCustomProcess()" style="background: #2F7D32; color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer;">+ Prozess hinzufügen</button>
+                        </div>
+                    </div>
+                    <div class="roi-item" style="background: #f1f8f4; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <span><strong>Gesamte wöchentliche Zeitersparnis:</strong></span>
+                        <span><strong><span id="totalHours">0</span> Stunden</strong></span>
+                    </div>
+                </div>
+
+                <div class="key-message" style="margin-top: 30px;">
+                    <strong>Ihre nächsten Schritte:</strong> Basierend auf Ihrer Zeitersparnis erstellen wir ein maßgeschneidertes Automatisierungskonzept für Hanseatic AGRI.
+                </div>
+
+                <div class="cta-section" style="margin-top: 30px;">
+                    <div class="cta-title">Lassen Sie uns Ihre Prozesse optimieren</div>
+                    <button class="cta-button" onclick="alert('Kontaktieren Sie uns unter: beratung@prozessagent.de')">Konzept anfordern</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation" id="navigation" style="display: none;">
+            <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">← Zurück</button>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <button class="edit-selection-button" onclick="editSelection()">Auswahl bearbeiten</button>
+                <div class="slide-indicator">
+                    <span id="currentSlide">1</span> / <span id="totalSlides">12</span>
+                </div>
+            </div>
+            <button class="nav-button" id="nextBtn" onclick="changeSlide(1)">Weiter →</button>
+        </div>
+    </div>
+
+    <script>
+    // Enhanced Theme Generator System mit Claude API Integration
+    class ThemeGenerator {
+    constructor() {
+        this.contextText = ''; // Wird mit dem Inhalt der HanseaticAGRIBericht.txt gefüllt
+        this.generatedSlides = JSON.parse(localStorage.getItem('hanseaticAgri_generatedSlides')) || [];
+    }
+
+    // Lädt den Kontext aus der Datei
+    async loadContext() {
+        // Der Kontext wurde bereits im HTML eingebettet
+        this.contextText = document.getElementById('hanseaticContext').textContent;
+    }
+
+    // Erstellt das HTML für das Eingabeformular
+    generateCustomThemeUI() {
+        return `
+            <div class="custom-theme-section" style="margin-top: 40px; margin-bottom: 40px; padding: 30px; background: #f8f9fa; border-radius: 12px; border: 2px dashed #2F7D32;">
+                <h3 style="color: #2F7D32; margin-bottom: 20px;">🤖 Eigenes Thema mit Claude AI erstellen</h3>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Thema-Titel:</label>
+                    <input type="text" id="customThemeTitle" placeholder="z.B. Nachhaltigkeitsreporting, Kundenportal, etc."
+                           style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1.1em; color: #333;"
+                           onfocus="this.style.borderColor='#2F7D32'" onblur="this.style.borderColor='#e0e0e0'">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Beschreibung / Anweisungen:</label>
+                    <textarea id="customThemeInstruction" rows="4"
+                              placeholder="Beschreiben Sie detailliert, welche Prozesse automatisiert werden sollen und welche Vorteile Sie sich davon versprechen..."
+                              style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1em; resize: vertical; color: #333;"
+                              onfocus="this.style.borderColor='#2F7D32'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
+                </div>
+                <button onclick="themeGenerator.generateCustomTheme()"
+                        style="background: #2F7D32; color: white; border: none; padding: 14px 30px; font-size: 1.1em; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                    🚀 Folie mit KI generieren
+                </button>
+                <div id="customThemeStatus" style="margin-top: 20px; display: none;"></div>
+            </div>
+        `;
+    }
+
+
+    // Generiert eine neue Folie mit Claude API
+    async generateCustomTheme() {
+        const titleInput = document.getElementById('customThemeTitle');
+        const instructionInput = document.getElementById('customThemeInstruction');
+        const title = titleInput.value.trim();
+        const instruction = instructionInput.value.trim();
+        const statusDiv = document.getElementById('customThemeStatus');
+
+
+        if (!title || !instruction) {
+            this.showError('Bitte füllen Sie beide Felder aus.');
+            return;
+        }
+
+        // Zeige Ladeindikator
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = `
+            <div style="background: #e3f2fd; border: 1px solid #2196f3; padding: 20px; border-radius: 6px;">
+                <h4 style="color: #1976d2; margin-bottom: 10px;">⏳ KI generiert Ihre Folie...</h4>
+                <p>Dies kann einen Moment dauern...</p>
+            </div>
+        `;
+
+        try {
+            // Erstelle den Prompt für Claude
+            const prompt = `Du bist ein Experte für Prozessautomatisierung bei Hanseatic AGRI. Basierend auf folgenden Informationen über das Unternehmen:
+
+${this.contextText}
+
+Erstelle eine neue Präsentationsfolie für das Thema "${title}" mit folgender Anforderung: "${instruction}"
+
+Die Folie soll:
+1. Dem Stil der anderen Folien entsprechen (McKinsey-Style)
+2. Konkrete Automatisierungslösungen für Hanseatic AGRI vorschlagen
+3. Zeitersparnis und Nutzen klar darstellen
+4. Die spezifischen Herausforderungen des Unternehmens adressieren
+5. VERMEIDE genaue Zahlen zu verwenden!
+
+WICHTIG für Icons:
+- Verwende AUSSCHLIESSLICH Font Awesome Icons
+- Format: <i class="fas fa-icon-name"></i> oder <i class="far fa-icon-name"></i>
+- Beispiele:
+  * Für Automatisierung: <i class="fas fa-robot"></i>
+  * Für Prozesse: <i class="fas fa-cogs"></i>
+  * Für Dokumente: <i class="fas fa-file-alt"></i>
+  * Für Analyse: <i class="fas fa-chart-line"></i>
+  * Für Zeit: <i class="fas fa-clock"></i>
+  * Für Erfolg: <i class="fas fa-check-circle"></i>
+- KEINE Emoji-Icons verwenden!
+- Nutze Icons sparsam und nur in theme-icon Spans oder als Akzente
+
+Gib NUR den HTML-Code für die Folie zurück (nur das <div class="slide">...</div> Element), ohne zusätzliche Erklärungen. 
+Verwende data-theme="${this.generateThemeId(title)}" für die Folie.
+Nutze die gleichen CSS-Klassen wie in den anderen Folien (metric-grid, process-grid, value-grid, key-message, etc.).`;
+
+            // API Call zu lokalem Proxy Server
+            const response = await fetch('http://localhost:3000/api/claude', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: 'claude-3-opus-20240229',
+                    max_tokens: 4000,
+                    messages: [{
+                        role: 'user',
+                        content: prompt
+                    }]
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const slideHTML = data.content[0].text;
+
+            // Füge die neue Folie und Theme-Card hinzu
+            this.insertNewSlide(title, instruction, slideHTML);
+
+            // Zeige Erfolgsmeldung
+            statusDiv.innerHTML = `
+                <div style="background: #e8f5e9; border: 1px solid #4caf50; padding: 20px; border-radius: 6px;">
+                    <h4 style="color: #2F7D32; margin-bottom: 15px;">✅ Folie erfolgreich erstellt!</h4>
+                    <p>Die neue Folie "${title}" wurde zur Präsentation hinzugefügt.</p>
+                    <button onclick="location.reload()" 
+                            style="background: #2F7D32; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-top: 10px;">
+                        🔄 Seite neu laden
+                    </button>
+                </div>
+            `;
+
+            // Leere die Eingabefelder
+            titleInput.value = '';
+            instructionInput.value = '';
+
+        } catch (error) {
+            console.error('Error generating slide:', error);
+            this.showError(`Fehler beim Generieren der Folie: ${error.message}`);
+        }
+    }
+
+    // Fügt die neue Folie in die HTML-Struktur ein
+    insertNewSlide(title, description, slideHTML) {
+        const themeId = this.generateThemeId(title);
+        
+        // Speichere die generierte Folie
+        const slideData = {
+            themeId,
+            title,
+            description,
+            slideHTML
+        };
+        
+        this.generatedSlides.push(slideData);
+        localStorage.setItem('hanseaticAgri_generatedSlides', JSON.stringify(this.generatedSlides));
+        
+        // 1. Füge neue Theme-Card hinzu
+        this.addThemeCard(themeId, title, description);
+
+        // 2. Füge die neue Folie vor der UMSETZUNG-Folie ein
+        this.addSlideToDOM(slideHTML);
+    }
+
+    // Fügt eine Theme-Card zum DOM hinzu
+    addThemeCard(themeId, title, description) {
+        const themesGrid = document.querySelector('.themes-grid');
+        const newThemeCard = document.createElement('div');
+        newThemeCard.className = 'theme-card';
+        newThemeCard.setAttribute('data-theme', themeId);
+        newThemeCard.innerHTML = `
+            <span class="theme-icon"><i class="fas fa-robot"></i></span>
+            <div class="theme-title">${title}</div>
+            <div class="theme-description">${description.substring(0, 100)}...</div>
+        `;
+        themesGrid.appendChild(newThemeCard);
+
+        // Füge Event Listener hinzu
+        newThemeCard.addEventListener('click', () => {
+            newThemeCard.classList.toggle('selected');
+            const theme = newThemeCard.dataset.theme;
+            if (newThemeCard.classList.contains('selected')) {
+                if (!selectedThemes.includes(theme)) {
+                    selectedThemes.push(theme);
+                }
+            } else {
+                selectedThemes = selectedThemes.filter(t => t !== theme);
+            }
+            document.getElementById('startPresentation').disabled = selectedThemes.length === 0;
+        });
+    }
+
+    // Fügt eine Folie zum DOM hinzu
+    addSlideToDOM(slideHTML) {
+        const umsetzungSlide = Array.from(document.querySelectorAll('.slide')).find(slide => 
+            slide.querySelector('.slide-number')?.textContent === 'UMSETZUNG'
+        );
+        
+        if (umsetzungSlide && slideHTML) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = slideHTML;
+            const newSlide = tempDiv.firstElementChild;
+            if (newSlide) {
+                umsetzungSlide.parentNode.insertBefore(newSlide, umsetzungSlide);
+            }
+        }
+    }
+
+    // Lädt gespeicherte Folien beim Start
+    loadSavedSlides() {
+        this.generatedSlides.forEach(slide => {
+            this.addThemeCard(slide.themeId, slide.title, slide.description);
+            this.addSlideToDOM(slide.slideHTML);
+        });
+    }
+
+    // Generiert eine eindeutige Theme-ID
+    generateThemeId(title) {
+        return title.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 20);
+    }
+
+    // Hilfsfunktion für Fehlermeldungen
+    showError(message) {
+        const statusDiv = document.getElementById('customThemeStatus');
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = `<div style="background: #fee; border: 1px solid #fcc; padding: 15px; border-radius: 6px; color: #c00;">⚠️ ${message}</div>`;
+        setTimeout(() => { statusDiv.style.display = 'none'; }, 5000);
+    }
+}
+
+    // Globale Instanzen und Variablen
+    const themeGenerator = new ThemeGenerator();
+    let selectedThemes = [];
+
+    // DOM-Elemente
+    const themeCards = document.querySelectorAll('.theme-card');
+    const startButton = document.getElementById('startPresentation');
+    const themeSelection = document.getElementById('themeSelection');
+    const slidesContainer = document.getElementById('slidesContainer');
+    const navigation = document.getElementById('navigation');
+
+    // Event Listeners für die Themenauswahl
+    themeCards.forEach(card => {
+        card.addEventListener('click', () => {
+            card.classList.toggle('selected');
+            const theme = card.dataset.theme;
+
+            if (card.classList.contains('selected')) {
+                if (!selectedThemes.includes(theme)) {
+                    selectedThemes.push(theme);
+                }
+            } else {
+                selectedThemes = selectedThemes.filter(t => t !== theme);
+            }
+
+            startButton.disabled = selectedThemes.length === 0;
+        });
+    });
+
+    startButton.addEventListener('click', () => {
+        if (selectedThemes.length > 0) {
+            initializePresentation();
+        }
+    });
+
+    function initializePresentation(restoreSlide = 0) {
+        const themesText = {
+            buchhaltung: 'Buchhaltung & Verwaltung',
+            vertrieb: 'Vertrieb & Auftragsmanagement',
+            logistik: 'Logistik & Supply Chain',
+            qualitaet: 'Qualitätsmanagement',
+            daten: 'Datenanalyse & KPIs',
+            integration: 'Systemintegration'
+        };
+
+        const selectedThemesNames = selectedThemes.map(theme => themesText[theme] || theme);
+        document.getElementById('selectedThemesText').innerHTML =
+            `Sie interessieren sich für folgende Automatisierungsbereiche:<br><strong>${selectedThemesNames.join(', ')}</strong>`;
+
+        localStorage.setItem('hanseaticAgri_selectedThemes', JSON.stringify(selectedThemes));
+
+        themeSelection.style.display = 'none';
+        slidesContainer.style.display = 'block';
+        navigation.style.display = 'flex';
+
+        filterSlides();
+        showSlide(restoreSlide);
+    }
+
+    function filterSlides() {
+        const allSlides = document.querySelectorAll('.slide');
+        allSlides.forEach(slide => {
+            const slideTheme = slide.dataset.theme;
+            if (!slideTheme || slideTheme === 'all' || selectedThemes.includes(slideTheme) || slide.id === 'thankYouSlide') {
+                slide.classList.add('available');
+            } else {
+                slide.classList.remove('available');
+            }
+        });
+    }
+
+    // Navigation
+    let currentSlideIndex = 0;
+    let visibleSlides = [];
+
+    function updateVisibleSlides() {
+        visibleSlides = Array.from(document.querySelectorAll('.slide.available'));
+        document.getElementById('totalSlides').textContent = visibleSlides.length;
+    }
+
+    function showSlide(index) {
+        updateVisibleSlides();
+        if (visibleSlides.length === 0) return;
+
+        document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active'));
+
+        if (index >= 0 && index < visibleSlides.length) {
+            visibleSlides[index].classList.add('active');
+            currentSlideIndex = index;
+
+            document.getElementById('currentSlide').textContent = index + 1;
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === visibleSlides.length - 1;
+
+            localStorage.setItem('hanseaticAgri_currentSlide', index);
+        }
+    }
+
+    function changeSlide(direction) {
+        const newIndex = currentSlideIndex + direction;
+        if (newIndex >= 0 && newIndex < visibleSlides.length) {
+            showSlide(newIndex);
+        }
+    }
+
+    function editSelection() {
+        localStorage.removeItem('hanseaticAgri_currentSlide');
+        localStorage.removeItem('hanseaticAgri_selectedThemes');
+
+        slidesContainer.style.display = 'none';
+        navigation.style.display = 'none';
+        themeSelection.style.display = 'flex';
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (slidesContainer.style.display === 'block') {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        }
+    });
+
+    // ROI Calculator
+    let confirmedValues = [0, 0, 0, 0, 0, 0, 0];
+    let customProcessCount = 7;
+
+    function confirmInput(index) {
+        const input = document.getElementById(`input${index}`);
+        const value = parseFloat(input.value) || 0;
+        confirmedValues[index - 1] = value;
+        input.style.background = '#f1f8f4';
+        updateTotal();
+    }
+
+    function updateTotal() {
+        const total = confirmedValues.reduce((sum, value) => sum + value, 0);
+        document.getElementById('totalHours').textContent = total.toFixed(1);
+    }
+
+    function addCustomProcess() {
+        const processNameInput = document.getElementById('customProcessName');
+        const processName = processNameInput.value.trim();
+        if (processName === '') return alert('Bitte geben Sie einen Prozessnamen ein.');
+
+        customProcessCount++;
+        const index = customProcessCount;
+        confirmedValues.push(0);
+
+        const newRoiItem = document.createElement('div');
+        newRoiItem.className = 'roi-item';
+        newRoiItem.innerHTML = `
+            <span>${index}. ${processName}:</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="number" id="input${index}" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                <span>h/Woche gespart</span>
+                <button onclick="confirmInput(${index})" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                <button onclick="removeCustomProcess(this, ${index})" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">×</button>
+            </div>
+        `;
+        document.getElementById('roi-items-container').appendChild(newRoiItem);
+        processNameInput.value = '';
+        document.getElementById(`input${index}`).focus();
+    }
+
+    function removeCustomProcess(button, index) {
+        confirmedValues[index - 1] = 0; // Set value to 0
+        button.closest('.roi-item').remove();
+        updateTotal();
+    }
+
+    // Initialisiert die Seite beim Laden
+    window.addEventListener('DOMContentLoaded', async () => {
+        // Lade den Kontext für die API
+        await themeGenerator.loadContext();
+        
+        // Lade gespeicherte generierte Folien
+        themeGenerator.loadSavedSlides();
+        
+        const customThemeContainer = document.getElementById('customThemeContainer');
+        if (customThemeContainer) {
+            customThemeContainer.innerHTML = themeGenerator.generateCustomThemeUI();
+        }
+
+        const savedThemes = localStorage.getItem('hanseaticAgri_selectedThemes');
+        const savedSlide = localStorage.getItem('hanseaticAgri_currentSlide');
+
+        if (savedThemes && savedSlide !== null) {
+            selectedThemes = JSON.parse(savedThemes);
+            selectedThemes.forEach(theme => {
+                const card = document.querySelector(`[data-theme="${theme}"]`);
+                if (card) card.classList.add('selected');
+            });
+            startButton.disabled = selectedThemes.length === 0;
+            initializePresentation(parseInt(savedSlide));
+        }
+    });
+</script>
+</body>
+</html>

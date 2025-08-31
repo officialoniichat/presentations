@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI-Automatisierung für FUTURE CANDY - Strategische Beratung</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.6;
+        }
+
+        .presentation-container {
+            width: 96%;
+            max-width: 1500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            padding: 50px 70px;
+            min-height: 750px;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide h1 {
+            color: #2d3748;
+            font-size: 2.4em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #ff6b6b;
+            padding-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .slide h3 {
+            color: #ff6b6b;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin: 25px 0 15px 0;
+        }
+
+        .slide p {
+            color: #4a5568;
+            font-size: 1.1em;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .exec-summary {
+            background: linear-gradient(135deg, #fff2f2 0%, #fed7d7 20%, #fc8181 100%);
+            border-left: 6px solid #ff6b6b;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .exec-summary h3 {
+            color: #2d3748;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .insight-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-left: 6px solid #4ecdc4;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .insight-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            border-color: #4ecdc4;
+        }
+
+        .insight-card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #4ecdc4;
+        }
+
+        .metrics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric-box {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+            color: white;
+            padding: 25px 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 0.95em;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 35px 0;
+        }
+
+        .solution-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .solution-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+        }
+
+        .solution-header {
+            background: linear-gradient(135deg, #2d3748 0%, #ff6b6b 100%);
+            color: white;
+            padding: 20px 25px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .solution-content {
+            padding: 25px;
+        }
+
+        .solution-feature {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            color: #4a5568;
+        }
+
+        .solution-feature::before {
+            content: "✓";
+            color: #4ecdc4;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+
+        .case-study {
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            border: 2px solid #4ecdc4;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .case-study::before {
+            content: "🚀";
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-size: 1.5em;
+        }
+
+        .case-study-header {
+            color: #2d3748;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .case-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .case-result {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .case-result-value {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #4ecdc4;
+            display: block;
+        }
+
+        .case-result-label {
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        .questions-section {
+            background: linear-gradient(135deg, #fffacd 0%, #ffd700 100%);
+            border: 2px solid #f6ad55;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .questions-section h3 {
+            color: #c05621;
+            margin-bottom: 20px;
+        }
+
+        .question-item {
+            background: white;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #f6ad55;
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .pain-point {
+            background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%);
+            border: 2px solid #f6ad55;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .pain-point h4 {
+            color: #c05621;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .pain-point-item {
+            margin: 10px 0;
+            padding: 8px 0;
+            color: #744210;
+            font-weight: 500;
+        }
+
+        .pain-point-item::before {
+            content: "⚠️";
+            margin-right: 10px;
+        }
+
+        .roi-calculator {
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            border: 2px solid #4ecdc4;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .roi-calculator h3 {
+            color: #234e52;
+            margin-bottom: 20px;
+        }
+
+        .roi-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #81e6d9;
+            align-items: center;
+        }
+
+        .roi-item:last-child {
+            border-bottom: none;
+
+        }
+
+        .action-items {
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            border: 2px solid #4ecdc4;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .action-items h4 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .action-items ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .action-items li {
+            padding: 12px 0;
+            border-bottom: 1px solid #9ae6b4;
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .action-items li:last-child {
+            border-bottom: none;
+        }
+
+        .action-items li::before {
+            content: "✓";
+            color: #4ecdc4;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 1.1em;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 70px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .nav-button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-counter {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .before-column {
+            background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%);
+            border: 2px solid #f6ad55;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .after-column {
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            border: 2px solid #4ecdc4;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .before-column h4 {
+            color: #c05621;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .after-column h4 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .process-step-item {
+            margin: 10px 0;
+            padding: 8px 0;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .process-step-item strong {
+            color: #2d3748;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Titel & Einführung -->
+        <div class="slide active">
+            <h1>Digitale Transformation für FUTURE CANDY</h1>
+            
+            <div class="exec-summary">
+                <h3>Warum wir heute sprechen</h3>
+                <p><strong>Die Situation:</strong> Intern limitieren manuelle Prozesse euer eigenes Wachstum</p>
+                <p><strong>Unser Ansatz:</strong> Vollautomatisierung eurer Kernprozesse - damit ihr euch zu 100% auf Innovation konzentrieren könnt</p>
+            </div>
+
+            <div class="metrics-container">
+                <div class="metric-box">
+                    <span class="metric-value">Custom Software</span>
+                    <span class="metric-label">Maßgeschneiderte Lösung</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-value">Skalierbar</span>
+                    <span class="metric-label">Mit eurem Wachstum</span>
+                </div>
+            </div>
+
+            <div class="insight-card">
+                <h3>Der Kern des Problems: Fragmentierte manuelle Prozesse</h3>
+                <p>Von der ersten Kundenanfrage bis zur finalen Rechnung - viele Schritte laufen heute manuell ab. Tom kopiert Daten aus E-Mails in Excel-Listen, Nick erstellt Angebote in Word, Sabine tippt Rechnungsdaten ab. Diese Lösungen sind schwer skalierbar und rauben euch die Zeit für das, was FUTURE CANDY ausmacht: Innovation.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Prozess 1 - Kundenanfragen -->
+        <div class="slide">
+            <h1>Verarbeitung neuer Kundenanfragen</h1>
+
+            <div class="before-after">
+                <div class="before-column">
+                    <h4>Heute: Manueller Chaos-Prozess</h4>
+                    <div class="process-step-item"><strong>1.</strong> Tom öffnet E-Mail mit Keynote-Anfrage</div>
+                    <div class="process-step-item"><strong>2.</strong> Öffnet Excel-Tabelle "Anfragen_2025.xlsx"</div>
+                    <div class="process-step-item"><strong>3.</strong> Kopiert manuell Name, Firma, E-Mail aus der E-Mail</div>
+                    <div class="process-step-item"><strong>4.</strong> Fügt jeden Wert einzeln in Excel ein</div>
+                    <div class="process-step-item"><strong>5.</strong> Öffnet Word-Vorlage für Antwort-E-Mail</div>
+                    <div class="process-step-item"><strong>6.</strong> Passt Anrede manuell an und versendet</div>
+                    <div class="process-step-item"><strong>7.</strong> Schreibt separate E-Mail an Nick</div>
+                    <p><em>Dauer: 10-15 Minuten pro Anfrage</em></p>
+                </div>
+                
+                <div class="after-column">
+                    <h4>Mit Custom Software: Vollautomatisch</h4>
+                    <div class="process-step-item"><strong>1.</strong> Kunde klickt "Senden" auf Website</div>
+                    <div class="process-step-item"><strong>2.</strong> Software analysiert Anfrage automatisch</div>
+                    <div class="process-step-item"><strong>3.</strong> Speichert alle Daten in zentrale Datenbank</div>
+                    <div class="process-step-item"><strong>4.</strong> Versendet personalisierte E-Mail automatisch</div>
+                    <div class="process-step-item"><strong>5.</strong> Erstellt Aufgabe in Nick's Dashboard</div>
+                    <div class="process-step-item"><strong>6.</strong> Hängt aktuelle Keynote-Broschüre an</div>
+                    <div class="process-step-item"><strong>7.</strong> Prozess komplett abgeschlossen</div>
+                    <p><em>Dauer: Wenige Sekunden, null manueller Aufwand</em></p>
+                </div>
+            </div>
+
+            <div class="questions-section">
+                <h3>Fragen zur aktuellen Anfragen-Verarbeitung</h3>
+                <div class="question-item">Wie gelangen Anfragen zu euch? Website-Formular oder zentrale E-Mail?</div>
+                <div class="question-item">Wer ist für die Bearbeitung zuständig und wie lange dauert es?</div>
+                <div class="question-item">Nutzt ihr ein CRM oder Excel-Listen für die Verwaltung?</div>
+                <div class="question-item">Passiert es, dass Anfragen in Stoßzeiten liegen bleiben?</div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Prozess 2 - Angebotserstellung -->
+        <div class="slide">
+            <h1>Erstellung von Angeboten</h1>
+
+            <div class="before-after">
+                <div class="before-column">
+                    <h4>Heute: Copy-Paste-Marathon</h4>
+                    <div class="process-step-item"><strong>1.</strong> Nick sagt Tom: "Angebot für Firma X, 10.000€"</div>
+                    <div class="process-step-item"><strong>2.</strong> Tom öffnet Word-Vorlage "Angebot_Keynote.docx"</div>
+                    <div class="process-step-item"><strong>3.</strong> Sucht Kundendaten in Excel-Tabelle</div>
+                    <div class="process-step-item"><strong>4.</strong> Kopiert Adresse manuell ins Word-Dokument</div>
+                    <div class="process-step-item"><strong>5.</strong> Tippt Datum, Angebotsnummer, Preis ein</div>
+                    <div class="process-step-item"><strong>6.</strong> Prüft auf Copy-Paste-Fehler (häufiges Problem!)</div>
+                    <div class="process-step-item"><strong>7.</strong> Speichert als PDF und versendet per E-Mail</div>
+                    <div class="process-step-item"><strong>8.</strong> Notiert sich Nachfass-Termin im Kalender</div>
+                    <p><em>Dauer: 15-20 Minuten pro Angebot</em></p>
+                </div>
+                
+                <div class="after-column">
+                    <h4>Mit Custom Software: Ein-Klick-Angebot</h4>
+                    <div class="process-step-item"><strong>1.</strong> Nick öffnet Kundendatensatz im Dashboard</div>
+                    <div class="process-step-item"><strong>2.</strong> Klickt "Angebot erstellen"</div>
+                    <div class="process-step-item"><strong>3.</strong> Wählt "Keynote" und tippt nur den Preis ein</div>
+                    <div class="process-step-item"><strong>4.</strong> Software zieht alle anderen Daten automatisch</div>
+                    <div class="process-step-item"><strong>5.</strong> Klickt "Angebot generieren & senden"</div>
+                    <div class="process-step-item"><strong>6.</strong> PDF wird perfekt formatiert erstellt</div>
+                    <div class="process-step-item"><strong>7.</strong> Automatischer Versand mit professionellem Text</div>
+                    <div class="process-step-item"><strong>8.</strong> Nachfass-Aufgabe wird automatisch erstellt</div>
+                    <p><em>Dauer: 30 Sekunden für Nick</em></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Prozess 3A - Automatisierte Terminfindung -->
+        <div class="slide">
+            <h1>Automatisierte Terminfindung</h1>
+
+            <div class="before-after">
+                <div class="before-column">
+                    <h4>Heute: E-Mail-Ping-Pong-Marathon</h4>
+                    <div class="process-step-item"><strong>1.</strong> Vertriebsmitarbeiter schreibt E-Mail: "Wann passt es Ihnen?"</div>
+                    <div class="process-step-item"><strong>2.</strong> Schlägt vor: "Dienstag 10:00, Mittwoch 14:00, Freitag 11:00"</div>
+                    <div class="process-step-item"><strong>3.</strong> Kunde antwortet Stunden später: "Passt leider nicht"</div>
+                    <div class="process-step-item"><strong>4.</strong> Kunde schlägt vor: "Donnerstag 15:00?"</div>
+                    <div class="process-step-item"><strong>5.</strong> Mitarbeiter prüft eigenen Kalender</div>
+                    <div class="process-step-item"><strong>6.</strong> Antwortet: "Ja, Donnerstag 15:00 ist super"</div>
+                    <div class="process-step-item"><strong>7.</strong> Öffnet Outlook, erstellt manuell Meeting-Eintrag</div>
+                    <div class="process-step-item"><strong>8.</strong> Fügt Kunden manuell als Teilnehmer hinzu</div>
+                    <p><em>Dauer: Mehrere Tage E-Mail-Ping-Pong</em></p>
+                </div>
+                
+                <div class="after-column">
+                    <h4>Mit Custom Software: Ein-Klick-Terminbuchung</h4>
+                    <div class="process-step-item"><strong>1.</strong> Software ist mit Nicks Kalender verbunden (Microsoft 365)</div>
+                    <div class="process-step-item"><strong>2.</strong> Mitarbeiter klickt "Meeting planen" im Dashboard</div>
+                    <div class="process-step-item"><strong>3.</strong> Software generiert einzigartigen, sicheren Weblink</div>
+                    <div class="process-step-item"><strong>4.</strong> Link wird in E-Mail kopiert oder automatisch versendet</div>
+                    <div class="process-step-item"><strong>5.</strong> Kunde klickt Link, sieht Kalenderansicht</div>
+                    <div class="process-step-item"><strong>6.</strong> Nur tatsächlich verfügbare Zeitfenster werden angezeigt</div>
+                    <div class="process-step-item"><strong>7.</strong> Kunde wählt mit einem Klick seinen Wunschtermin</div>
+                    <div class="process-step-item"><strong>8.</strong> Termin wird sofort in beide Kalender eingetragen</div>
+                    <p><em>Dauer: Sofortige Buchung, null Abstimmung</em></p>
+                </div>
+            </div>
+
+            <div class="questions-section">
+                <h3>Fragen zur aktuellen Terminfindung</h3>
+                <div class="question-item">Wie läuft die Terminfindung mit Kunden ab? E-Mail-Vorschläge hin und her?</div>
+                <div class="question-item">Nutzt ihr bereits Terminbuchungs-Tools wie Calendly oder ähnliches?</div>
+                <div class="question-item">Wie oft kommt es zu Doppelbuchungen durch manuelle Koordination?</div>
+                <div class="question-item">Wer kümmert sich um diese Abstimmung? Nick selbst oder das Team?</div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Prozess 3B - Digitaler Vertragsabschluss -->
+        <div class="slide">
+            <h1>Digitaler Vertragsabschluss</h1>
+
+            <div class="before-after">
+                <div class="before-column">
+                    <h4>Heute: Analog-Digital-Analog-Chaos</h4>
+                    <div class="process-step-item"><strong>1.</strong> Kunde antwortet: "Ja, das Angebot nehmen wir an"</div>
+                    <div class="process-step-item"><strong>2.</strong> Mitarbeiter erstellt aus Angebot Vertragsdokument in Word</div>
+                    <div class="process-step-item"><strong>3.</strong> Schickt Vertrags-PDF per E-Mail: "Bitte unterschreiben"</div>
+                    <div class="process-step-item"><strong>4.</strong> Kunde muss Vertrag ausdrucken</div>
+                    <div class="process-step-item"><strong>5.</strong> Unterschreibt mit Stift auf Papier</div>
+                    <div class="process-step-item"><strong>6.</strong> Scannt Dokument ein (oft schlechte Handy-Qualität)</div>
+                    <div class="process-step-item"><strong>7.</strong> Sendet Scan per E-Mail oder Fax zurück</div>
+                    <div class="process-step-item"><strong>8.</strong> Mitarbeiter lädt herunter, prüft Lesbarkeit, legt manuell ab</div>
+                    <p><em>Dauer: Mehrere Tage, medienbrüchig, fehleranfällig</em></p>
+                </div>
+                
+                <div class="after-column">
+                    <h4>Mit Custom Software: Rechtsgültige E-Signatur</h4>
+                    <div class="process-step-item"><strong>1.</strong> Angebot wird im Dashboard als "angenommen" markiert</div>
+                    <div class="process-step-item"><strong>2.</strong> Mitarbeiter klickt "Vertrag zur Signatur vorbereiten"</div>
+                    <div class="process-step-item"><strong>3.</strong> Software generiert rechtssicheres Vertrags-PDF</div>
+                    <div class="process-step-item"><strong>4.</strong> Klick auf "Zum Signieren senden"</div>
+                    <div class="process-step-item"><strong>5.</strong> E-Mail mit Link zu sicherem "Signatur-Raum"</div>
+                    <div class="process-step-item"><strong>6.</strong> Kunde sieht Vertrag direkt im Browser/Handy</div>
+                    <div class="process-step-item"><strong>7.</strong> Unterschreibt mit Maus/Finger auf Bildschirm</div>
+                    <div class="process-step-item"><strong>8.</strong> Automatische Ablage und Verteilung an alle Parteien</div>
+                    <p><em>Dauer: Wenige Minuten, vollständig digital</em></p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Slide 6: Prozess 4 - Rechnungsstellung & Zahlungsverfolgung -->
+        <div class="slide">
+            <h1>Rechnungsstellung & Zahlungsüberwachung</h1>
+
+            <div class="before-after">
+                <div class="before-column">
+                    <h4>Heute: Manueller Dokumenten-Zirkus</h4>
+                    <div class="process-step-item"><strong>1.</strong> Projektleiter: "Workshop abgeschlossen, Rechnung über 8.500€"</div>
+                    <div class="process-step-item"><strong>2.</strong> Tom öffnet Word-Vorlage "Rechnungsvorlage.docx"</div>
+                    <div class="process-step-item"><strong>3.</strong> Sucht Kundenadresse in Excel-Tabelle</div>
+                    <div class="process-step-item"><strong>4.</strong> Prüft letzte Rechnungsnummer in anderer Excel-Tabelle</div>
+                    <div class="process-step-item"><strong>5.</strong> Tippt alle Daten manuell ins Word-Dokument</div>
+                    <div class="process-step-item"><strong>6.</strong> Sabine loggt sich wöchentlich ins Bank-Portal ein</div>
+                    <div class="process-step-item"><strong>7.</strong> Vergleicht Zahlungseingänge manuell mit Rechnungsliste</div>
+                    <div class="process-step-item"><strong>8.</strong> Schreibt bei Verzug manuelle Mahnungen</div>
+                </div>
+                
+                <div class="after-column">
+                    <h4>Mit Custom Software: Vollautomatischer Cashflow</h4>
+                    <div class="process-step-item"><strong>1.</strong> Projektleiter markiert Projekt als "abgeschlossen"</div>
+                    <div class="process-step-item"><strong>2.</strong> Klickt "Rechnung jetzt erstellen"</div>
+                    <div class="process-step-item"><strong>3.</strong> Software kennt alle Projekt- und Kundendaten</div>
+                    <div class="process-step-item"><strong>4.</strong> Generiert automatisch lückenlose Rechnungsnummer</div>
+                    <div class="process-step-item"><strong>5.</strong> Perfekt formatiertes PDF wird automatisch versendet</div>
+                    <div class="process-step-item"><strong>6.</strong> Software prüft täglich Bankkonto über Schnittstelle</div>
+                    <div class="process-step-item"><strong>7.</strong> Ordnet Zahlungen automatisch den Rechnungen zu</div>
+                    <div class="process-step-item"><strong>8.</strong> Versendet automatische Mahnungen bei Verzug</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Slide 7: Prozess 5 - Innovation Trips Management -->
+        <div class="slide">
+            <h1>Planung & Kommunikation von Innovation Trips</h1>
+
+            <div class="before-after">
+                <div class="before-column">
+                    <h4>Heute: Excel-Chaos bei Gruppenreisen</h4>
+                    <div class="process-step-item"><strong>1.</strong> Erstellt riesige Master-Excel für Silicon Valley Trip</div>
+                    <div class="process-step-item"><strong>2.</strong> Bucht für jeden der 15 Teilnehmer manuell Flug</div>
+                    <div class="process-step-item"><strong>3.</strong> Kopiert Buchungsnummern in Excel-Tabelle</div>
+                    <div class="process-step-item"><strong>4.</strong> Wiederholt das für Hotel und Mietwagen</div>
+                    <div class="process-step-item"><strong>5.</strong> Bei Änderung: Manuelle Aktualisierung der Excel</div>
+                    <div class="process-step-item"><strong>6.</strong> Rund-E-Mail mit PDF-Anhang an alle</div>
+                    <div class="process-step-item"><strong>7.</strong> Weitere Updates → weitere E-Mails → Verwirrung</div>
+                    <div class="process-step-item"><strong>8.</strong> Beantwortet individuelle Fragen per E-Mail</div>
+                </div>
+                
+                <div class="after-column">
+                    <h4>Mit Custom Software: Zentrales Trip-Dashboard</h4>
+                    <div class="process-step-item"><strong>1.</strong> Software erstellt automatisch "Reise-Dashboard"</div>
+                    <div class="process-step-item"><strong>2.</strong> Buchungsdaten werden strukturiert im System erfasst</div>
+                    <div class="process-step-item"><strong>3.</strong> System ist "Single Source of Truth"</div>
+                    <div class="process-step-item"><strong>4.</strong> Automatische personalisierte E-Mails: "4 Wochen vorher: Pack-Tipps"</div>
+                    <div class="process-step-item"><strong>5.</strong> Jeder Teilnehmer erhält persönliches Portal</div>
+                    <div class="process-step-item"><strong>6.</strong> Aktuelle Reisepläne, Tickets, Hoteladresse immer verfügbar</div>
+                    <div class="process-step-item"><strong>7.</strong> Änderung → sofortiges Update für alle sichtbar</div>
+                    <div class="process-step-item"><strong>8.</strong> Push-Benachrichtigung bei wichtigen Updates</div>
+                </div>
+            </div>
+
+            <div class="insight-card">
+                <h3>Premium-Experience als Wettbewerbsvorteil</h3>
+                <p>Mit einer professionellen Trip-Management-Platform könnt ihr nicht nur effizienter arbeiten, sondern auch eine Premium-Experience bieten, die eure hohen Preise rechtfertigt. Teilnehmer erhalten eine App-ähnliche Erfahrung mit Agenda, Networking-Features und Live-Updates.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Prozess 6 - Tech Flat Abonnement-Verwaltung -->
+        <div class="slide">
+            <h1>Verwaltung des Tech Flat Abonnements</h1>
+
+            <div class="before-after">
+                <div class="before-column">
+                    <h4>Heute: Quartalsweise Logistik-Hölle</h4>
+                    <div class="process-step-item"><strong>1.</strong> Kalender-Erinnerung: "TECH FLAT Q3 Versand prüfen"</div>
+                    <div class="process-step-item"><strong>2.</strong> Öffnet Excel mit allen TECH FLAT Kunden</div>
+                    <div class="process-step-item"><strong>3.</strong> Prüft, welche Kunden neue Box bekommen</div>
+                    <div class="process-step-item"><strong>4.</strong> Geht ins Lager, sucht 4 Gadgets für Firma Z</div>
+                    <div class="process-step-item"><strong>5.</strong> Öffnet DHL-Website, tippt Adresse manuell ein</div>
+                    <div class="process-step-item"><strong>6.</strong> Druckt Etikett, klebt es auf, bringt zur Post</div>
+                    <div class="process-step-item"><strong>7.</strong> Schreibt manuelle E-Mail: "Eure Box ist unterwegs"</div>
+                    <div class="process-step-item"><strong>8.</strong> Trägt in Excel ein: welche Gadgets wohin</div>
+                    <div class="process-step-item"><strong>9.</strong> Wiederholt für jeden einzelnen Kunden</div>
+                </div>
+                
+                <div class="after-column">
+                    <h4>Mit Custom Software: Vollautomatische Gadget-Pipeline</h4>
+                    <div class="process-step-item"><strong>1.</strong> Software erstellt automatisch Versandaufträge zum Stichtag</div>
+                    <div class="process-step-item"><strong>2.</strong> Lagermitarbeiter sieht klare Liste: "Für Firma Z: Gadget A,B,C,D"</div>
+                    <div class="process-step-item"><strong>3.</strong> Klickt "Versandetikett drucken"</div>
+                    <div class="process-step-item"><strong>4.</strong> Software-Schnittstelle zu DHL generiert sofort Etikett</div>
+                    <div class="process-step-item"><strong>5.</strong> Markiert Paket als "versendet"</div>
+                    <div class="process-step-item"><strong>6.</strong> Automatische E-Mail mit Sendungsverfolgung</div>
+                    <div class="process-step-item"><strong>7.</strong> Gerätestatus wird automatisch aktualisiert</div>
+                    <div class="process-step-item"><strong>8.</strong> Rücksendeprozess für Q4 bereits vorgemerkt</div>
+                    <div class="process-step-item"><strong>9.</strong> Aufwand pro Kunde: wenige Klicks statt viele Minuten</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Prozess 7 - Eingangsrechnungen -->
+        <div class="slide">
+            <h1>Verarbeitung von Eingangsrechnungen</h1>
+
+            <div class="before-after">
+                <div class="before-column">
+                    <h4>Heute: Sabines Copy-Paste-Marathon</h4>
+                    <div class="process-step-item"><strong>1.</strong> Rechnung kommt als PDF-Anhang per E-Mail</div>
+                    <div class="process-step-item"><strong>2.</strong> Sabine öffnet PDF und Buchhaltungssoftware parallel</div>
+                    <div class="process-step-item"><strong>3.</strong> Liest Lieferantennamen ab und tippt ihn ab</div>
+                    <div class="process-step-item"><strong>4.</strong> Wiederholt für Rechnungsnummer, Datum, Beträge</div>
+                    <div class="process-step-item"><strong>5.</strong> Bei >1.000€: E-Mail an Nick zur Freigabe</div>
+                    <div class="process-step-item"><strong>6.</strong> Nick ist unterwegs, sieht E-Mail erst später</div>
+                    <div class="process-step-item"><strong>7.</strong> Antwortet: "Ok, passt"</div>
+                    <div class="process-step-item"><strong>8.</strong> Sabine setzt Häkchen "Freigegeben" für Zahlung</div>
+                </div>
+                
+                <div class="after-column">
+                    <h4>Mit Custom Software: KI-gestützte Verarbeitung</h4>
+                    <div class="process-step-item"><strong>1.</strong> Alle Rechnungen an spezielle E-Mail-Adresse</div>
+                    <div class="process-step-item"><strong>2.</strong> Software "liest" PDF automatisch mit KI</div>
+                    <div class="process-step-item"><strong>3.</strong> Extrahiert alle Daten: Lieferant, Nummer, Beträge</div>
+                    <div class="process-step-item"><strong>4.</strong> Legt Rechnung in "Freigabe-Center" an</div>
+                    <div class="process-step-item"><strong>5.</strong> Push-Nachricht an Nicks Handy</div>
+                    <div class="process-step-item"><strong>6.</strong> Nick klickt Link, sieht aufbereitete Rechnung</div>
+                    <div class="process-step-item"><strong>7.</strong> Ein Klick: "Freigeben" oder "Ablehnen"</div>
+                    <div class="process-step-item"><strong>8.</strong> Übertragung an Buchhaltungssoftware per Schnittstelle</div>
+                </div>
+            </div>
+
+            <div class="insight-card">
+                <h3>Intelligent Document Processing (IDP)</h3>
+                <p>Moderne KI kann Rechnungen mit SEHR SEHR SEHR hoher Genauigkeit "lesen". Lieferantennamen, Rechnungsnummern, Beträge, USt-Sätze - alles wird automatisch extrahiert und strukturiert. Sabine muss nur noch kontrollieren statt abtippen.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: ROI-Kalkulation -->
+        <div class="slide">
+            <h1>ROI: Was diese Automatisierung für FUTURE CANDY bedeutet</h1>
+
+            <div class="roi-calculator">
+    <h3>Konkrete Zeitersparnis-Kalkulation für euer Team</h3>
+    
+    <div id="processContainer">
+    
+    <div class="roi-item" data-process-id="1" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span>1. Kundenanfragen-Verarbeitung:</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="number" id="input1" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" onchange="updateTotal()">
+            <span style="font-weight: normal;">h/Woche gespart</span>
+        </div>
+    </div>
+
+    <div class="roi-item" data-process-id="2" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span>2. Angebotserstellung:</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="number" id="input2" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" onchange="updateTotal()">
+            <span style="font-weight: normal;">h/Woche gespart</span>
+        </div>
+    </div>
+
+    <div class="roi-item" data-process-id="3" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span>3. Automatisierte Terminfindung:</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="number" id="input3" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" onchange="updateTotal()">
+            <span style="font-weight: normal;">h/Woche gespart</span>
+        </div>
+    </div>
+
+    <div class="roi-item" data-process-id="4" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span>4. Digitaler Vertragsabschluss:</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="number" id="input4" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" onchange="updateTotal()">
+            <span style="font-weight: normal;">h/Woche gespart</span>
+        </div>
+    </div>
+
+    <div class="roi-item" data-process-id="5" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span>5. Rechnungsstellung & Zahlungsüberwachung:</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="number" id="input5" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" onchange="updateTotal()">
+            <span style="font-weight: normal;">h/Woche gespart</span>
+        </div>
+    </div>
+
+    <div class="roi-item" data-process-id="6" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span>6. Innovation Trips Management:</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="number" id="input6" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" onchange="updateTotal()">
+            <span style="font-weight: normal;">h/Woche gespart</span>
+        </div>
+    </div>
+
+    <div class="roi-item" data-process-id="7" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span>7. Tech Flat Logistik:</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="number" id="input7" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" onchange="updateTotal()">
+            <span style="font-weight: normal;">h/Woche gespart</span>
+        </div>
+    </div>
+
+    <div class="roi-item" data-process-id="8" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span>8. Eingangsrechnungen-Verarbeitung:</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="number" id="input8" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" onchange="updateTotal()">
+            <span style="font-weight: normal;">h/Woche gespart</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- Neuen Prozess hinzufügen - VERBESSERTES DESIGN -->
+<div class="roi-item" style="border: 2px dashed #4ecdc4; background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%); cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center;" onclick="showAddProcessDialog()">
+    
+    <div style="display: flex; align-items: center; justify-content: center; gap: 15px; padding: 10px;">
+        
+        <div style="background: #4ecdc4; color: white; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; font-weight: bold; display: flex; align-items: center; justify-content: center; line-height: 1; padding-bottom: 3px;">
+    +
+</div>
+        
+        <span style="font-size: 1.1em; font-weight: 600; color: #4ecdc4;">Weiteren Prozess hinzufügen</span>
+
+    </div>
+</div>
+
+<!-- Popup Dialog für neuen Prozess -->
+<div id="addProcessDialog" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 500px; width: 90%;">
+        <h3 style="margin: 0 0 20px 0; color: #2d3748;">Neuen Prozess hinzufügen</h3>
+        <input type="text" id="dialogProcessName" placeholder="Name des Prozesses eingeben..." style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1em; margin-bottom: 20px; box-sizing: border-box;">
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button onclick="hideAddProcessDialog()" style="background: #a0aec0; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1em;">Abbrechen</button>
+            <button onclick="addProcessFromDialog()" style="background: linear-gradient(135deg, #4ecdc4 0%, #45b7d1 100%); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1em; font-weight: 600;">Hinzufügen</button>
+        </div>
+    </div>
+</div>
+    
+    <!-- Neuen Prozess hinzufügen -->
+
+    
+    <!-- Ergebnisse -->
+    <div class="roi-item" style="background: #e6fffa; padding: 15px; border-radius: 8px; margin-top: 20px;">
+        <span><strong>Gesamte wöchentliche Zeitersparnis:</strong></span>
+        <span><strong><span id="totalHours">0.0</span> Stunden</strong></span>
+    </div>
+    
+    <div class="roi-item" style="background: #f0fff4; padding: 15px; border-radius: 8px; margin-top: 10px;">
+        <span><strong>Das entspricht pro Jahr:</strong></span>
+        <span><strong><span id="yearlyHours">0</span> Stunden = <span id="workWeeks">0.0</span> Arbeitswochen</strong></span>
+    </div>
+</div>
+
+            <div class="insight-card">
+                <h3>Diese Zeit könnt ihr investieren in:</h3>
+                <p>• Mehr Kundenakquise • Neue Produkte entwickeln • Trendforschung intensivieren • Strategische Partnerschaften • Team-Weiterentwicklung • Innovation Labs • Internationale Expansion</p>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">◀ Zurück</button>
+            <div class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">11</span>
+            </div>
+            <button class="nav-button" id="nextBtn" onclick="changeSlide(1)">Weiter ▶</button>
+        </div>
+    </div>
+
+   <script>
+    function initializeProcesses() {
+    const processElements = document.querySelectorAll('#processContainer .roi-item[data-process-id]');
+    processCounter = processElements.length;
+    processes.clear(); 
+
+    processElements.forEach(element => {
+        const id = parseInt(element.getAttribute('data-process-id'));
+        const nameElement = element.querySelector('span');
+        // Speichere den "reinen" Namen ohne die anfängliche Nummer
+        const baseName = nameElement.textContent.substring(nameElement.textContent.indexOf(' ') + 1).trim();
+
+        processes.set(id, {
+            id: id,
+            name: baseName, // Wichtig: nur der Name, ohne Nummer
+            value: 0,
+            isCustom: false
+        });
+    });
+    updateTotal();
+}
+// ===================================================================================
+// ROI CALCULATOR LOGIC (NEU & VERBESSERT)
+// ===================================================================================
+
+let processCounter = 8; // Start bei 8, da wir 8 vordefinierte Prozesse haben
+let processes = new Map();
+
+// Initialisiere die 8 existierenden Prozesse und andere Elemente beim Laden der Seite
+// Diesen Block ganz am Anfang deines <script>-Tags einfügen
+// ALTEN BLOCK LÖSCHEN, DIESEN EINFÜGEN
+document.addEventListener('DOMContentLoaded', () => {
+    // CSS für Hover-Effekt dynamisch hinzufügen
+    const style = document.createElement('style');
+    style.textContent = `
+        .delete-wrapper { position: relative; cursor: pointer; display: inline-block; padding: 5px 8px; margin: -5px -8px; }
+        .process-text { transition: opacity 0.2s ease-in-out; }
+        .delete-icon { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #ff6b6b; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1em; opacity: 0; transition: opacity 0.2s ease-in-out; border-radius: 4px; }
+        .delete-wrapper:hover .process-text { opacity: 0; }
+        .delete-wrapper:hover .delete-icon { opacity: 1; }
+    `;
+    document.head.append(style);
+
+    // WICHTIG: Die neue Initialisierung hier aufrufen
+    initializeProcesses();
+
+    // Slider Logik
+    if (slides.length > 0) {
+        document.getElementById('totalSlides').textContent = totalSlides;
+        currentSlideIndex = loadSlidePosition();
+        showSlide(currentSlideIndex);
+    }
+});
+
+
+function updateTotal() {
+    let total = 0;
+    document.querySelectorAll('#processContainer input[type="number"]').forEach(input => {
+        const value = parseFloat(input.value) || 0;
+        total += value;
+        const processId = parseInt(input.closest('.roi-item').getAttribute('data-process-id'));
+        if (processes.has(processId)) {
+            processes.get(processId).value = value;
+        }
+    });
+    const yearly = total * 52;
+    const workWeeks = yearly / 40;
+    document.getElementById('totalHours').textContent = total.toFixed(1);
+    document.getElementById('yearlyHours').textContent = yearly.toFixed(0);
+    document.getElementById('workWeeks').textContent = workWeeks.toFixed(1);
+    console.log('Aktualisierte Summe:', total, 'Stunden/Woche');
+}
+
+function showAddProcessDialog() {
+    document.getElementById('addProcessDialog').style.display = 'flex';
+    document.getElementById('dialogProcessName').focus();
+}
+
+function hideAddProcessDialog() {
+    document.getElementById('addProcessDialog').style.display = 'none';
+    document.getElementById('dialogProcessName').value = '';
+}
+
+// ALTE FUNKTION LÖSCHEN, DIESE EINFÜGEN
+function addProcessFromDialog() {
+    const nameInput = document.getElementById('dialogProcessName');
+    const processName = nameInput.value.trim();
+    if (!processName) {
+        alert('Bitte geben Sie einen Namen für den Prozess ein.');
+        return;
+    }
+
+    processCounter++;
+    const newId = processCounter;
+
+    const newProcessHTML = `
+        <div class="roi-item" data-process-id="${newId}" data-is-custom="true" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div class="delete-wrapper">
+                <span class="process-text" style="font-weight: normal;">${newId}. ${processName}</span>
+                <div class="delete-icon" onclick="removeProcess(${newId})">✗</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="number" id="input${newId}" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" onchange="updateTotal()">
+                <span style="font-weight: normal;">h/Woche gespart</span>
+            </div>
+        </div>`;
+
+    document.getElementById('processContainer').insertAdjacentHTML('beforeend', newProcessHTML);
+    
+    processes.set(newId, {
+        id: newId,
+        name: processName, // Speichere nur den reinen Namen
+        value: 0,
+        isCustom: true
+    });
+
+    hideAddProcessDialog();
+    updateTotal(); // Nur die Summe aktualisieren, nicht neu nummerieren!
+}
+function removeProcess(processId) {
+    const element = document.querySelector(`.roi-item[data-process-id="${processId}"]`);
+    if (element) {
+        element.remove();
+        processes.delete(processId);
+        renumberProcesses(); // Nach dem Löschen neu nummerieren
+        updateTotal();
+    }
+}
+
+// ALTE FUNKTION LÖSCHEN, DIESE EINFÜGEN
+function renumberProcesses() {
+    const processElements = document.querySelectorAll('#processContainer .roi-item[data-process-id]');
+    const newProcesses = new Map();
+    
+    processElements.forEach((element, index) => {
+        const newId = index + 1;
+        const oldId = parseInt(element.getAttribute('data-process-id'));
+        const processData = processes.get(oldId);
+
+        if (processData) {
+            // DOM-Elemente mit der neuen ID aktualisieren
+            element.setAttribute('data-process-id', newId);
+            const input = element.querySelector('input');
+            if (input) input.id = `input${newId}`;
+
+            // Text-Label aktualisieren (funktioniert für vordefinierte und neue Prozesse)
+            const textElement = element.querySelector('.process-text, span');
+            if (textElement) textElement.textContent = `${newId}. ${processData.name}`;
+
+            // Löschen-Icon aktualisieren (nur bei neuen Prozessen vorhanden)
+            const deleteIcon = element.querySelector('.delete-icon');
+            if (deleteIcon) deleteIcon.setAttribute('onclick', `removeProcess(${newId})`);
+
+            // Neue Map mit den korrekten, lückenlosen IDs aufbauen
+            processData.id = newId;
+            newProcesses.set(newId, processData);
+        }
+    });
+
+    // Globale Variablen mit den korrekten Daten überschreiben
+    processes = newProcesses;
+    processCounter = processes.size;
+}
+
+// ===================================================================================
+// SLIDER & NAVIGATION LOGIC (ORIGINALCODE 1:1 ÜBERNOMMEN)
+// ===================================================================================
+
+let currentSlideIndex = 0;
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+
+function showSlide(index) {
+    slides.forEach(slide => slide.classList.remove('active'));
+    slides[index].classList.add('active');
+
+    document.getElementById('currentSlide').textContent = index + 1;
+
+    document.getElementById('prevBtn').disabled = index === 0;
+    document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+
+    if (index === totalSlides - 1) {
+        document.getElementById('nextBtn').textContent = 'Lass uns sprechen!';
+    } else {
+        document.getElementById('nextBtn').textContent = 'Weiter ▶';
+    }
+    // Speichere die aktuelle Position
+    saveSlidePosition();
+}
+
+function changeSlide(direction) {
+    currentSlideIndex += direction;
+
+    if (currentSlideIndex < 0) {
+        currentSlideIndex = 0;
+    } else if (currentSlideIndex >= totalSlides) {
+        currentSlideIndex = totalSlides - 1;
+    }
+
+    showSlide(currentSlideIndex);
+}
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'ArrowLeft') {
+        changeSlide(-1);
+    } else if (event.key === 'ArrowRight') {
+        changeSlide(1);
+    }
+});
+
+function saveSlidePosition() {
+    localStorage.setItem('currentSlideIndex', currentSlideIndex.toString());
+    localStorage.setItem('slidePositionTimestamp', Date.now().toString());
+}
+
+function clearOldSlidePosition() {
+    const lastSaved = localStorage.getItem('slidePositionTimestamp');
+    const now = Date.now();
+    const oneHour = 60 * 60 * 1000; // 1 Stunde in Millisekunden
+
+    if (lastSaved && (now - parseInt(lastSaved)) > oneHour) {
+        localStorage.removeItem('currentSlideIndex');
+        localStorage.removeItem('slidePositionTimestamp');
+        return true; // Position wurde gelöscht
+    }
+    return false; // Position ist noch gültig
+}
+
+function loadSlidePosition() {
+    if (clearOldSlidePosition()) {
+        return 0; // Zu alt, starte von vorne
+    }
+
+    const saved = localStorage.getItem('currentSlideIndex');
+    if (saved !== null) {
+        const savedIndex = parseInt(saved);
+        if (savedIndex >= 0 && savedIndex < totalSlides) {
+            return savedIndex;
+        }
+    }
+    return 0;
+}
+
+
+// ULTRA FAST Trackpad Swipe Navigation mit 3s Rebound nur für HORIZONTALES Swipen
+let touchStartX = 0;
+let touchEndX = 0;
+let isTrackpadSwipe = false;
+
+const ULTRA_FAST_SETTINGS = {
+    debounceTime: 15,
+    wheelThreshold: 15,
+    instantSwipeThreshold: 60,
+    touchThreshold: 20,
+    mouseThreshold: 40,
+    reboundTime: 3000
+};
+
+let lastHorizontalSwipeTime = 0;
+let isInHorizontalRebound = false;
+
+function canHorizontalSwipe() {
+    const currentTime = Date.now();
+    if (currentTime - lastHorizontalSwipeTime > ULTRA_FAST_SETTINGS.reboundTime) {
+        return true;
+    }
+    return false;
+}
+
+function executeHorizontalSwipe(direction) {
+    if (canHorizontalSwipe()) {
+        changeSlide(direction);
+        lastHorizontalSwipeTime = Date.now();
+        isInHorizontalRebound = true;
+        console.log(`🎯 Horizontaler Swipe ${direction > 0 ? 'vorwärts' : 'rückwärts'} - Rebound aktiv für 3s`);
+        setTimeout(() => {
+            isInHorizontalRebound = false;
+            console.log('✅ Horizontaler Rebound beendet - Swipe wieder möglich');
+        }, ULTRA_FAST_SETTINGS.reboundTime);
+        return true;
+    } else {
+        const remainingTime = Math.ceil((ULTRA_FAST_SETTINGS.reboundTime - (Date.now() - lastHorizontalSwipeTime)) / 1000);
+        console.log(`🚫 Horizontaler Swipe blockiert - noch ${remainingTime}s Rebound`);
+        return false;
+    }
+}
+
+document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    isTrackpadSwipe = true;
+}, { passive: true });
+
+document.addEventListener('touchend', function(e) {
+    if (!isTrackpadSwipe) return;
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+    isTrackpadSwipe = false;
+}, { passive: true });
+
+let wheelDeltaX = 0;
+let wheelTimeout = null;
+let isWheelSwipe = false;
+let lastWheelTime = 0;
+
+document.addEventListener('wheel', function(e) {
+    const currentTime = Date.now();
+    const isHorizontalScroll = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+    const isVerticalScroll = Math.abs(e.deltaY) > Math.abs(e.deltaX);
+    if (isHorizontalScroll) {
+        if (!canHorizontalSwipe()) {
+            e.preventDefault();
+            return;
+        }
+        e.preventDefault();
+        wheelDeltaX += e.deltaX;
+        isWheelSwipe = true;
+        lastWheelTime = currentTime;
+        clearTimeout(wheelTimeout);
+        wheelTimeout = setTimeout(() => {
+            if (isWheelSwipe && Math.abs(wheelDeltaX) > ULTRA_FAST_SETTINGS.wheelThreshold) {
+                if (wheelDeltaX > 0) {
+                    executeHorizontalSwipe(1);
+                } else {
+                    executeHorizontalSwipe(-1);
+                }
+            }
+            wheelDeltaX = 0;
+            isWheelSwipe = false;
+        }, ULTRA_FAST_SETTINGS.debounceTime);
+    } else if (isVerticalScroll) {
+        console.log('📜 Vertikales Scrollen - kein Rebound, normal durchgelassen');
+    }
+}, { passive: false });
+
+document.addEventListener('wheel', function(e) {
+    const isHorizontalScroll = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+    if (isHorizontalScroll && Math.abs(e.deltaX) > ULTRA_FAST_SETTINGS.instantSwipeThreshold) {
+        if (!canHorizontalSwipe()) {
+            e.preventDefault();
+            return;
+        }
+        e.preventDefault();
+        if (e.deltaX > 0) {
+            if (executeHorizontalSwipe(1)) {
+                wheelDeltaX = 0;
+                clearTimeout(wheelTimeout);
+            }
+        } else {
+            if (executeHorizontalSwipe(-1)) {
+                wheelDeltaX = 0;
+                clearTimeout(wheelTimeout);
+            }
+        }
+    }
+}, { passive: false });
+
+function handleSwipe() {
+    const swipeThreshold = ULTRA_FAST_SETTINGS.touchThreshold;
+    const swipeDistance = touchEndX - touchStartX;
+    if (Math.abs(swipeDistance) > swipeThreshold) {
+        if (swipeDistance > 0) {
+            executeHorizontalSwipe(-1);
+        } else {
+            executeHorizontalSwipe(1);
+        }
+    }
+}
+
+let pointerStartX = 0;
+let pointerEndX = 0;
+let isPointerSwipe = false;
+document.addEventListener('pointerdown', function(e) {
+    if (e.pointerType === 'touch') {
+        pointerStartX = e.clientX;
+        isPointerSwipe = true;
+    }
+});
+document.addEventListener('pointerup', function(e) {
+    if (e.pointerType === 'touch' && isPointerSwipe) {
+        pointerEndX = e.clientX;
+        const pointerSwipeDistance = pointerEndX - pointerStartX;
+        const pointerSwipeThreshold = ULTRA_FAST_SETTINGS.touchThreshold;
+        if (Math.abs(pointerSwipeDistance) > pointerSwipeThreshold) {
+            if (pointerSwipeDistance > 0) {
+                executeHorizontalSwipe(-1);
+            } else {
+                executeHorizontalSwipe(1);
+            }
+        }
+        isPointerSwipe = false;
+    }
+});
+
+document.addEventListener('gesturestart', function(e) { e.preventDefault(); }, { passive: false });
+document.addEventListener('gesturechange', function(e) { e.preventDefault(); }, { passive: false });
+document.addEventListener('gestureend', function(e) { e.preventDefault(); }, { passive: false });
+
+let mouseStartX = 0;
+let isMouseDragging = false;
+document.addEventListener('mousedown', function(e) {
+    if (e.button === 1) { // Middle mouse button
+        mouseStartX = e.clientX;
+        isMouseDragging = true;
+        e.preventDefault();
+    }
+});
+document.addEventListener('mousemove', function(e) {
+    if (isMouseDragging) {
+        e.preventDefault();
+    }
+});
+document.addEventListener('mouseup', function(e) {
+    if (isMouseDragging && e.button === 1) {
+        const mouseSwipeDistance = e.clientX - mouseStartX;
+        const mouseSwipeThreshold = ULTRA_FAST_SETTINGS.mouseThreshold;
+        if (Math.abs(mouseSwipeDistance) > mouseSwipeThreshold) {
+            if (mouseSwipeDistance > 0) {
+                executeHorizontalSwipe(-1);
+            } else {
+                executeHorizontalSwipe(1);
+            }
+        }
+        isMouseDragging = false;
+    }
+});
+
+let rafId = null;
+let accumulatedDeltaX = 0;
+document.addEventListener('wheel', function(e) {
+    const isHorizontalScroll = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+    if (isHorizontalScroll) {
+        if (!canHorizontalSwipe()) {
+            e.preventDefault();
+            return;
+        }
+        e.preventDefault();
+        accumulatedDeltaX += e.deltaX;
+        if (rafId) {
+            cancelAnimationFrame(rafId);
+        }
+        rafId = requestAnimationFrame(() => {
+            if (Math.abs(accumulatedDeltaX) > 10) {
+                if (accumulatedDeltaX > 0) {
+                    executeHorizontalSwipe(1);
+                } else {
+                    executeHorizontalSwipe(-1);
+                }
+            }
+            accumulatedDeltaX = 0;
+            rafId = null;
+        });
+    }
+}, { passive: false });
+
+console.log('⚡ ULTRA FAST Trackpad Navigation mit 3s Rebound nur für HORIZONTALES Swipen!');
+console.log('🚀 Horizontales Swipen: Debounce 15ms, Threshold 15px, 3s Rebound');
+console.log('📜 Vertikales Scrollen: Normal ohne Einschränkungen');
+console.log('👆 Swipe horizontal für Slides, vertikal für normales Scrollen!');
+console.log('Settings:', ULTRA_FAST_SETTINGS);
+
+</script>
+</body>
+</html>

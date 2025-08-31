@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L-T - Digitale Transformation durch Automatisierung</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .edit-selection-button {
+            background: transparent;
+            color: #2F7D32;
+            border: 2px solid #2F7D32;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .edit-selection-button:hover {
+            background: #2F7D32;
+            color: white;
+        }
+
+        /* ROI Calculator */
+        .roi-calculator {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .roi-calculator h3 {
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .roi-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            align-items: center;
+        }
+
+        .roi-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Theme Selection Screen */
+        .theme-selection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px;
+            background: linear-gradient(135deg, #fff5f1 0%, #ffe8df 100%);
+        }
+
+        .theme-selection.hidden {
+            display: none;
+        }
+
+        .logo-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo-header img {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .company-name {
+            font-size: 3em;
+            color: #fe723f;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .selection-title {
+            font-size: 2.2em;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .selection-subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 50px;
+        }
+
+        .theme-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .theme-card:hover {
+            border-color: #fe723f;
+            box-shadow: 0 8px 24px rgba(254, 114, 63, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .theme-card.selected {
+            border-color: #fe723f;
+            background: #fff5f1;
+            box-shadow: 0 4px 20px rgba(254, 114, 63, 0.2);
+        }
+
+        .theme-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #fe723f;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .theme-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .theme-title {
+            font-size: 1.4em;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .theme-description {
+            color: #666;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+
+        .start-button {
+            background: #fe723f;
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .start-button:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(254, 114, 63, 0.3);
+        }
+
+        .start-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Slides */
+        .slide {
+            display: none;
+            padding: 60px 80px 120px 80px; /* More padding at bottom for navigation */
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Theme Icon in Slides */
+        .slide-icon {
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            width: 60px;
+            height: 60px;
+            opacity: 0.8;
+        }
+        
+        /* Theme-specific colors */
+        .slide[data-theme="buchhaltung"] .slide-header {
+            border-bottom-color: #01a999;
+        }
+        .slide[data-theme="buchhaltung"] .slide-number {
+            color: #01a999;
+        }
+        .slide[data-theme="buchhaltung"] h2 {
+            border-left-color: #01a999;
+        }
+        .slide[data-theme="buchhaltung"] h3 {
+            color: #01a999;
+        }
+        .slide[data-theme="buchhaltung"] .metric-value {
+            color: #01a999;
+        }
+        .slide[data-theme="buchhaltung"] .timeline-marker {
+            background: #01a999;
+        }
+        .slide[data-theme="buchhaltung"] .key-message {
+            border-left-color: #01a999;
+        }
+        
+        .slide[data-theme="vertrieb"] .slide-header,
+        .slide[data-theme="qualitaet"] .slide-header,
+        .slide[data-theme="daten"] .slide-header {
+            border-bottom-color: #cf72a9;
+        }
+        .slide[data-theme="vertrieb"] .slide-number,
+        .slide[data-theme="qualitaet"] .slide-number,
+        .slide[data-theme="daten"] .slide-number {
+            color: #cf72a9;
+        }
+        .slide[data-theme="vertrieb"] h2,
+        .slide[data-theme="qualitaet"] h2,
+        .slide[data-theme="daten"] h2 {
+            border-left-color: #cf72a9;
+        }
+        .slide[data-theme="vertrieb"] h3,
+        .slide[data-theme="qualitaet"] h3,
+        .slide[data-theme="daten"] h3 {
+            color: #cf72a9;
+        }
+        .slide[data-theme="vertrieb"] .metric-value,
+        .slide[data-theme="qualitaet"] .metric-value,
+        .slide[data-theme="daten"] .metric-value {
+            color: #cf72a9;
+        }
+        .slide[data-theme="vertrieb"] .timeline-marker,
+        .slide[data-theme="qualitaet"] .timeline-marker,
+        .slide[data-theme="daten"] .timeline-marker {
+            background: #cf72a9;
+        }
+        .slide[data-theme="vertrieb"] .key-message,
+        .slide[data-theme="qualitaet"] .key-message,
+        .slide[data-theme="daten"] .key-message {
+            border-left-color: #cf72a9;
+        }
+        .slide[data-theme="vertrieb"] .process-header,
+        .slide[data-theme="qualitaet"] .process-header,
+        .slide[data-theme="daten"] .process-header {
+            background: #cf72a9;
+        }
+        .slide[data-theme="vertrieb"] .insight-box,
+        .slide[data-theme="qualitaet"] .insight-box,
+        .slide[data-theme="daten"] .insight-box {
+            background: #fef2f9;
+            border-color: #f3c6e2;
+        }
+        
+        .slide[data-theme="logistik"] .slide-header,
+        .slide[data-theme="integration"] .slide-header {
+            border-bottom-color: #01a999;
+        }
+        .slide[data-theme="logistik"] .slide-number,
+        .slide[data-theme="integration"] .slide-number {
+            color: #01a999;
+        }
+        .slide[data-theme="logistik"] h2,
+        .slide[data-theme="integration"] h2 {
+            border-left-color: #01a999;
+        }
+        .slide[data-theme="logistik"] h3,
+        .slide[data-theme="integration"] h3 {
+            color: #01a999;
+        }
+        .slide[data-theme="logistik"] .metric-value,
+        .slide[data-theme="integration"] .metric-value {
+            color: #01a999;
+        }
+        .slide[data-theme="logistik"] .timeline-marker,
+        .slide[data-theme="integration"] .timeline-marker {
+            background: #01a999;
+        }
+        .slide[data-theme="logistik"] .key-message,
+        .slide[data-theme="integration"] .key-message {
+            border-left-color: #01a999;
+        }
+        .slide[data-theme="logistik"] .insight-box,
+        .slide[data-theme="integration"] .insight-box {
+            background: #e6f7f5;
+            border-color: #01a999;
+        }
+
+        .slide.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .slide.available {
+            /* Slides that are available for viewing based on theme selection */
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* McKinsey Style Typography */
+        .slide-header {
+            border-bottom: 3px solid #fe723f;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .slide-number {
+            color: #fe723f;
+            font-size: 1em;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            color: #1a1a1a;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .slide-subtitle {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 300;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #1a1a1a;
+            font-weight: 400;
+            margin: 40px 0 20px 0;
+            padding-left: 20px;
+            border-left: 4px solid #fe723f;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #fe723f;
+            font-weight: 500;
+            margin: 30px 0 15px 0;
+        }
+
+        /* Content Elements */
+        .key-message {
+            background: #f8f9fa;
+            border-left: 5px solid #fe723f;
+            padding: 25px 30px;
+            margin: 30px 0;
+            font-size: 1.2em;
+            color: #1a1a1a;
+        }
+
+        .insight-box {
+            background: #fff5f1;
+            border: 1px solid #fdd6c4;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .metric-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .slide[data-theme="buchhaltung"] .metric-card:hover,
+        .slide[data-theme="logistik"] .metric-card:hover,
+        .slide[data-theme="integration"] .metric-card:hover {
+            border-color: #01a999;
+        }
+        
+        .slide[data-theme="vertrieb"] .metric-card:hover,
+        .slide[data-theme="qualitaet"] .metric-card:hover,
+        .slide[data-theme="daten"] .metric-card:hover {
+            border-color: #cf72a9;
+        }
+
+        .metric-value {
+            font-size: 3em;
+            color: #fe723f;
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 1.1em;
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Process Cards */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .process-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .process-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transform: translateY(-3px);
+        }
+
+        .process-header {
+            background: #fe723f;
+            color: white;
+            padding: 20px 25px;
+            font-size: 1.3em;
+            font-weight: 500;
+        }
+
+        .process-content {
+            padding: 25px;
+        }
+
+        .process-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+
+        .process-item:last-child {
+            border-bottom: none;
+        }
+
+        .process-item::before {
+            content: "→";
+            color: inherit;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .slide[data-theme="buchhaltung"] .process-item::before,
+        .slide[data-theme="logistik"] .process-item::before,
+        .slide[data-theme="integration"] .process-item::before {
+            color: #01a999;
+        }
+        
+        .slide[data-theme="vertrieb"] .process-item::before,
+        .slide[data-theme="qualitaet"] .process-item::before,
+        .slide[data-theme="daten"] .process-item::before {
+            color: #cf72a9;
+        }
+
+        /* Value Proposition */
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .value-card {
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .value-card h4 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .slide[data-theme="buchhaltung"] .value-card h4,
+        .slide[data-theme="logistik"] .value-card h4,
+        .slide[data-theme="integration"] .value-card h4 {
+            color: #01a999;
+        }
+        
+        .slide[data-theme="vertrieb"] .value-card h4,
+        .slide[data-theme="qualitaet"] .value-card h4,
+        .slide[data-theme="daten"] .value-card h4 {
+            color: #cf72a9;
+        }
+
+        .value-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .value-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .value-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: inherit;
+            font-weight: bold;
+        }
+        
+        .slide[data-theme="buchhaltung"] .value-list li::before,
+        .slide[data-theme="logistik"] .value-list li::before,
+        .slide[data-theme="integration"] .value-list li::before {
+            color: #01a999;
+        }
+        
+        .slide[data-theme="vertrieb"] .value-list li::before,
+        .slide[data-theme="qualitaet"] .value-list li::before,
+        .slide[data-theme="daten"] .value-list li::before {
+            color: #cf72a9;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-marker {
+            width: 60px;
+            height: 60px;
+            background: #fe723f;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            margin-left: 30px;
+            flex-grow: 1;
+        }
+
+        .timeline-title {
+            font-size: 1.4em;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .timeline-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 20px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: #fe723f;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-button:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(254, 114, 63, 0.3);
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-indicator {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: #2F7D32;
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cta-title {
+            font-size: 2em;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .cta-subtitle {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: white;
+            color: #2F7D32;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .edit-selection-button {
+            background: transparent;
+            color: #fe723f;
+            border: 2px solid #fe723f;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .edit-selection-button:hover {
+            background: #fe723f;
+            color: white;
+        }
+
+        /* Transition Screen */
+        .transition-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transition-content {
+            text-align: center;
+        }
+
+        /* Checkmark Animation */
+        .checkmark-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+        }
+
+        .checkmark {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #fff;
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px #fe723f;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #fe723f;
+            fill: none;
+            animation: stroke .6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke .3s cubic-bezier(0.65, 0, 0.45, 1) .8s forwards;
+        }
+
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+
+        @keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 75px #fe723f;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Versteckter Kontext für Claude API -->
+    <script type="text/template" id="hanseaticContext" style="display: none;">
+# Comprehensive Process Automation Analysis for Generaxion GmbH
+
+Generaxion GmbH operates as a North European digital marketing powerhouse with **400+ employees across 11 offices**, serving **8,000+ clients** through their comprehensive digital agency group model. Founded by Allan Damborg in 2008 and now led in Germany by Co-founder **Cati Klintworth**, the company has positioned itself as a market leader in performance marketing, strategy, and digital transformation services. This analysis reveals **67 specific automation opportunities** across their operations, from obvious marketing agency processes to sophisticated hidden workflows that could transform their competitive position.
+
+## Understanding Generaxion's Business Model
+
+Generaxion operates as a **unified digital agency holding company** with multiple acquired agencies under one brand. Their business model centers on providing comprehensive digital marketing services to SMEs across Northern Europe, with recent expansion into Germany through the **wyn acquisition** in 2022. The company emphasizes **employee ownership**, innovative work arrangements like their "Generaxion Anywhere" program, and a **"two steps ahead"** approach to digital trends.
+
+**Core service offerings** span four key areas: Strategy & Insight (data analysis and business strategy), Marketing & Media (performance marketing and campaign management), Platforms & E-commerce (website and platform development), and Branding & Content (brand strategy and content creation). Their **"Demand Drivers"** workforce operates across Denmark, Sweden, Finland, Norway, and Germany, with Hamburg serving as a key operational hub.
+
+## Highly Interesting Automation Opportunities (Marketing Agency Staples)
+
+### Client Management and Onboarding Automation
+
+**Lead Qualification and Scoring System**
+- **Implementation**: Automated lead scoring using HubSpot or Salesforce with custom scoring models based on company size, industry, and engagement patterns
+- **Business Impact**: 25% of leads are typically sales-ready; automation can identify these immediately instead of manual qualification
+- **Specific Process**: Integrate website forms with CRM, automatically score leads based on criteria (company size, industry, engagement level), and route qualified leads to appropriate account managers
+- **ROI Potential**: Reduce lead qualification time by 70% and increase conversion rates by 20%
+
+**Automated Client Onboarding Workflows**
+- **Implementation**: Create standardized onboarding sequences using workflow automation platforms
+- **Process Details**: Automated contract signing (DocuSign), welcome email sequences, project setup, team introductions, and initial strategy sessions scheduling
+- **Business Impact**: Reduce onboarding time from 2 weeks to 3 days, improve client satisfaction scores
+- **Tools**: HubSpot workflows, Salesforce automation, or custom workflow solutions
+
+### Campaign Management Automation
+
+**Cross-Platform Campaign Orchestration**
+- **Implementation**: Automated campaign deployment across Google Ads, LinkedIn Ads, Facebook Ads, and other platforms
+- **Specific Process**: Create campaign templates, automated budget allocation based on performance, real-time bid optimization, and cross-platform performance tracking
+- **Business Impact**: 30% improvement in campaign efficiency, 24/7 optimization capabilities
+- **Tools**: Google Ads scripts, Facebook Business Manager API, LinkedIn Campaign Manager automation
+
+**Dynamic Creative Optimization**
+- **Implementation**: AI-powered creative testing and optimization across all campaigns
+- **Process Details**: Automated A/B testing of ad creatives, dynamic creative adjustments based on performance, automated pause/activation of underperforming assets
+- **ROI Potential**: 25% improvement in campaign performance, 50% reduction in creative management time
+
+### Reporting and Analytics Automation
+
+**Automated Client Reporting System**
+- **Implementation**: Real-time dashboard generation with automated monthly report delivery
+- **Specific Process**: Data aggregation from all marketing platforms, automated insight generation, white-label report creation, and scheduled client delivery
+- **Business Impact**: Save 10-20 hours per week on manual reporting, improve data accuracy
+- **Tools**: DashThis, AgencyAnalytics, or custom Google Data Studio solutions
+
+**Performance Monitoring and Alerting**
+- **Implementation**: Real-time performance monitoring with automated alerts for campaign anomalies
+- **Process Details**: Automated tracking of KPIs, instant alerts for performance drops, automated pause mechanisms for underperforming campaigns
+- **Business Impact**: Prevent budget waste, improve client satisfaction through proactive management
+
+### Content Creation and Social Media Automation
+
+**AI-Powered Content Generation**
+- **Implementation**: Automated content creation for social media, blog posts, and ad copy
+- **Specific Process**: AI-generated content based on brand guidelines, automated content calendar creation, multi-platform content adaptation
+- **Business Impact**: 60% reduction in content creation time, consistent brand voice across all platforms
+- **Tools**: ChatGPT API integration, Jasper, or custom AI content solutions
+
+**Social Media Scheduling and Management**
+- **Implementation**: Automated social media posting across all client accounts
+- **Process Details**: Content calendar automation, optimal posting time algorithms, automated engagement responses, hashtag optimization
+- **ROI Potential**: 70% reduction in social media management time, 40% increase in engagement rates
+
+## Hidden/Non-Obvious Automation Opportunities
+
+### Advanced Data Integration and Intelligence
+
+**Cross-Client Performance Benchmarking System**
+- **Implementation**: Automated analysis of performance data across all 8,000+ clients to identify industry benchmarks and optimization opportunities
+- **Hidden Value**: Create competitive intelligence reports, identify trends before competitors, provide strategic insights to clients
+- **Process Details**: Automated data collection from all client accounts, machine learning-powered pattern recognition, automated benchmark report generation
+- **Business Impact**: New revenue stream through premium insights, improved client retention through superior strategy
+
+**Predictive Client Churn Prevention**
+- **Implementation**: Machine learning model to predict client churn based on engagement patterns, performance metrics, and communication frequency
+- **Hidden Process**: Automated analysis of client behavior, early warning system for at-risk accounts, automated intervention workflows
+- **ROI Potential**: 30% reduction in client churn, improved lifetime value
+
+### Sophisticated Workflow Orchestration
+
+**Multi-Agency Resource Allocation System**
+- **Implementation**: Automated resource allocation across all 11 offices based on capacity, expertise, and project requirements
+- **Hidden Value**: Optimize utilization across the Nordic network, reduce bottlenecks, improve project delivery times
+- **Process Details**: Real-time capacity monitoring, automated skill matching, dynamic project assignment, cross-border collaboration workflows
+- **Business Impact**: 37% improvement in billable utilization, 45% reduction in project delays
+
+**Intelligent Project Handoff Automation**
+- **Implementation**: Automated handoff processes between strategy, creative, development, and account management teams
+- **Hidden Process**: Automated project documentation, seamless knowledge transfer, automated approval workflows, status synchronization
+- **ROI Potential**: 40% reduction in project completion time, fewer communication gaps
+
+### Advanced Client Intelligence Systems
+
+**Automated Competitive Intelligence Gathering**
+- **Implementation**: Real-time monitoring of competitor campaigns, pricing, and strategies across all client industries
+- **Hidden Value**: Provide clients with competitive advantages, identify market opportunities, optimize pricing strategies
+- **Process Details**: Automated web scraping of competitor data, campaign monitoring, pricing analysis, trend identification
+- **Business Impact**: New premium service offering, improved client results, competitive differentiation
+
+**Client Business Intelligence Automation**
+- **Implementation**: Automated analysis of client business performance beyond marketing metrics
+- **Hidden Process**: Integration with client CRM/ERP systems, automated business performance correlation with marketing activities, predictive business impact modeling
+- **ROI Potential**: Position as strategic business partner, justify higher fees, improve client retention
+
+### Sophisticated Quality Assurance Systems
+
+**Automated Quality Control Across All Deliverables**
+- **Implementation**: AI-powered quality checking for all creative assets, strategies, and campaigns before client delivery
+- **Hidden Value**: Consistent quality standards across all 400+ employees, reduced revision cycles, improved client satisfaction
+- **Process Details**: Automated brand guideline checking, performance prediction for campaigns, automated compliance verification
+- **Business Impact**: 50% reduction in client revisions, improved brand reputation
+
+**Real-Time Performance Optimization Engine**
+- **Implementation**: Continuous automated optimization of all client campaigns based on real-time performance data
+- **Hidden Process**: Machine learning-powered bid adjustments, automated budget reallocation, predictive performance optimization
+- **ROI Potential**: 25% improvement in overall campaign performance, reduced manual optimization time
+
+## Internal Process Automation Opportunities
+
+### Human Resources and Talent Management
+
+**Automated Employee Onboarding and Training**
+- **Implementation**: Comprehensive onboarding automation for new "Demand Drivers" across all 11 offices
+- **Process Details**: Automated document collection, training module assignment, progress tracking, mentorship matching
+- **Business Impact**: Standardized onboarding experience, reduced time to productivity, improved employee satisfaction
+
+**Performance Management Automation**
+- **Implementation**: Automated performance tracking, goal setting, and review processes
+- **Hidden Value**: Data-driven performance insights, automated skill gap identification, predictive performance management
+- **Tools**: Custom HR automation platform integrated with project management systems
+
+### Financial Operations Automation
+
+**Automated Multi-Currency Invoice Processing**
+- **Implementation**: Automated invoice generation, currency conversion, and payment processing across Nordic markets
+- **Process Details**: Automated project milestone tracking, time tracking integration, multi-currency handling, payment automation
+- **ROI Potential**: Reduce invoice processing time from days to minutes, improve cash flow
+
+**Sophisticated Revenue Recognition Automation**
+- **Implementation**: Automated revenue recognition across multiple service types and geographic markets
+- **Hidden Process**: Complex revenue allocation across services, automated compliance with international accounting standards
+- **Business Impact**: Improved financial accuracy, reduced audit preparation time
+
+### Operations and Facilities Management
+
+**Cross-Office Resource Optimization**
+- **Implementation**: Automated management of resources across all 11 offices including equipment, meeting rooms, and shared services
+- **Process Details**: Real-time resource availability tracking, automated booking systems, cross-office resource sharing
+- **Business Impact**: Improved resource utilization, reduced operational costs
+
+**Automated Vendor Management System**
+- **Implementation**: Comprehensive vendor relationship automation for all suppliers across Nordic markets
+- **Hidden Process**: Automated vendor performance monitoring, contract lifecycle management, automated renewal negotiations
+- **ROI Potential**: 23% reduction in procurement costs, improved vendor relationships
+
+## External/Customer-Facing Process Automation
+
+### Client Communication and Relationship Management
+
+**Proactive Client Communication System**
+- **Implementation**: Automated client communication based on project milestones, performance changes, and market conditions
+- **Process Details**: Automated status updates, performance alerts, market insight sharing, meeting scheduling
+- **Business Impact**: Improved client satisfaction, reduced account management workload
+
+**Automated Client Success Monitoring**
+- **Implementation**: Real-time monitoring of client business success and automated intervention when needed
+- **Hidden Value**: Predictive client success management, automated upselling opportunities, proactive problem resolution
+- **ROI Potential**: 30% improvement in client retention, increased average account value
+
+### Advanced Service Delivery Automation
+
+**Automated Service Customization Engine**
+- **Implementation**: Dynamic service offering customization based on client industry, size, and performance requirements
+- **Process Details**: Automated service recommendations, dynamic pricing, customized proposal generation
+- **Business Impact**: Improved close rates, optimized service delivery, premium pricing opportunities
+
+**Client Self-Service Portal Automation**
+- **Implementation**: Comprehensive self-service portal allowing clients to access reports, request changes, and manage their accounts
+- **Hidden Process**: Automated request routing, approval workflows, service delivery tracking
+- **ROI Potential**: Reduce account management workload by 40%, improve client satisfaction
+
+## Industry-Specific Automation Opportunities
+
+### Nordic Market Specialization
+
+**Multi-Language Content Automation**
+- **Implementation**: Automated translation and localization of content across Danish, Swedish, Finnish, Norwegian, and German markets
+- **Process Details**: AI-powered translation with cultural adaptation, automated content distribution, localized performance tracking
+- **Business Impact**: Scale content creation across all Nordic markets, maintain cultural relevance
+
+**Regulatory Compliance Automation**
+- **Implementation**: Automated compliance monitoring across different Nordic and German regulatory requirements
+- **Hidden Process**: Real-time regulatory change monitoring, automated policy updates, compliance report generation
+- **ROI Potential**: Reduce compliance costs, avoid regulatory penalties
+
+### Digital Transformation Specialization
+
+**Client Digital Maturity Assessment Automation**
+- **Implementation**: Automated assessment of client digital capabilities and automated recommendation generation
+- **Process Details**: Automated auditing tools, digital maturity scoring, customized transformation roadmaps
+- **Business Impact**: New service offering, improved client results, competitive differentiation
+
+**Industry Trend Monitoring and Analysis**
+- **Implementation**: Automated monitoring of digital marketing trends specific to each client industry
+- **Hidden Process**: Real-time trend analysis, automated insight generation, proactive strategy recommendations
+- **ROI Potential**: Position as industry thought leader, justify premium pricing
+
+## Technology Integration and Data Management
+
+### Advanced Analytics and AI Integration
+
+**Predictive Analytics Platform**
+- **Implementation**: Machine learning platform for predicting campaign performance, client churn, and market trends
+- **Process Details**: Automated data model training, real-time prediction generation, automated recommendation systems
+- **Business Impact**: Improved decision-making, competitive advantage, new service offerings
+
+**Automated Data Quality Management**
+- **Implementation**: Continuous data quality monitoring and automated correction across all client data
+- **Hidden Process**: Automated data validation, duplicate detection, data enrichment, quality scoring
+- **ROI Potential**: 67% reduction in data-related errors, improved decision accuracy
+
+### Integration and Platform Management
+
+**Unified Marketing Technology Stack**
+- **Implementation**: Automated integration and management of all marketing tools and platforms
+- **Process Details**: Automated data synchronization, single sign-on management, platform optimization
+- **Business Impact**: Improved operational efficiency, reduced technology costs
+
+**API-First Automation Architecture**
+- **Implementation**: Custom API development for seamless integration between all business systems
+- **Hidden Value**: Enable rapid automation deployment, improve system reliability, reduce integration costs
+- **ROI Potential**: 50% reduction in integration time, improved system reliability
+
+## Implementation Strategy and Recommendations
+
+### Phase 1: Foundation Building (Months 1-3)
+
+**High-Impact, Low-Complexity Implementations:**
+1. **Automated Client Reporting**: Implement DashThis or AgencyAnalytics for automated report generation
+2. **Email Marketing Automation**: Deploy HubSpot workflows for client communication and lead nurturing
+3. **Social Media Scheduling**: Implement Buffer or Hootsuite for automated posting across all client accounts
+4. **Basic CRM Automation**: Set up automated lead scoring and routing in existing CRM
+
+**Expected ROI**: 150% within 6 months, 15-20 hours saved per week
+
+### Phase 2: Process Optimization (Months 4-8)
+
+**Medium-Complexity, High-Impact Implementations:**
+1. **Campaign Management Automation**: Deploy cross-platform automation for Google Ads, LinkedIn, and Facebook
+2. **Client Onboarding Automation**: Implement comprehensive onboarding workflows
+3. **Performance Monitoring System**: Set up real-time monitoring with automated alerts
+4. **Content Creation Automation**: Integrate AI-powered content generation
+
+**Expected ROI**: 240% within 9 months, 30-40 hours saved per week
+
+### Phase 3: Advanced Automation (Months 9-18)
+
+**High-Complexity, Transformative Implementations:**
+1. **Predictive Analytics Platform**: Develop machine learning capabilities for client churn prediction and performance optimization
+2. **Multi-Agency Resource Allocation**: Implement sophisticated resource management across all offices
+3. **Advanced Quality Control**: Deploy AI-powered quality assurance systems
+4. **Competitive Intelligence Automation**: Implement automated competitor monitoring and analysis
+
+**Expected ROI**: 350% within 18 months, strategic competitive advantage
+
+### Success Metrics and Monitoring
+
+**Financial KPIs:**
+- Process automation ROI target: 240% within 6-9 months
+- Cost per client reduction: 30% within 12 months
+- Revenue per employee improvement: 25% within 18 months
+
+**Operational KPIs:**
+- Client satisfaction score improvement: 20% within 12 months
+- Project delivery time reduction: 40% within 18 months
+- Employee productivity increase: 35% within 12 months
+
+**Strategic KPIs:**
+- Client retention rate improvement: 30% within 18 months
+- New service revenue from automation insights: 15% of total revenue
+- Market share growth in German market: 25% within 24 months
+
+## Conclusion
+
+Generaxion GmbH sits at the intersection of significant automation opportunity and competitive necessity. With their **400+ employee workforce** serving **8,000+ clients** across **11 offices**, the company has reached a scale where automation becomes not just beneficial but essential for continued growth and competitive advantage.
+
+The **67 automation opportunities** identified range from immediate high-impact implementations like automated reporting and client communication to sophisticated systems like predictive analytics and cross-agency resource optimization. The combination of obvious marketing agency automations and hidden process improvements could transform Generaxion from a well-run agency into a technology-enabled market leader.
+
+**Key strategic advantages** include their Nordic market position, employee ownership model, and existing digital expertise - all factors that support successful automation adoption. The German market expansion through wyn provides additional opportunities for automation-driven scaling and competitive differentiation.
+
+**Implementation should prioritize** high-ROI, low-complexity solutions first, building toward sophisticated automation capabilities that create sustainable competitive advantages. With proper execution, Generaxion can achieve the industry-standard **240% ROI within 6-9 months** while positioning for long-term market leadership in the evolving digital marketing landscape.
+
+The company's **"two steps ahead"** philosophy aligns perfectly with automation adoption - those who implement comprehensive automation strategies now will dominate tomorrow's market. For Generaxion, automation represents not just operational improvement but strategic transformation into a truly scalable, data-driven organization capable of sustained growth across European markets.
+    </script>
+
+    <div class="presentation-container">
+        <!-- Theme Selection Screen -->
+        <div class="theme-selection" id="themeSelection">
+            <div class="logo-header">
+                <img src="LT_Logo.svg" alt="L-T Logo" style="max-width: 150px; height: auto; margin-bottom: 30px;">
+                <div class="selection-title">Digitale Prozessoptimierung für L-T</div>
+                <div class="selection-subtitle">Wählen Sie die Prozesse, die Sie optimieren möchten:</div>
+            </div>
+
+            <div class="themes-grid">
+                <div class="theme-card" data-theme="buchhaltung">
+                    <span class="theme-icon"><i class="fas fa-tags"></i></span>
+                    <div class="theme-title">Aktionsstart vorbereiten</div>
+                    <div class="theme-description">Automatisierte Sale-Etiketten mit Laufweg-Optimierung</div>
+                </div>
+
+                <div class="theme-card" data-theme="vertrieb">
+                    <span class="theme-icon"><i class="fas fa-barcode"></i></span>
+                    <div class="theme-title">Preis-Kontrolle auf der Fläche</div>
+                    <div class="theme-description">Täglicher Abgleich und mobile Fehlerkorrektur</div>
+                </div>
+
+                <div class="theme-card" data-theme="logistik">
+                    <span class="theme-icon"><i class="fas fa-boxes"></i></span>
+                    <div class="theme-title">Nachschub & Größenverteilung</div>
+                    <div class="theme-description">Intelligente Nachversorgung und Umlagerungen</div>
+                </div>
+
+                <div class="theme-card" data-theme="qualitaet">
+                    <span class="theme-icon"><i class="fas fa-calendar-alt"></i></span>
+                    <div class="theme-title">Dienstpläne für Stoßzeiten</div>
+                    <div class="theme-description">Datenbasierte Personalplanung mit Forecast</div>
+                </div>
+
+                <div class="theme-card" data-theme="daten">
+                    <span class="theme-icon"><i class="fas fa-undo"></i></span>
+                    <div class="theme-title">Retouren & Preisfehler erkennen</div>
+                    <div class="theme-description">Tägliche Ausnahmenliste für schnelle Reaktion</div>
+                </div>
+
+                <div class="theme-card" data-theme="rechnungen">
+                    <span class="theme-icon"><i class="fas fa-file-invoice"></i></span>
+                    <div class="theme-title">Rechnungen zahlen/buchen</div>
+                    <div class="theme-description">Automatisierter 3-Way-Match mit Ausnahmen-Prinzip</div>
+                </div>
+
+                <div class="theme-card" data-theme="wartung">
+                    <span class="theme-icon"><i class="fas fa-wrench"></i></span>
+                    <div class="theme-title">Reparatur & Wartung</div>
+                    <div class="theme-description">QR-Codes und automatische SLA-Verfolgung</div>
+                </div>
+
+                <div class="theme-card" data-theme="integration">
+                    <span class="theme-icon"><i class="fas fa-qrcode"></i></span>
+                    <div class="theme-title">Digitale Clubkarte & Bons</div>
+                    <div class="theme-description">Self-Service Anmeldung und E-Bon Standard</div>
+                </div>
+            </div>
+
+            <!-- Custom Theme Generator Section -->
+            <div id="customThemeContainer"></div>
+
+            <button class="start-button" id="startPresentation" disabled>Präsentation starten</button>
+        </div>
+
+        <!-- Transition Screen -->
+        <div class="transition-screen" id="transitionScreen" style="display: none;">
+            <div class="transition-content">
+                <h1 style="color: #1a1a1a; font-size: 2.5em; font-weight: 300; margin-bottom: 40px;">
+                    Vielen Dank für die Eingabe, lasst uns loslegen!
+                </h1>
+                <div class="checkmark-circle">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slides -->
+        <div class="slides-container" id="slidesContainer">
+
+            <!-- Slide 1: Executive Summary -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">EXECUTIVE SUMMARY</div>
+                    <h1>L-T Effizienzsteigerung durch intelligente Automatisierung</h1>
+                    <div class="slide-subtitle">Wie L-T mit digitalen Lösungen Zeit spart und Fehler minimiert</div>
+                </div>
+
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">1x</div>
+                        <div class="metric-label">Laufweg statt mehrere Runden</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">-90%</div>
+                        <div class="metric-label">Weniger Preis-Overrides</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">24/7</div>
+                        <div class="metric-label">Live-Transparenz</div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong>Kernbotschaft:</strong> L-T kann durch gezielte Prozessautomatisierung in Aktionsvorbereitung, Preiskontrolle, Nachschub und digitalen Services erhebliche Zeitgewinne erzielen und gleichzeitig die Kundenzufriedenheit steigern.
+                </div>
+            </div>
+
+            <!-- Slide 2: Current Situation -->
+            <div class="slide" data-theme="all">
+                <div class="slide-header">
+                    <div class="slide-number">CURRENT SITUATION</div>
+                    <h1>L-T spezifische tägliche Herausforderungen</h1>
+                </div>
+
+                <div class="process-grid">
+                    <div class="process-card">
+                        <div class="process-header">Zeitintensive Abläufe</div>
+                        <div class="process-content">
+                            <div class="process-item">Mehrfache Laufwege für Aktions-Etiketten</div>
+                            <div class="process-item">Manuelle Preiskontrollen nach Aktionstagen</div>
+                            <div class="process-item">Nachschub-Anfragen per Telefon/E-Mail</div>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-header">Reaktive Prozesse</div>
+                        <div class="process-content">
+                            <div class="process-item">Preisfehler erst an der Kasse bemerkt</div>
+                            <div class="process-item">Dienstpläne basieren auf Erfahrung</div>
+                            <div class="process-item">Reparaturen per Telefon/E-Mail gemeldet</div>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-header">Manuelle Systeme</div>
+                        <div class="process-content">
+                            <div class="process-item">Clubkarten-Registrierung manuell</div>
+                            <div class="process-item">Rechnungsprüfung per Hand</div>
+                            <div class="process-item">Wöchentliche Retouren-Analyse</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <h3>Unsere Analyse zeigt:</h3>
+                    <p>L-T hat bereits solide digitale Grundlagen, aber viele Prozesse laufen noch manuell ab. Durch intelligente Automatisierung können Mitarbeiter von Routinearbeit befreit und für wertvolleren Kundenservice eingesetzt werden.</p>
+                </div>
+            </div>
+
+            <!-- Slide 3: Aktionsstart vorbereiten -->
+            <div class="slide" data-theme="buchhaltung">
+                <img src="Strategie.svg" alt="Strategie Icon" class="slide-icon">
+                <div class="slide-header">
+                    <div class="slide-number">PROZESS 1</div>
+                    <h1>Aktionsstart vorbereiten (Sale/Preisaktionen)</h1>
+                </div>
+
+                <h2><i class="fas fa-tags" style="color: #01a999; margin-right: 10px;"></i>Wie läuft Ihre Aktionsvorbereitung heute ab?</h2>
+                <div class="process-card" style="margin: 30px 0;">
+                    <div class="process-header" style="background: #01a999;"><i class="fas fa-clipboard-list"></i> IST-Prozess: Manuelle Etikettierung mit mehreren Runden</div>
+                    <div class="process-content">
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-clock"></i> Aktionsvorbereitung</h4>
+                            <div class="process-item">Einkauf pflegt Aktionspreise im ERP/POS</div>
+                            <div class="process-item">Marketing pflegt Artikel/Flächen im Kampagnen-Tool</div>
+                            <div class="process-item">Warenauszeichnung druckt Etiketten nach Marke/Warenträger</div>
+                            <div class="process-item">Mehrere Laufwege durch die Abteilung</div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-redo"></i> Nacharbeiten</h4>
+                            <div class="process-item">Nachdrucke wegen Restposten/vergessener Ständer</div>
+                            <div class="process-item">Kasse bemerkt Abweichungen am Aktionstag</div>
+                            <div class="process-item">Ad-hoc-Fix während Kundenandrang</div>
+                            <div class="process-item">Unnötige Wege und Zeitverlust</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 40px;"><i class="fas fa-robot" style="color: #01a999; margin-right: 10px;"></i>So funktioniert es automatisiert:</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-moon"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Nacht-Job erstellt Aktionspakete (T-1, 02:00)</div>
+                            <div class="timeline-description">IT/ERP erzeugt pro Abteilung 1 PDF-Paket mit allen Aktionsetiketten, sortiert nach Laufweg (Eingang → Mitte → Rückwand). Deckblatt zeigt Stückzahl und ETA.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-route"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Ein Laufweg mit Mobile-Tracking</div>
+                            <div class="timeline-description">Warenauszeichnung läuft einmal linear durch, scannt jedes geklebte Etikett in MDE/Handy-App. System trackt Fortschritt live.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-check-circle"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Auto-Restliste & Status-Ampel</div>
+                            <div class="timeline-description">12:00 Nachdruck nur für nicht geklebte Labels. 15:00 Ampel je Abteilung (fertig/offen). Marketing sieht Bereitstellungsgrad live.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong><i class="fas fa-lightbulb"></i> Resultat:</strong> Nachdrucke/Abteilung ↓, Ersttags-Preisfehler ↓, "fertig bis 15:00"-Quote ↑. Ein Laufweg statt mehrere Runden.
+                </div>
+            </div>
+
+            <!-- Slide 4: Preis-Kontrolle -->
+            <div class="slide" data-theme="vertrieb">
+                <img src="Marketing.svg" alt="Marketing Icon" class="slide-icon">
+                <div class="slide-header">
+                    <div class="slide-number">PROZESS 2</div>
+                    <h1>Preis-Kontrolle (tägliche Preisgenauigkeit)</h1>
+                </div>
+
+                <h2><i class="fas fa-euro-sign" style="color: #cf72a9; margin-right: 10px;"></i>Wie läuft Ihre Preiskontrolle heute ab?</h2>
+                <div class="process-card" style="margin: 30px 0;">
+                    <div class="process-header" style="background: #cf72a9;"><i class="fas fa-clipboard-list"></i> IST-Prozess: Reaktive Fehlerfindung</div>
+                    <div class="process-content">
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-search"></i> Stichprobenkontrollen</h4>
+                            <div class="process-item">Mitarbeiter prüft nach Aktionstagen sporadisch</div>
+                            <div class="process-item">Manuelle Preisvergleiche zwischen Etikett und Kasse</div>
+                            <div class="process-item">Zeit für komplette Prüfung fehlt meist</div>
+                            <div class="process-item">Nur Auffälligkeiten werden dokumentiert</div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> Fehlererkennung</h4>
+                            <div class="process-item">Preisfehler werden erst an der Kasse bemerkt</div>
+                            <div class="process-item">Kundenbeschwerde wegen falscher Preise</div>
+                            <div class="process-item">Override-Häufungen erst wöchentlich analysiert</div>
+                            <div class="process-item">Keine systematische Ursachenanalyse</div>
+                        </div>
+                        <div>
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-tools"></i> Korrektur</h4>
+                            <div class="process-item">Manuelle Einzelkorrektur je Auffälligkeit</div>
+                            <div class="process-item">Neue Etiketten drucken und austauschen</div>
+                            <div class="process-item">Kassierer-Information per E-Mail oder Zettel</div>
+                            <div class="process-item">Aufwand erst nach dem Fehler</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 40px;"><i class="fas fa-robot" style="color: #cf72a9; margin-right: 10px;"></i>So funktioniert es automatisiert:</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-sync"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Täglicher automatischer Preisabgleich (06:00)</div>
+                            <div class="timeline-description">System vergleicht alle ERP-Preise mit POS-Preisen automatisch. Alle Aktionsänderungen werden sofort auf Konsistenz geprüft.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-list"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Intelligente Fehlerliste mit Prioritäten</div>
+                            <div class="timeline-description">System erstellt priorisierte Abweichungsliste: Hochfrequenz-Artikel zuerst, mit Mengenangabe und Umsatzrelevanz.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-rocket"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Ein-Klick-Korrektur & Auto-Sync</div>
+                            <div class="timeline-description">Korrekturen werden mit einem Klick an ERP und POS übertragen. Etikett-Neudruck automatisch ausgelöst. Kasse aktualisiert sich live.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong><i class="fas fa-lightbulb"></i> Resultat:</strong> -90% weniger Preis-Overrides an der Kasse, proaktive statt reaktive Preiskontrolle, deutlich weniger Kundenbeschwerden.
+                </div>
+            </div>
+
+            <!-- Slide 5: Nachschub & Größenverteilung -->
+            <div class="slide" data-theme="logistik">
+                <img src="Strategie.svg" alt="Strategie Icon" class="slide-icon">
+                <div class="slide-header">
+                    <div class="slide-number">PROZESS 3</div>
+                    <h1>Nachschub & Größenverteilung (intelligente Bestandsoptimierung)</h1>
+                </div>
+
+                <h2><i class="fas fa-boxes" style="color: #01a999; margin-right: 10px;"></i>Wie läuft Ihr Nachschub heute ab?</h2>
+                <div class="process-card" style="margin: 30px 0;">
+                    <div class="process-header" style="background: #01a999;"><i class="fas fa-clipboard-list"></i> IST-Prozess: Nachschub auf Anforderung</div>
+                    <div class="process-content">
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-phone"></i> Bedarfsmeldung</h4>
+                            <div class="process-item">Verkäufer bemerkt leere Größe oder Artikel</div>
+                            <div class="process-item">Anruf oder E-Mail an Lager: "Brauchen Größe M"</div>
+                            <div class="process-item">Keine Information über Verkaufsgeschwindigkeit</div>
+                            <div class="process-item">Lager prüft Verfügbarkeit manuell</div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-truck"></i> Lieferung</h4>
+                            <div class="process-item">Standard-Nachschub ohne Größenprognose</div>
+                            <div class="process-item">Oft zu viel von langsamen Größen</div>
+                            <div class="process-item">Schnelldreher gehen trotzdem aus</div>
+                            <div class="process-item">Größenlücken entstehen erneut</div>
+                        </div>
+                        <div>
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> Probleme</h4>
+                            <div class="process-item">Kunden fragen nach ausverkauften Größen</div>
+                            <div class="process-item">Umsatzverlust durch fehlende Artikel</div>
+                            <div class="process-item">Lagerstau bei langsamen Größen</div>
+                            <div class="process-item">Reaktive statt proaktive Planung</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 40px;"><i class="fas fa-robot" style="color: #01a999; margin-right: 10px;"></i>So funktioniert es automatisiert:</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-chart-line"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Intelligente Bestandsanalyse (täglich)</div>
+                            <div class="timeline-description">System analysiert Verkaufsgeschwindigkeit pro Artikel/Größe, erkennt Trends und berücksichtigt Saisonalität und Werbeaktionen.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-brain"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Predictive Nachschub-Empfehlungen</div>
+                            <div class="timeline-description">KI berechnet optimale Größenverteilung basierend auf historischen Daten, Wetterprognose und geplanten Aktionen.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-shipping-fast"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Automatische Nachschub-Orders</div>
+                            <div class="timeline-description">System erstellt automatisch Nachschub-Aufträge mit optimaler Mengenverteilung. Proaktive Warnung vor kritischen Beständen.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong><i class="fas fa-lightbulb"></i> Resultat:</strong> Weniger Ausverkaufssituationen, optimierte Lagerumschläge, höhere Kundenzufriedenheit durch verfügbare Größen.
+                </div>
+            </div>
+
+            <!-- Slide 6: Dienstpläne -->
+            <div class="slide" data-theme="qualitaet">
+                <img src="Marketing.svg" alt="Marketing Icon" class="slide-icon">
+                <div class="slide-header">
+                    <div class="slide-number">PROZESS 4</div>
+                    <h1>Dienstpläne (datenbasierte Personalplanung)</h1>
+                </div>
+
+                <h2><i class="fas fa-calendar-alt" style="color: #cf72a9; margin-right: 10px;"></i>Wie erstellen Sie heute Dienstpläne?</h2>
+                <div class="process-card" style="margin: 30px 0;">
+                    <div class="process-header" style="background: #cf72a9;"><i class="fas fa-clipboard-list"></i> IST-Prozess: Erfahrungsbasierte Planung</div>
+                    <div class="process-content">
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-brain"></i> Bauchgefühl-Planung</h4>
+                            <div class="process-item">Store Manager plant basierend auf Erfahrung</div>
+                            <div class="process-item">"Samstags ist immer viel los"</div>
+                            <div class="process-item">Feste Schichten ohne Kundenfrequenz-Daten</div>
+                            <div class="process-item">Gleiches Muster jede Woche</div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> Probleme</h4>
+                            <div class="process-item">Personalengpässe während Rush-Hours</div>
+                            <div class="process-item">Leerlauf während ruhiger Phasen</div>
+                            <div class="process-item">Keine Berücksichtigung von Aktionen/Wetter</div>
+                            <div class="process-item">Reaktive Anpassungen erst nach Problemen</div>
+                        </div>
+                        <div>
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-tools"></i> Manuelle Korrekturen</h4>
+                            <div class="process-item">Last-minute-Aufstockung bei Andrang</div>
+                            <div class="process-item">Mitarbeiter früher nach Hause bei Leerlauf</div>
+                            <div class="process-item">Stresssituationen für Personal und Kunden</div>
+                            <div class="process-item">Unbefriedigende Customer Experience</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 40px;"><i class="fas fa-robot" style="color: #cf72a9; margin-right: 10px;"></i>So funktioniert es automatisiert:</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-chart-line"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">POS-Daten-Analyse & Kundenfrequenz-Tracking</div>
+                            <div class="timeline-description">System analysiert historische Transaktionsdaten, Kundenfrequenz pro Stunde/Tag, berücksichtigt Aktionen, Wetter und Events.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-brain"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Predictive Staffing-Forecast</div>
+                            <div class="timeline-description">KI prognostiziert optimale Personalbesetzung pro Zeitslot basierend auf erwarteter Kundenfrequenz und Transaktionsvolumen.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-calendar-plus"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Automatische Dienstplan-Generierung</div>
+                            <div class="timeline-description">System erstellt optimierte Dienstpläne mit Skill-Matching, berücksichtigt Mitarbeiter-Präferenzen und Arbeitsrecht-Compliance.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong><i class="fas fa-lightbulb"></i> Resultat:</strong> Optimale Personalkosten, kürzere Warteschlangen, zufriedenere Mitarbeiter durch planbare Arbeitszeiten.
+                </div>
+            </div>
+
+            <!-- Slide 7: Retouren & Preisfehler -->
+            <div class="slide" data-theme="daten">
+                <img src="Entwicklung.svg" alt="Entwicklung Icon" class="slide-icon">
+                <div class="slide-header">
+                    <div class="slide-number">PROZESS 5</div>
+                    <h1>Retouren & Preisfehler (tägliche Ausnahmelisten)</h1>
+                </div>
+
+                <h2><i class="fas fa-undo" style="color: #cf72a9; margin-right: 10px;"></i>Wie analysieren Sie heute Retouren und Preisfehler?</h2>
+                <div class="process-card" style="margin: 30px 0;">
+                    <div class="process-header" style="background: #cf72a9;"><i class="fas fa-clipboard-list"></i> IST-Prozess: Wöchentliche Analyse</div>
+                    <div class="process-content">
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-calendar-week"></i> Wöchentlicher Review</h4>
+                            <div class="process-item">Jeden Montag: Excel-Export der Retouren-Daten</div>
+                            <div class="process-item">Manuelle Kategorisierung der Rückgabe-Gründe</div>
+                            <div class="process-item">Stichproben-artige Preisfehler-Auswertung</div>
+                            <div class="process-item">Zusammenfassung im Wochenmeeting</div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-search"></i> Ursachensuche</h4>
+                            <div class="process-item">Reaktive Analyse erst nach Auffälligkeiten</div>
+                            <div class="process-item">Manuelle Prüfung verdächtiger Artikel</div>
+                            <div class="process-item">Keine automatische Mustererkennung</div>
+                            <div class="process-item">Zeitverzögerung zwischen Problem und Erkennung</div>
+                        </div>
+                        <div>
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-tools"></i> Maßnahmen</h4>
+                            <div class="process-item">Manuelle Einzelfall-Korrekturen</div>
+                            <div class="process-item">Kommunikation an Lieferanten per E-Mail</div>
+                            <div class="process-item">Keine systematische Prävention</div>
+                            <div class="process-item">Probleme wiederholen sich oft</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 40px;"><i class="fas fa-robot" style="color: #cf72a9; margin-right: 10px;"></i>So funktioniert es automatisiert:</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-chart-line"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Tägliche automatische Anomalie-Erkennung</div>
+                            <div class="timeline-description">System erkennt auffällige Retouren-Raten pro Artikel, ungewöhnliche Preisfehler-Häufungen und Qualitätsprobleme in Echtzeit.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-list"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Intelligente Exception-Reports</div>
+                            <div class="timeline-description">Tägliche Ausnahmelisten mit priorisierten Problemfällen, automatische Kategorisierung und Ursachen-Vorschläge.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-paper-plane"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Automatisierte Maßnahmen-Workflows</div>
+                            <div class="timeline-description">Automatische Benachrichtigung relevanter Stakeholder, vordefinierte Korrektur-Workflows, Lieferanten-Alerts bei Qualitätsproblemen.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong><i class="fas fa-lightbulb"></i> Resultat:</strong> Proaktive Problemerkennung statt reaktive Analyse, weniger Retouren durch schnelle Korrekturen, bessere Lieferanten-Performance.
+                </div>
+            </div>
+
+            <!-- Slide 8: Rechnungen zahlen/buchen -->
+            <div class="slide" data-theme="rechnungen">
+                <img src="WebDev.svg" alt="WebDev Icon" class="slide-icon">
+                <div class="slide-header">
+                    <div class="slide-number">PROZESS 6</div>
+                    <h1>Rechnungen zahlen/buchen (3-Way-Match Automatisierung)</h1>
+                </div>
+
+                <h2><i class="fas fa-file-invoice-dollar" style="color: #01a999; margin-right: 10px;"></i>Wie prüfen Sie heute Eingangsrechnungen?</h2>
+                <div class="process-card" style="margin: 30px 0;">
+                    <div class="process-header" style="background: #01a999;"><i class="fas fa-clipboard-list"></i> IST-Prozess: Manuelle Rechnungsprüfung</div>
+                    <div class="process-content">
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-envelope"></i> Rechnungseingang</h4>
+                            <div class="process-item">Papier-Rechnungen oder E-Mail-PDFs</div>
+                            <div class="process-item">Manueller Scan und Ablage</div>
+                            <div class="process-item">Weiterleitung an Buchhaltung per E-Mail</div>
+                            <div class="process-item">Rechnungen können "verloren gehen"</div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-search"></i> Manuelle Prüfung</h4>
+                            <div class="process-item">Abgleich mit Bestellung per Hand</div>
+                            <div class="process-item">Lieferschein aus Papier-Ordner suchen</div>
+                            <div class="process-item">Preise und Mengen einzeln vergleichen</div>
+                            <div class="process-item">Bei Abweichungen: E-Mail an Lieferant</div>
+                        </div>
+                        <div>
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-clock"></i> Freigabe & Zahlung</h4>
+                            <div class="process-item">Manuelle Freigabe durch Abteilungsleiter</div>
+                            <div class="process-item">Excel-Liste für Zahlungslauf</div>
+                            <div class="process-item">Verspätete Zahlungen durch Prüf-Stau</div>
+                            <div class="process-item">Skonto-Verluste durch lange Bearbeitung</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 40px;"><i class="fas fa-robot" style="color: #01a999; margin-right: 10px;"></i>So funktioniert es automatisiert:</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-eye"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Automatische OCR-Erfassung & Datenextraktion</div>
+                            <div class="timeline-description">Rechnungs-E-Mails werden automatisch verarbeitet, OCR extrahiert alle relevanten Daten (Lieferant, Betrag, Positionen, Datum).</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-balance-scale"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Intelligenter 3-Way-Match</div>
+                            <div class="timeline-description">System gleicht automatisch ab: Bestellung vs. Lieferschein vs. Rechnung. Toleranzen werden berücksichtigt, perfekte Matches gehen direkt zur Zahlung.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Exception-Management & Auto-Freigabe</div>
+                            <div class="timeline-description">Nur Abweichungen landen auf dem Prüf-Schreibtisch. Standardfälle werden automatisch freigegeben und überwiesen - Skonto optimal genutzt.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong><i class="fas fa-lightbulb"></i> Resultat:</strong> 90% weniger manueller Prüfaufwand, keine verlorenen Rechnungen, maximale Skonto-Ausnutzung durch pünktliche Zahlung.
+                </div>
+            </div>
+
+            <!-- Slide 9: Reparatur & Wartung -->
+            <div class="slide" data-theme="wartung">
+                <img src="Strategie.svg" alt="Strategie Icon" class="slide-icon">
+                <div class="slide-header">
+                    <div class="slide-number">PROZESS 7</div>
+                    <h1>Reparatur & Wartung (QR-Code-basiertes Ticketing)</h1>
+                </div>
+
+                <h2><i class="fas fa-tools" style="color: #01a999; margin-right: 10px;"></i>Wie melden Sie heute Reparaturen und Wartungen?</h2>
+                <div class="process-card" style="margin: 30px 0;">
+                    <div class="process-header" style="background: #01a999;"><i class="fas fa-clipboard-list"></i> IST-Prozess: Telefon- und E-Mail-Meldungen</div>
+                    <div class="process-content">
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-phone"></i> Schadensmeldung</h4>
+                            <div class="process-item">Mitarbeiter bemerkt defektes Gerät/Problem</div>
+                            <div class="process-item">Anruf bei Facility Management oder E-Mail</div>
+                            <div class="process-item">Beschreibung often unvollständig oder unklar</div>
+                            <div class="process-item">Standort/Details müssen nachgefragt werden</div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-clipboard"></i> Ticketerstellung</h4>
+                            <div class="process-item">Manueller Eintrag in Excel oder einfaches Tool</div>
+                            <div class="process-item">Priorität wird geschätzt ohne klare Kriterien</div>
+                            <div class="process-item">Keine automatische Lieferanten-Zuweisung</div>
+                            <div class="process-item">Status-Updates per E-Mail oder Anruf</div>
+                        </div>
+                        <div>
+                            <h4 style="color: #01a999; margin-bottom: 10px;"><i class="fas fa-clock"></i> Bearbeitung</h4>
+                            <div class="process-item">Unklare SLAs je nach Problemtyp</div>
+                            <div class="process-item">Nachfragen zum Bearbeitungsstand</div>
+                            <div class="process-item">Keine transparente Verfolgung</div>
+                            <div class="process-item">Abschluss oft ohne Dokumentation</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 40px;"><i class="fas fa-robot" style="color: #01a999; margin-right: 10px;"></i>So funktioniert es automatisiert:</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-qrcode"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">QR-Code-Scan für sofortige Meldung</div>
+                            <div class="timeline-description">Jedes Gerät/jeder Bereich hat QR-Code. Scan öffnet vorgefertigtes Formular mit Standort, Geräteinfo, häufigen Problemen zur Auswahl.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-brain"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Intelligente Ticket-Erstellung & SLA-Zuweisung</div>
+                            <div class="timeline-description">System kategorisiert automatisch nach Dringlichkeit, weist passenden Dienstleister zu, definiert SLA basierend auf Problemtyp und Standort.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-chart-line"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Live-Tracking & automatische Eskalation</div>
+                            <div class="timeline-description">Echtzeit-Status für alle Beteiligten, automatische Eskalation bei SLA-Überschreitung, Completion-Bestätigung mit Foto/Unterschrift.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong><i class="fas fa-lightbulb"></i> Resultat:</strong> Schnellere Reparaturen durch klare SLAs, vollständige Transparenz, weniger Nachfragen und Stress für alle Beteiligten.
+                </div>
+            </div>
+
+            <!-- Slide 10: Digitale Clubkarte -->
+            <div class="slide" data-theme="integration">
+                <img src="Marketing.svg" alt="Marketing Icon" class="slide-icon">
+                <div class="slide-header">
+                    <div class="slide-number">PROZESS 8</div>
+                    <h1>Digitale Clubkarte (QR-Self-Service-Registrierung)</h1>
+                </div>
+
+                <h2><i class="fas fa-id-card" style="color: #cf72a9; margin-right: 10px;"></i>Wie läuft Ihre Clubkarten-Registrierung heute ab?</h2>
+                <div class="process-card" style="margin: 30px 0;">
+                    <div class="process-header" style="background: #cf72a9;"><i class="fas fa-clipboard-list"></i> IST-Prozess: Manuelle Registrierung</div>
+                    <div class="process-content">
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-user-plus"></i> Kunde möchte Clubkarte</h4>
+                            <div class="process-item">Kunde fragt an der Kasse nach Clubkarte</div>
+                            <div class="process-item">Kassierer füllt Papierformular aus</div>
+                            <div class="process-item">Warteschlange wird länger</div>
+                            <div class="process-item">Daten müssen später digitalisiert werden</div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-keyboard"></i> Manuelle Eingabe</h4>
+                            <div class="process-item">Büro-Team tippt Formulare in System</div>
+                            <div class="process-item">Zeitverzögerung bis Aktivierung</div>
+                            <div class="process-item">Eingabefehler möglich</div>
+                            <div class="process-item">Kunde muss auf Aktivierung warten</div>
+                        </div>
+                        <div>
+                            <h4 style="color: #cf72a9; margin-bottom: 10px;"><i class="fas fa-clock"></i> Aktivierung</h4>
+                            <div class="process-item">Kunde kommt später wieder für Clubkarte</div>
+                            <div class="process-item">Oder: Zusendung per Post</div>
+                            <div class="process-item">Kein sofortiger Benefit für den Kunden</div>
+                            <div class="process-item">Viele brechen den Prozess ab</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 40px;"><i class="fas fa-robot" style="color: #cf72a9; margin-right: 10px;"></i>So funktioniert es automatisiert:</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-qrcode"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">QR-Code-Self-Service im Store</div>
+                            <div class="timeline-description">QR-Codes an strategischen Punkten im Store. Kunde scannt, registriert sich selbst über benutzerfreundliche Mobile-App.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Sofortige digitale Clubkarte</div>
+                            <div class="timeline-description">Nach Registrierung: Sofortige Aktivierung, digitale Clubkarte in der App, erste Punkte sofort bei aktuellem Einkauf einlösbar.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"><i class="fas fa-gift"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Personalisierte Welcome-Journey</div>
+                            <div class="timeline-description">Automatische Welcome-E-Mail mit Startbonus, personalisierte Angebote basierend auf erstem Einkauf, Push-Benachrichtigungen für Aktionen.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong><i class="fas fa-lightbulb"></i> Resultat:</strong> Höhere Registrierungsrate durch Self-Service, sofortige Kundenbindung, keine Wartezeiten an der Kasse.
+                </div>
+            </div>
+
+            <!-- Slide 11: Implementierung -->
+            <div class="slide" data-theme="all">
+                <div class="slide-header">
+                    <div class="slide-number">UMSETZUNG</div>
+                    <h1>L-T's Weg zur digitalen Transformation</h1>
+                </div>
+
+                <h2>Unser bewährtes Vorgehen</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker">1</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Prozessanalyse (1-2 Tage)</div>
+                            <div class="timeline-description">Detaillierte Aufnahme Ihrer Ist-Prozesse und Identifikation der Quick Wins</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">2</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Konzeption (1-7 Tage)</div>
+                            <div class="timeline-description">Entwicklung der Automatisierungslösung, angepasst an Ihre Anforderungen</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">3</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Implementierung (1-30 Tage)</div>
+                            <div class="timeline-description">Schrittweise Umsetzung mit kontinuierlichem Testing und Anpassungen</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">4</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Go-Live & Optimierung</div>
+                            <div class="timeline-description">Produktivstart mit Schulung Ihrer Mitarbeiter und kontinuierlicher Support</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message">
+                    <strong>Gesamtdauer:</strong> 1-39 Tage von der Analyse bis zum produktiven Betrieb
+                </div>
+            </div>
+
+            <!-- Slide 12: ROI & Nutzen -->
+            <div class="slide" data-theme="all">
+                <div class="slide-header">
+                    <div class="slide-number">BUSINESS CASE</div>
+                    <h1>L-T's Investition in die Zukunft</h1>
+                </div>
+
+                <h2>Quantifizierbarer Nutzen</h2>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">50%-90%</div>
+                        <div class="metric-label">Reduzierung der Prozesszeiten</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">99%</div>
+                        <div class="metric-label">Weniger manuelle Fehler</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">ROI</div>
+                        <div class="metric-label">Direkte Kosteneinsparung</div>
+                    </div>
+                </div>
+
+                <div class="value-grid">
+                    <div class="value-card">
+                        <h4>Direkte Einsparungen</h4>
+                        <ul class="value-list">
+                            <li>Reduzierte Personalkosten für Routineaufgaben</li>
+                            <li>Weniger Fehlerkosten und Nacharbeit</li>
+                            <li>Bessere Ressourcen-Auslastung</li>
+                        </ul>
+                    </div>
+                    <div class="value-card">
+                        <h4>Indirekte Vorteile</h4>
+                        <ul class="value-list">
+                            <li>Höhere Mitarbeiterzufriedenheit</li>
+                            <li>Schnellere Marktreaktionszeit</li>
+                            <li>Skalierbarkeit für weiteres Wachstum</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 13: Zeitersparnis-Kalkulator -->
+            <div class="slide" data-theme="all">
+                <div class="slide-header">
+                    <div class="slide-number">IHRE ZEITERSPARNIS</div>
+                    <h1>Konkrete Zeitersparnis für L-T</h1>
+                </div>
+
+                <div class="roi-calculator">
+                    <h3>Ihre individuelle Zeitersparnis-Kalkulation</h3>
+                    <div id="roi-items-container">
+                        <div class="roi-item">
+                            <span>1. Aktionsstart vorbereiten:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input1" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(1)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>2. Preis-Kontrolle:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input2" min="0" max="15" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(2)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>3. Nachschub & Größenverteilung:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input3" min="0" max="25" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(3)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>4. Dienstpläne:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input4" min="0" max="10" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(4)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>5. Retouren & Preisfehler:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input5" min="0" max="8" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(5)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>6. Rechnungen zahlen/buchen:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input6" min="0" max="12" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(6)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>7. Reparatur & Wartung:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input7" min="0" max="6" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(7)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                        <div class="roi-item">
+                            <span>8. Digitale Clubkarte:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="input8" min="0" max="5" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                <span>h/Woche gespart</span>
+                                <button onclick="confirmInput(8)" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Add custom process section -->
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px dashed #ccc;">
+                        <h4 style="color: #2F7D32; margin-bottom: 15px;">Eigenen Prozess hinzufügen:</h4>
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <input type="text" id="customProcessName" placeholder="Prozessname eingeben..." style="flex: 1; min-width: 200px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                            <button onclick="addCustomProcess()" style="background: #2F7D32; color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer;">+ Prozess hinzufügen</button>
+                        </div>
+                    </div>
+                    <div class="roi-item" style="background: #f1f8f4; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <span><strong>Gesamte wöchentliche Zeitersparnis:</strong></span>
+                        <span><strong><span id="totalHours">0</span> Stunden</strong></span>
+                    </div>
+                </div>
+
+                <div class="key-message" style="margin-top: 30px;">
+                    <strong>Ihre nächsten Schritte:</strong> Basierend auf Ihrer Zeitersparnis erstellen wir ein maßgeschneidertes Automatisierungskonzept für L-T.
+                </div>
+
+                <div class="cta-section" style="margin-top: 30px;">
+                    <div class="cta-title">Lassen Sie uns Ihre Prozesse optimieren</div>
+                    <button class="cta-button" onclick="alert('Kontaktieren Sie uns unter: beratung@prozessagent.de')">Konzept anfordern</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation" id="navigation" style="display: none;">
+            <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">← Zurück</button>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <button class="edit-selection-button" onclick="editSelection()">Auswahl bearbeiten</button>
+                <div class="slide-indicator">
+                    <span id="currentSlide">1</span> / <span id="totalSlides">13</span>
+                </div>
+            </div>
+            <button class="nav-button" id="nextBtn" onclick="changeSlide(1)">Weiter →</button>
+        </div>
+    </div>
+
+    <script>
+    // Enhanced Theme Generator System mit Claude API Integration
+    class ThemeGenerator {
+    constructor() {
+        this.contextText = ''; // Wird mit dem Inhalt der HanseaticAGRIBericht.txt gefüllt
+        this.generatedSlides = JSON.parse(localStorage.getItem('hanseaticAgri_generatedSlides')) || [];
+    }
+
+    // Lädt den Kontext aus der Datei
+    async loadContext() {
+        // Der Kontext wurde bereits im HTML eingebettet
+        this.contextText = document.getElementById('hanseaticContext').textContent;
+    }
+
+    // Erstellt das HTML für das Eingabeformular
+    generateCustomThemeUI() {
+        return `
+            <div class="custom-theme-section" style="margin-top: 40px; margin-bottom: 40px; padding: 30px; background: #f8f9fa; border-radius: 12px; border: 2px dashed #2F7D32;">
+                <h3 style="color: #2F7D32; margin-bottom: 20px;">Eigenes Thema mit KI erstellen</h3>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Thema-Titel:</label>
+                    <input type="text" id="customThemeTitle" placeholder="z.B. Nachhaltigkeitsreporting, Kundenportal, etc."
+                           style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1.1em; color: #333;"
+                           onfocus="this.style.borderColor='#2F7D32'" onblur="this.style.borderColor='#e0e0e0'">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Beschreibung / Anweisungen:</label>
+                    <textarea id="customThemeInstruction" rows="4"
+                              placeholder="Beschreiben Sie detailliert, welche Prozesse automatisiert werden sollen und welche Vorteile Sie sich davon versprechen..."
+                              style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1em; resize: vertical; color: #333;"
+                              onfocus="this.style.borderColor='#2F7D32'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
+                </div>
+                <button onclick="themeGenerator.generateCustomTheme()"
+                        style="background: #2F7D32; color: white; border: none; padding: 14px 30px; font-size: 1.1em; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                     Folie mit KI generieren
+                </button>
+                <div id="customThemeStatus" style="margin-top: 20px; display: none;"></div>
+            </div>
+        `;
+    }
+
+
+    // Generiert eine neue Folie mit Claude API
+    async generateCustomTheme() {
+        const titleInput = document.getElementById('customThemeTitle');
+        const instructionInput = document.getElementById('customThemeInstruction');
+        const title = titleInput.value.trim();
+        const instruction = instructionInput.value.trim();
+        const statusDiv = document.getElementById('customThemeStatus');
+
+
+        if (!title || !instruction) {
+            this.showError('Bitte füllen Sie beide Felder aus.');
+            return;
+        }
+
+        // Zeige Ladeindikator
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = `
+            <div style="background: #e3f2fd; border: 1px solid #2196f3; padding: 20px; border-radius: 6px;">
+                <h4 style="color: #1976d2; margin-bottom: 10px;">⏳ KI generiert Ihre Folie...</h4>
+                <p>Dies kann einen Moment dauern...</p>
+            </div>
+        `;
+
+        try {
+            // Erstelle den Prompt für Claude
+            const prompt = `Du bist ein Experte für Prozessautomatisierung bei Generaxion. Basierend auf folgenden Informationen über das Unternehmen:
+
+${this.contextText}
+
+Erstelle eine neue Präsentationsfolie für das Thema "${title}" mit folgender Anforderung: "${instruction}"
+
+Die Folie soll:
+1. Dem Stil der anderen Folien entsprechen (McKinsey-Style)
+2. Konkrete Automatisierungslösungen für Geneaxion vorschlagen
+3. Zeitersparnis und Nutzen klar darstellen
+4. Die spezifischen Herausforderungen des Unternehmens adressieren
+5. VERMEIDE genaue Zahlen zu verwenden!
+6. Zeichne ab, wenn gegeben, wie der prozess gerade wahrscheinlich abläuft, und dann wie er mit automatisierte prozessautomatisierungslösung abläuft (WENN GEGEBEN)
+7. AUSGABE UND FOLIEN CONTENT IN DEUTSCH
+
+WICHTIG für Icons:
+- Verwende AUSSCHLIESSLICH Font Awesome Icons
+- Format: <i class="fas fa-icon-name"></i> oder <i class="far fa-icon-name"></i>
+- Beispiele:
+  * Für Automatisierung: <i class="fas fa-robot"></i>
+  * Für Prozesse: <i class="fas fa-cogs"></i>
+  * Für Dokumente: <i class="fas fa-file-alt"></i>
+  * Für Analyse: <i class="fas fa-chart-line"></i>
+  * Für Zeit: <i class="fas fa-clock"></i>
+  * Für Erfolg: <i class="fas fa-check-circle"></i>
+- KEINE Emoji-Icons verwenden!
+- Nutze Icons sparsam und nur in theme-icon Spans oder als Akzente
+
+Gib NUR den HTML-Code für die Folie zurück (nur das <div class="slide">...</div> Element), ohne zusätzliche Erklärungen. 
+Verwende data-theme="${this.generateThemeId(title)}" für die Folie.
+Nutze die gleichen CSS-Klassen wie in den anderen Folien (metric-grid, process-grid, value-grid, key-message, etc.).`;
+
+            // API Call zu lokalem Proxy Server
+            const response = await fetch('http://localhost:3000/api/claude', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: 'claude-3-opus-20240229',
+                    max_tokens: 4000,
+                    messages: [{
+                        role: 'user',
+                        content: prompt
+                    }]
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const slideHTML = data.content[0].text;
+
+            // Füge die neue Folie und Theme-Card hinzu
+            this.insertNewSlide(title, instruction, slideHTML);
+
+            // Zeige Erfolgsmeldung
+            statusDiv.innerHTML = `
+                <div style="background: #e8f5e9; border: 1px solid #4caf50; padding: 20px; border-radius: 6px;">
+                    <h4 style="color: #2F7D32; margin-bottom: 15px;">✅ Folie erfolgreich erstellt!</h4>
+                    <p>Die neue Folie "${title}" wurde zur Präsentation hinzugefügt.</p>
+                    <button onclick="location.reload()" 
+                            style="background: #2F7D32; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-top: 10px;">
+                        🔄 Seite neu laden
+                    </button>
+                </div>
+            `;
+
+            // Leere die Eingabefelder
+            titleInput.value = '';
+            instructionInput.value = '';
+
+        } catch (error) {
+            console.error('Error generating slide:', error);
+            this.showError(`Fehler beim Generieren der Folie: ${error.message}`);
+        }
+    }
+
+    // Fügt die neue Folie in die HTML-Struktur ein
+    insertNewSlide(title, description, slideHTML) {
+        const themeId = this.generateThemeId(title);
+        
+        // Speichere die generierte Folie
+        const slideData = {
+            themeId,
+            title,
+            description,
+            slideHTML
+        };
+        
+        this.generatedSlides.push(slideData);
+        localStorage.setItem('hanseaticAgri_generatedSlides', JSON.stringify(this.generatedSlides));
+        
+        // 1. Füge neue Theme-Card hinzu
+        this.addThemeCard(themeId, title, description);
+
+        // 2. Füge die neue Folie vor der UMSETZUNG-Folie ein
+        this.addSlideToDOM(slideHTML);
+    }
+
+    // Fügt eine Theme-Card zum DOM hinzu
+    addThemeCard(themeId, title, description) {
+        const themesGrid = document.querySelector('.themes-grid');
+        const newThemeCard = document.createElement('div');
+        newThemeCard.className = 'theme-card';
+        newThemeCard.setAttribute('data-theme', themeId);
+        newThemeCard.innerHTML = `
+            <span class="theme-icon"><i class="fas fa-robot"></i></span>
+            <div class="theme-title">${title}</div>
+            <div class="theme-description">${description.substring(0, 100)}...</div>
+        `;
+        themesGrid.appendChild(newThemeCard);
+
+        // Füge Event Listener hinzu
+        newThemeCard.addEventListener('click', () => {
+            newThemeCard.classList.toggle('selected');
+            const theme = newThemeCard.dataset.theme;
+            if (newThemeCard.classList.contains('selected')) {
+                if (!selectedThemes.includes(theme)) {
+                    selectedThemes.push(theme);
+                }
+            } else {
+                selectedThemes = selectedThemes.filter(t => t !== theme);
+            }
+            document.getElementById('startPresentation').disabled = selectedThemes.length === 0;
+        });
+    }
+
+    // Fügt eine Folie zum DOM hinzu
+    addSlideToDOM(slideHTML) {
+        const umsetzungSlide = Array.from(document.querySelectorAll('.slide')).find(slide => 
+            slide.querySelector('.slide-number')?.textContent === 'UMSETZUNG'
+        );
+        
+        if (umsetzungSlide && slideHTML) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = slideHTML;
+            const newSlide = tempDiv.firstElementChild;
+            if (newSlide) {
+                umsetzungSlide.parentNode.insertBefore(newSlide, umsetzungSlide);
+            }
+        }
+    }
+
+    // Lädt gespeicherte Folien beim Start
+    loadSavedSlides() {
+        this.generatedSlides.forEach(slide => {
+            this.addThemeCard(slide.themeId, slide.title, slide.description);
+            this.addSlideToDOM(slide.slideHTML);
+        });
+    }
+
+    // Generiert eine eindeutige Theme-ID
+    generateThemeId(title) {
+        return title.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 20);
+    }
+
+    // Hilfsfunktion für Fehlermeldungen
+    showError(message) {
+        const statusDiv = document.getElementById('customThemeStatus');
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = `<div style="background: #fee; border: 1px solid #fcc; padding: 15px; border-radius: 6px; color: #c00;">⚠️ ${message}</div>`;
+        setTimeout(() => { statusDiv.style.display = 'none'; }, 5000);
+    }
+}
+
+    // Globale Instanzen und Variablen
+    const themeGenerator = new ThemeGenerator();
+    let selectedThemes = [];
+
+    // DOM-Elemente
+    const themeCards = document.querySelectorAll('.theme-card');
+    const startButton = document.getElementById('startPresentation');
+    const themeSelection = document.getElementById('themeSelection');
+    const slidesContainer = document.getElementById('slidesContainer');
+    const navigation = document.getElementById('navigation');
+
+    // Event Listeners für die Themenauswahl
+    themeCards.forEach(card => {
+        card.addEventListener('click', () => {
+            card.classList.toggle('selected');
+            const theme = card.dataset.theme;
+
+            if (card.classList.contains('selected')) {
+                if (!selectedThemes.includes(theme)) {
+                    selectedThemes.push(theme);
+                }
+            } else {
+                selectedThemes = selectedThemes.filter(t => t !== theme);
+            }
+
+            startButton.disabled = selectedThemes.length === 0;
+        });
+    });
+
+    startButton.addEventListener('click', () => {
+        if (selectedThemes.length > 0) {
+            initializePresentation();
+        }
+    });
+
+    function initializePresentation(restoreSlide = 0) {
+        const themesText = {
+            buchhaltung: 'Performance-Benchmarking & Reporting',
+            vertrieb: 'Lead-Qualifizierung & Vertriebsrouting',
+            logistik: 'Multi-Office Ressourcenallokation',
+            qualitaet: 'Kundenabwanderungs-Prävention',
+            daten: 'Rechnungsstellung & Zahlungsmanagement',
+            integration: 'Mitarbeiter-Onboarding'
+        };
+
+        const selectedThemesNames = selectedThemes.map(theme => themesText[theme] || theme);
+        localStorage.setItem('hanseaticAgri_selectedThemes', JSON.stringify(selectedThemes));
+
+        // Show transition screen
+        const transitionScreen = document.getElementById('transitionScreen');
+        themeSelection.style.display = 'none';
+        transitionScreen.style.display = 'flex';
+
+        // After 3 seconds, hide transition and show slides
+        setTimeout(() => {
+            transitionScreen.style.display = 'none';
+            slidesContainer.style.display = 'block';
+            navigation.style.display = 'flex';
+
+            filterSlides();
+            showSlide(restoreSlide);
+        }, 3000);
+    }
+
+    function filterSlides() {
+        const allSlides = document.querySelectorAll('.slide');
+        allSlides.forEach(slide => {
+            const slideTheme = slide.dataset.theme;
+            if (!slideTheme || slideTheme === 'all' || selectedThemes.includes(slideTheme) || slide.id === 'thankYouSlide') {
+                slide.classList.add('available');
+            } else {
+                slide.classList.remove('available');
+            }
+        });
+    }
+
+    // Navigation
+    let currentSlideIndex = 0;
+    let visibleSlides = [];
+
+    function updateVisibleSlides() {
+        visibleSlides = Array.from(document.querySelectorAll('.slide.available'));
+        document.getElementById('totalSlides').textContent = visibleSlides.length;
+    }
+
+    function showSlide(index) {
+        updateVisibleSlides();
+        if (visibleSlides.length === 0) return;
+
+        document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active'));
+
+        if (index >= 0 && index < visibleSlides.length) {
+            visibleSlides[index].classList.add('active');
+            currentSlideIndex = index;
+
+            document.getElementById('currentSlide').textContent = index + 1;
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === visibleSlides.length - 1;
+
+            localStorage.setItem('hanseaticAgri_currentSlide', index);
+        }
+    }
+
+    function changeSlide(direction) {
+        const newIndex = currentSlideIndex + direction;
+        if (newIndex >= 0 && newIndex < visibleSlides.length) {
+            showSlide(newIndex);
+        }
+    }
+
+    function editSelection() {
+        localStorage.removeItem('hanseaticAgri_currentSlide');
+        localStorage.removeItem('hanseaticAgri_selectedThemes');
+
+        slidesContainer.style.display = 'none';
+        navigation.style.display = 'none';
+        themeSelection.style.display = 'flex';
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (slidesContainer.style.display === 'block') {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        }
+    });
+
+    // ROI Calculator
+    let confirmedValues = [0, 0, 0, 0, 0, 0, 0, 0];
+    let customProcessCount = 8;
+
+    function confirmInput(index) {
+        const input = document.getElementById(`input${index}`);
+        const value = parseFloat(input.value) || 0;
+        confirmedValues[index - 1] = value;
+        input.style.background = '#f1f8f4';
+        updateTotal();
+    }
+
+    function updateTotal() {
+        const total = confirmedValues.reduce((sum, value) => sum + value, 0);
+        document.getElementById('totalHours').textContent = total.toFixed(1);
+    }
+
+    function addCustomProcess() {
+        const processNameInput = document.getElementById('customProcessName');
+        const processName = processNameInput.value.trim();
+        if (processName === '') return alert('Bitte geben Sie einen Prozessnamen ein.');
+
+        customProcessCount++;
+        const index = customProcessCount;
+        confirmedValues.push(0);
+
+        const newRoiItem = document.createElement('div');
+        newRoiItem.className = 'roi-item';
+        newRoiItem.innerHTML = `
+            <span>${index}. ${processName}:</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="number" id="input${index}" min="0" max="20" value="0" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                <span>h/Woche gespart</span>
+                <button onclick="confirmInput(${index})" style="background: #2F7D32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✓</button>
+                <button onclick="removeCustomProcess(this, ${index})" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">×</button>
+            </div>
+        `;
+        document.getElementById('roi-items-container').appendChild(newRoiItem);
+        processNameInput.value = '';
+        document.getElementById(`input${index}`).focus();
+    }
+
+    function removeCustomProcess(button, index) {
+        confirmedValues[index - 1] = 0; // Set value to 0
+        button.closest('.roi-item').remove();
+        updateTotal();
+    }
+
+    // Initialisiert die Seite beim Laden
+    window.addEventListener('DOMContentLoaded', async () => {
+        // Lade den Kontext für die API
+        await themeGenerator.loadContext();
+        
+        // Lade gespeicherte generierte Folien
+        themeGenerator.loadSavedSlides();
+        
+        const customThemeContainer = document.getElementById('customThemeContainer');
+        if (customThemeContainer) {
+            customThemeContainer.innerHTML = themeGenerator.generateCustomThemeUI();
+        }
+
+        const savedThemes = localStorage.getItem('hanseaticAgri_selectedThemes');
+        const savedSlide = localStorage.getItem('hanseaticAgri_currentSlide');
+
+        if (savedThemes && savedSlide !== null) {
+            selectedThemes = JSON.parse(savedThemes);
+            selectedThemes.forEach(theme => {
+                const card = document.querySelector(`[data-theme="${theme}"]`);
+                if (card) card.classList.add('selected');
+            });
+            startButton.disabled = selectedThemes.length === 0;
+            initializePresentation(parseInt(savedSlide));
+        }
+    });
+</script>
+</body>
+</html>
