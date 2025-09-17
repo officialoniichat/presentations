@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wichtige Fragen vor Projektstart - GEV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            padding: 60px 80px;
+        }
+
+        /* Header */
+        .header {
+            border-bottom: 3px solid #01a999;
+            padding-bottom: 30px;
+            margin-bottom: 50px;
+        }
+
+        .header-label {
+            color: #01a999;
+            font-size: 1em;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            color: #1a1a1a;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 300;
+        }
+
+        /* Question Categories */
+        .category {
+            margin-bottom: 50px;
+        }
+
+        .category-title {
+            font-size: 1.8em;
+            color: #01a999;
+            font-weight: 500;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(1, 169, 153, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #01a999;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 4px solid #01a999;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .question-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #01a999;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 0.9em;
+        }
+
+        .question-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .question-content {
+            color: #666;
+            line-height: 1.8;
+            margin-left: 45px;
+        }
+
+        .sub-question {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .sub-question-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #01a999 0%, #019185 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .info-box-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .info-box-content {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: #01a999;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(1, 169, 153, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #019185;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(1, 169, 153, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-label">ANFORDERUNGSANALYSE</div>
+            <h1>Wichtige Fragen vor Projektstart</h1>
+            <div class="subtitle">Diese Informationen benötigen wir für eine optimale Lösung</div>
+        </div>
+
+        <!-- Prozess & Arbeitsverteilung -->
+        <div class="category">
+            <div class="category-title">
+                <div class="category-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                Prozess & Arbeitsverteilung
+            </div>
+
+            <div class="question-card">
+                <div class="question-title">
+                    <span class="question-number">1</span>
+                    Messung der Arbeitslast
+                </div>
+                <div class="question-content">
+                    Sie sprachen von einer "gerechten" Verteilung. Messen wir die Auslastung rein nach der Anzahl der Fälle pro Mitarbeiter, oder gibt es bereits eine Einschätzung des geschätzten Aufwands pro Fall?
+                    <div class="sub-question">
+                        <div class="sub-question-title">Beispiele zur Klassifizierung:</div>
+                        • Kleinschaden (< 30 Min Bearbeitung)<br>
+                        • Standardschaden (30-90 Min)<br>
+                        • Großschaden (> 90 Min)<br>
+                        • Komplexfälle mit Gutachtern
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title">
+                    <span class="question-number">2</span>
+                    Temporäre Kapazitätsanpassung
+                </div>
+                <div class="question-content">
+                    Wie werden Sonderaufgaben (Projekte, Einarbeitung neuer Kollegen) aktuell erfasst? Gibt es eine Anforderung, dass ein Teamleiter die verfügbare Kapazität eines Mitarbeiters für einen bestimmten Zeitraum manuell anpassen kann?
+                    <div class="sub-question">
+                        <div class="sub-question-title">Szenarien:</div>
+                        • "Mitarbeiter A ist diese Woche nur zu 50% für Schadensfälle verfügbar"<br>
+                        • Projektarbeit parallel zur regulären Tätigkeit<br>
+                        • Mentoring-Aufgaben für neue Kollegen
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title">
+                    <span class="question-number">3</span>
+                    Eskalationspfad
+                </div>
+                <div class="question-content">
+                    Was soll passieren, wenn das System nach den definierten Regeln keinen passenden, verfügbaren Mitarbeiter finden kann? 
+                    <div class="sub-question">
+                        <div class="sub-question-title">Mögliche Optionen:</div>
+                        • Fall in allgemeinen Pool zur manuellen Prüfung durch Teamleiter<br>
+                        • Automatische Warteschlange bis Mitarbeiter frei wird<br>
+                        • Eskalation an übergeordnete Stelle<br>
+                        • Benachrichtigung bei kritischen Fällen
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title">
+                    <span class="question-number">4</span>
+                    Einarbeitung neuer Mitarbeiter
+                </div>
+                <div class="question-content">
+                    Wie sieht der Prozess für neue Sachbearbeiter genau aus? Erhalten sie nur Fälle bis zu einer bestimmten Schadenshöhe oder aus einer bestimmten Sparte? Wie lange dauert diese "Schonfrist"?
+                    <div class="sub-question">
+                        <div class="sub-question-title">Zu klären:</div>
+                        • Stufenweise Erhöhung der Komplexität<br>
+                        • Zeitraum der Einarbeitungsphase<br>
+                        • Betreuung durch erfahrene Kollegen<br>
+                        • Freigabeprozesse in der Anfangsphase
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technische Integration -->
+        <div class="category">
+            <div class="category-title">
+                <div class="category-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                Technische Integration
+            </div>
+
+            <div class="question-card">
+                <div class="question-title">
+                    <span class="question-number">5</span>
+                    Systemlandschaft
+                </div>
+                <div class="question-content">
+                    Sie erwähnten SAP. Handelt es sich um SAP FS-CM (Claims Management) für die Schadensakte? Welches System wird aktuell für die Erfassung von Urlaub, Krankheit und Arbeitszeitmodellen genutzt?
+                    <div class="sub-question">
+                        <div class="sub-question-title">Relevante Systeme:</div>
+                        • SAP FS-CM für Schadensmanagement?<br>
+                        • SAP HCM für Personalverwaltung?<br>
+                        • SuccessFactors für HR-Prozesse?<br>
+                        • Andere Zeiterfassungssysteme?
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title">
+                    <span class="question-number">6</span>
+                    Datenschnittstellen
+                </div>
+                <div class="question-content">
+                    Wie können wir auf die Abwesenheits- und Kapazitätsdaten zugreifen? Gibt es eine dokumentierte API (Schnittstelle), einen direkten Datenbankzugriff oder wäre ein regelmäßiger Datenexport eine Option?
+                    <div class="sub-question">
+                        <div class="sub-question-title">Integrationsmöglichkeiten:</div>
+                        • REST/SOAP APIs vorhanden?<br>
+                        • Direkter Datenbankzugriff möglich?<br>
+                        • Batch-Export (z.B. nächtlich)?<br>
+                        • Real-time vs. Near-real-time Anforderungen
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics & Optimierung -->
+        <div class="category">
+            <div class="category-title">
+                <div class="category-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                Analytics & Optimierung
+            </div>
+
+            <div class="question-card">
+                <div class="question-title">
+                    <span class="question-number">7</span>
+                    Leistungserfassung & Statistiken
+                </div>
+                <div class="question-content">
+                    Sollen Statistiken erhoben werden wie: Welcher Mitarbeiter ist wie schnell mit welchen Arten von Fällen fertig? Oder wird das bereits gemacht?
+                    <div class="sub-question">
+                        <div class="sub-question-title">Mögliche KPIs:</div>
+                        • Durchschnittliche Bearbeitungszeit pro Falltyp<br>
+                        • Mitarbeiter-Performance nach Schadenskategorie<br>
+                        • Lernkurven neuer Mitarbeiter<br>
+                        • Basis für KI-gestützte Optimierung der Zuteilung
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <div class="info-box-title">💡 Warum diese Fragen wichtig sind</div>
+            <div class="info-box-content">
+                Je genauer wir Ihre Prozesse und Anforderungen verstehen, desto passgenauer können wir die Lösung auf Ihre Bedürfnisse zuschneiden. 
+                Diese Informationen ermöglichen es uns, von Anfang an die richtigen technischen Entscheidungen zu treffen und Ihnen eine optimale Lösung zu liefern.
+            </div>
+        </div>
+
+        <!-- Pricing Button -->
+        <a href="/src/presentations/preis.html" style="
+            display: inline-block;
+            background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(255, 165, 0, 0.4)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 165, 0, 0.3)'">
+            <i class="fas fa-euro-sign" style="margin-right: 10px;"></i>
+            Preisübersicht ansehen
+        </a>
+    </div>
+
+    <!-- Back Button -->
+    <a href="javascript:history.back()" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Zurück
+    </a>
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEV Zuteilungscockpit (Canvas Version)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="flex h-screen">
+        <!-- Sidebar (unchanged from original) -->
+        <aside class="sidebar bg-slate-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 z-20">
+            <a href="#" class="text-white flex items-center space-x-2 px-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span class="text-2xl font-extrabold">GEV Secure</span>
+            </a>
+            <nav>
+                <a href="#" class="flex items-center space-x-3 bg-blue-500 bg-opacity-30 text-white py-2 px-4 rounded transition duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
+                    <span>Dashboard</span>
+                </a>
+                 <a href="#" class="flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>
+                     <span>Alle Fälle</span>
+                 </a>
+                 <a href="#" class="flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                     <span>Mitarbeiter</span>
+                 </a>
+                 <a href="#" class="flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>
+                     <span>Regelwerk</span>
+                 </a>
+            </nav>
+        </aside>
+
+        <!-- Main content -->
+        <div class="main-content flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white shadow-md p-4 flex justify-between items-center z-10">
+                <button class="md:hidden" id="menu-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+                <h1 class="text-xl font-bold text-gray-700">Zuteilungscockpit (Canvas)</h1>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm">Hallo, Herr Weber (Teamleiter)</span>
+                    <img class="h-10 w-10 rounded-full object-cover" src="https://placehold.co/100x100/E2E8F0/4A5568?text=MW" alt="User Avatar">
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <canvas id="dashboardCanvas"></canvas>
+            </main>
+        </div>
+    </div>
+<script>
+    // --- Mock Data --- 
+    // (Same data as in the previous example)
+    const mitarbeiterData = [
+        { id: 1, name: "Anna Schmidt", status: "Verfügbar", workload: 15, maxWorkload: 20, skills: ["Kfz", "Standard"], avatar: "AS" },
+        { id: 2, name: "Bernd Maier", status: "Verfügbar", workload: 12, maxWorkload: 20, skills: ["Hausrat", "Kfz", "Standard"], avatar: "BM" },
+        { id: 3, name: "Carla Huber", status: "Beschäftigt", workload: 19, maxWorkload: 20, skills: ["Kfz", "Großschaden", "Betrug"], avatar: "CH" },
+        { id: 4, name: "David Fuchs", status: "Verfügbar", workload: 8, maxWorkload: 15, skills: ["Wohngebäude", "Standard"], avatar: "DF", isNew: true },
+        { id: 5, name: "Eva Klein", status: "Urlaub", workload: 0, maxWorkload: 20, skills: ["Hausrat", "Großschaden"], avatar: "EK" },
+        { id: 6, name: "Frank Nagel", status: "Verfügbar", workload: 18, maxWorkload: 25, skills: ["Kfz", "Regress", "Experte"], avatar: "FN" },
+        { id: 7, name: "Gabi Lorenz", status: "Krank", workload: 5, maxWorkload: 20, skills: ["Wohngebäude", "Standard"], avatar: "GL" },
+        { id: 8, name: "Hans Richter", status: "Verfügbar", workload: 11, maxWorkload: 20, skills: ["Hausrat", "Standard"], avatar: "HR" },
+    ];
+
+    const manuelleFaelleData = [
+        { id: "SF-98345", type: "Wohngebäude", amount: 75000, reason: "Potenzieller Großschaden" },
+        { id: "SF-98349", type: "Kfz-Haftpflicht", amount: 12000, reason: "Unklare Schuldfrage" },
+        { id: "SF-98351", type: "Hausrat", amount: 5000, reason: "Verdacht auf Betrug" },
+        { id: "SF-98355", type: "Unfall", amount: 25000, reason: "Personenschaden" },
+    ];
+     
+    let letzteZuweisungenData = [
+        { time: "16:18", id: "SF-98354", type: "Kfz-Kasko", mitarbeiter: "Anna Schmidt", status: "Zugewiesen"},
+        { time: "16:15", id: "SF-98353", type: "Hausrat", mitarbeiter: "Bernd Maier", status: "Zugewiesen"},
+        { time: "16:11", id: "SF-98352", type: "Wohngebäude", mitarbeiter: "David Fuchs", status: "Zugewiesen"},
+        { time: "16:05", id: "SF-98350", type: "Kfz-Kasko", mitarbeiter: "Anna Schmidt", status: "Zugewiesen"},
+    ];
+
+    let kpiData = {
+        neueFaelle: 124,
+        automatisch: 118,
+        manuell: 6,
+    };
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('dashboardCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // --- Style & Layout Constants ---
+        const theme = {
+            colors: {
+                bg: '#F0F2F5',
+                cardBg: '#FFFFFF',
+                text: '#374151',
+                textLight: '#6B7280',
+                textHeading: '#1F2937',
+                shadow: 'rgba(0, 0, 0, 0.1)',
+                blue: '#3B82F6', blueLight: '#DBEAFE',
+                green: '#10B981', greenLight: '#D1FAE5',
+                orange: '#F97316', orangeLight: '#FFEDD5',
+                indigo: '#6366F1', indigoLight: '#E0E7FF',
+                yellow: '#F59E0B',
+                red: '#EF4444',
+                slate: '#64748B', slateLight: '#F1F5F9',
+                border: '#E5E7EB',
+            },
+            padding: 24,
+            gap: 24,
+        };
+
+        // --- Helper functions ---
+        function drawRoundedRect(x, y, width, height, radius, color, shadow = false) {
+            ctx.fillStyle = color;
+            if (shadow) {
+                ctx.shadowColor = theme.colors.shadow;
+                ctx.shadowBlur = 15;
+                ctx.shadowOffsetY = 4;
+            }
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            ctx.fill();
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+        }
+
+        function drawIcon(iconName, x, y, size, color) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = size / 10;
+            ctx.beginPath();
+            switch(iconName) {
+                case 'new_case': // Plus in a document
+                    ctx.moveTo(x + size * 0.2, y + size * 0.1);
+                    ctx.lineTo(x + size * 0.8, y + size * 0.1);
+                    ctx.lineTo(x + size * 0.8, y + size * 0.9);
+                    ctx.lineTo(x + size * 0.2, y + size * 0.9);
+                    ctx.closePath();
+                    ctx.moveTo(x + size * 0.5, y + size * 0.3);
+                    ctx.lineTo(x + size * 0.5, y + size * 0.7);
+                    ctx.moveTo(x + size * 0.3, y + size * 0.5);
+                    ctx.lineTo(x + size * 0.7, y + size * 0.5);
+                    break;
+                case 'auto_assign': // Check in a gear
+                    ctx.arc(x + size / 2, y + size / 2, size * 0.4, 0, Math.PI * 2);
+                    ctx.moveTo(x + size * 0.4, y + size * 0.5);
+                    ctx.lineTo(x + size * 0.5, y + size * 0.6);
+                    ctx.lineTo(x + size * 0.7, y + size * 0.4);
+                    break;
+                case 'manual_review': // Exclamation in a circle
+                    ctx.arc(x + size / 2, y + size / 2, size * 0.45, 0, Math.PI * 2);
+                    ctx.moveTo(x + size / 2, y + size * 0.3);
+                    ctx.lineTo(x + size / 2, y + size * 0.6);
+                    ctx.moveTo(x + size / 2, y + size * 0.75);
+                    ctx.lineTo(x + size / 2, y + size * 0.8);
+                    break;
+                case 'available_staff': // Group of people
+                    ctx.arc(x + size * 0.5, y + size * 0.4, size * 0.15, 0, Math.PI * 2);
+                    ctx.moveTo(x + size * 0.3, y + size * 0.9);
+                    ctx.quadraticCurveTo(x + size * 0.5, y + size * 0.6, x + size * 0.7, y + size * 0.9);
+                    break;
+            }
+            ctx.stroke();
+        }
+
+        // --- Main Drawing Functions ---
+        function drawKPIs(x, y, width) {
+            const cardCount = 4;
+            const cardWidth = (width - (cardCount - 1) * theme.gap) / cardCount;
+            const cardHeight = 110;
+            
+            const cards = [
+                { title: 'Neue Fälle (heute)', value: kpiData.neueFaelle, color: theme.colors.blue, lightColor: theme.colors.blueLight, icon: 'new_case' },
+                { title: 'Automatisch zugewiesen', value: kpiData.automatisch, color: theme.colors.green, lightColor: theme.colors.greenLight, icon: 'auto_assign' },
+                { title: 'Manuelle Prüfung', value: kpiData.manuell, color: theme.colors.orange, lightColor: theme.colors.orangeLight, icon: 'manual_review' },
+                { title: 'Mitarbeiter verfügbar', value: `${mitarbeiterData.filter(m => m.status === 'Verfügbar' || m.status === 'Beschäftigt').length} / ${mitarbeiterData.length}`, color: theme.colors.indigo, lightColor: theme.colors.indigoLight, icon: 'available_staff' }
+            ];
+
+            cards.forEach((card, i) => {
+                const cardX = x + i * (cardWidth + theme.gap);
+                drawRoundedRect(cardX, y, cardWidth, cardHeight, 10, theme.colors.cardBg, true);
+                
+                // Content
+                ctx.fillStyle = theme.colors.textLight;
+                ctx.font = '14px Inter';
+                ctx.fillText(card.title, cardX + 20, y + 35);
+
+                ctx.fillStyle = card.color === theme.colors.orange ? theme.colors.orange : theme.colors.textHeading;
+                ctx.font = 'bold 30px Inter';
+                ctx.fillText(card.value, cardX + 20, y + 75);
+
+                // Icon
+                drawRoundedRect(cardX + cardWidth - 60, y + 20, 40, 40, 20, card.lightColor);
+                drawIcon(card.icon, cardX + cardWidth - 52, y + 28, 24, card.color);
+            });
+
+            return cardHeight; // Return the height of this section
+        }
+        
+        function drawManualCases(x, y, width, height) {
+            drawRoundedRect(x, y, width, height, 10, theme.colors.cardBg, true);
+            const p = 24; // padding
+
+            ctx.fillStyle = theme.colors.textHeading;
+            ctx.font = 'bold 20px Inter';
+            ctx.fillText('Fälle zur manuellen Prüfung', x + p, y + p + 10);
+
+            // Table Header
+            const headers = ['Fall-ID', 'Typ', 'Schadenhöhe (gesch.)', 'Grund', 'Aktion'];
+            const colWidths = [0.2, 0.2, 0.2, 0.25, 0.15];
+            ctx.font = '600 14px Inter';
+            ctx.fillStyle = theme.colors.textLight;
+            let currentX = x + p;
+            headers.forEach((header, i) => {
+                ctx.fillText(header, currentX, y + 70);
+                currentX += colWidths[i] * (width - 2 * p);
+            });
+
+            // Table Rows
+            const rowHeight = 50;
+            manuelleFaelleData.forEach((fall, i) => {
+                const rowY = y + 85 + i * rowHeight;
+                // Draw bottom border
+                ctx.strokeStyle = theme.colors.border;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x + p, rowY + rowHeight - 1);
+                ctx.lineTo(x + width - p, rowY + rowHeight - 1);
+                ctx.stroke();
+
+                let cellX = x + p;
+                // Fall-ID
+                ctx.font = '14px "Courier New", monospace';
+                ctx.fillStyle = theme.colors.text;
+                ctx.fillText(fall.id, cellX, rowY + 28);
+                cellX += colWidths[0] * (width - 2 * p);
+                // Typ
+                ctx.font = '14px Inter';
+                ctx.fillText(fall.type, cellX, rowY + 28);
+                cellX += colWidths[1] * (width - 2 * p);
+                // Schadenhöhe
+                ctx.fillText(`${fall.amount.toLocaleString('de-DE')} €`, cellX, rowY + 28);
+                cellX += colWidths[2] * (width - 2 * p);
+                // Grund
+                drawRoundedRect(cellX, rowY + 16, ctx.measureText(fall.reason).width + 20, 24, 12, theme.colors.orangeLight);
+                ctx.fillStyle = theme.colors.orange;
+                ctx.font = '500 12px Inter';
+                ctx.fillText(fall.reason, cellX + 10, rowY + 32);
+                cellX += colWidths[3] * (width - 2 * p);
+                // Aktion Button
+                drawRoundedRect(cellX + (colWidths[4] * (width - 2 * p) / 2) - 45 , rowY + 16, 90, 28, 6, theme.colors.blue);
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = 'bold 13px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Zuweisen', cellX + (colWidths[4] * (width - 2 * p) / 2), rowY + 35);
+                ctx.textAlign = 'left';
+
+            });
+        }
+        
+        function drawEmployeeUtilization(x, y, width, height) {
+             drawRoundedRect(x, y, width, height, 10, theme.colors.cardBg, true);
+             const p = 24; // padding
+
+            ctx.fillStyle = theme.colors.textHeading;
+            ctx.font = 'bold 20px Inter';
+            ctx.fillText('Mitarbeiter-Auslastung', x + p, y + p + 10);
+            
+            const itemHeight = 90;
+            mitarbeiterData.forEach((m, i) => {
+                const itemY = y + 60 + i * itemHeight;
+
+                // Avatar
+                drawRoundedRect(x + p, itemY, 40, 40, 20, theme.colors.slateLight);
+                ctx.fillStyle = theme.colors.slate;
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(m.avatar, x + p + 20, itemY + 26);
+                ctx.textAlign = 'left';
+
+                // Name & Skills
+                ctx.fillStyle = theme.colors.textHeading;
+                ctx.font = '600 15px Inter';
+                ctx.fillText(m.name, x + p + 55, itemY + 18);
+                if (m.isNew) {
+                    ctx.fillStyle = theme.colors.blue;
+                    ctx.font = '12px Inter';
+                    ctx.fillText('(Neu)', x + p + 55 + ctx.measureText(m.name).width + 5, itemY + 17);
+                }
+
+                let skillX = x + p + 55;
+                m.skills.forEach(skill => {
+                    drawRoundedRect(skillX, itemY + 25, ctx.measureText(skill).width + 12, 18, 5, theme.colors.slateLight);
+                    ctx.fillStyle = theme.colors.slate;
+                    ctx.font = '11px Inter';
+                    ctx.fillText(skill, skillX + 6, itemY + 38);
+                    skillX += ctx.measureText(skill).width + 18;
+                });
+
+                // Status Badge
+                const statusColors = { 'Verfügbar': {bg: theme.colors.greenLight, text: theme.colors.green}, 'Beschäftigt': {bg: theme.colors.yellow, text: '#FFFFFF'}, 'Urlaub': {bg: theme.colors.slateLight, text: theme.colors.slate}, 'Krank': {bg: theme.colors.red, text: '#FFFFFF'} };
+                const statusColor = statusColors[m.status] || {bg: theme.colors.slateLight, text: theme.colors.slate};
+                const statusWidth = ctx.measureText(m.status).width + 20;
+                drawRoundedRect(x + width - p - statusWidth, itemY + 10, statusWidth, 24, 12, statusColor.bg);
+                ctx.fillStyle = statusColor.text;
+                ctx.font = '500 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(m.status, x + width - p - statusWidth / 2, itemY + 26);
+                ctx.textAlign = 'left';
+
+                // Workload Bar
+                const percentage = (m.workload / m.maxWorkload) * 100;
+                let barColor = theme.colors.green;
+                if (percentage >= 85) barColor = theme.colors.red;
+                else if (percentage >= 50) barColor = theme.colors.yellow;
+                
+                drawRoundedRect(x + p, itemY + 70, width - 2 * p, 8, 4, theme.colors.slateLight);
+                drawRoundedRect(x + p, itemY + 70, (width - 2 * p) * (percentage / 100), 8, 4, barColor);
+                
+                ctx.fillStyle = theme.colors.textLight;
+                ctx.font = '12px Inter';
+                ctx.fillText('Auslastung', x + p, itemY + 60);
+                ctx.textAlign = 'right';
+                ctx.fillText(`${m.workload}/${m.maxWorkload} Fälle`, x + width - p, itemY + 60);
+                ctx.textAlign = 'left';
+            });
+        }
+        
+        function drawRecentAssignments(x, y, width, height, highlight) {
+            drawRoundedRect(x, y, width, height, 10, theme.colors.cardBg, true);
+            const p = 24; // padding
+
+            ctx.fillStyle = theme.colors.textHeading;
+            ctx.font = 'bold 20px Inter';
+            ctx.fillText('Letzte automatische Zuweisungen', x + p, y + p + 10);
+            
+            // Header
+            const headers = ['Zeit', 'Fall-ID', 'Typ', 'Mitarbeiter', 'Status'];
+            const colWidths = [0.1, 0.2, 0.25, 0.25, 0.2];
+            ctx.font = '600 14px Inter';
+            ctx.fillStyle = theme.colors.textLight;
+            let currentX = x + p;
+            headers.forEach((header, i) => {
+                ctx.fillText(header, currentX, y + 70);
+                currentX += colWidths[i] * (width - 2 * p);
+            });
+
+            // Rows
+            const rowHeight = 45;
+             letzteZuweisungenData.slice(0, 5).forEach((zuweisung, i) => {
+                const rowY = y + 80 + i * rowHeight;
+
+                if (highlight && i === 0) {
+                     drawRoundedRect(x + 5, rowY - 5, width - 10, rowHeight, 5, theme.colors.blueLight);
+                }
+                
+                // Border
+                ctx.strokeStyle = theme.colors.border;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x + p, rowY + rowHeight - 6);
+                ctx.lineTo(x + width - p, rowY + rowHeight - 6);
+                ctx.stroke();
+
+                let cellX = x + p;
+                ctx.fillStyle = theme.colors.textLight;
+                ctx.font = '14px Inter';
+                // Zeit
+                ctx.fillText(zuweisung.time, cellX, rowY + 25);
+                cellX += colWidths[0] * (width - 2 * p);
+                // Fall-ID
+                ctx.fillStyle = theme.colors.text;
+                ctx.font = '14px "Courier New", monospace';
+                ctx.fillText(zuweisung.id, cellX, rowY + 25);
+                cellX += colWidths[1] * (width - 2 * p);
+                // Typ
+                ctx.font = '14px Inter';
+                ctx.fillText(zuweisung.type, cellX, rowY + 25);
+                cellX += colWidths[2] * (width - 2 * p);
+                // Mitarbeiter
+                ctx.fillText(zuweisung.mitarbeiter, cellX, rowY + 25);
+                cellX += colWidths[3] * (width - 2 * p);
+                // Status
+                ctx.fillStyle = theme.colors.green;
+                ctx.fillText('✔ Zugewiesen', cellX, rowY + 25);
+
+             });
+        }
+        
+
+        // --- Main Render Loop ---
+        let highlightNewRow = false;
+
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = theme.colors.bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const p = theme.padding;
+            const gap = theme.gap;
+            const totalWidth = canvas.width - 2 * p;
+
+            // KPIs
+            const kpiHeight = drawKPIs(p, p, totalWidth);
+            const mainY = p + kpiHeight + gap;
+
+            // Main Grid
+            const isWide = canvas.width > 1024;
+            const mainGridHeight = 350;
+            const recentAssignmentsHeight = 300;
+            const employeeListHeight = mitarbeiterData.length * 90 + 80;
+
+            if (isWide) {
+                const manualWidth = totalWidth * (2/3) - gap / 2;
+                const employeeWidth = totalWidth * (1/3) - gap / 2;
+                drawManualCases(p, mainY, manualWidth, mainGridHeight);
+                drawEmployeeUtilization(p + manualWidth + gap, mainY, employeeWidth, employeeListHeight);
+                drawRecentAssignments(p, mainY + mainGridHeight + gap, manualWidth, recentAssignmentsHeight, highlightNewRow);
+            } else {
+                drawManualCases(p, mainY, totalWidth, mainGridHeight);
+                drawEmployeeUtilization(p, mainY + mainGridHeight + gap, totalWidth, employeeListHeight);
+                drawRecentAssignments(p, mainY + mainGridHeight + gap + employeeListHeight + gap, totalWidth, recentAssignmentsHeight, highlightNewRow);
+            }
+        }
+
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            // Set a minimum height for the canvas's container based on content
+            const isWide = window.innerWidth > 1024;
+            const employeeListHeight = mitarbeiterData.length * 90 + 80;
+            const mainGridHeight = 350;
+            const recentAssignmentsHeight = 300;
+            const kpiHeight = 110;
+
+            let requiredHeight = theme.padding * 2 + kpiHeight + theme.gap;
+            if(isWide) {
+                requiredHeight += Math.max(employeeListHeight, mainGridHeight + theme.gap + recentAssignmentsHeight);
+            } else {
+                requiredHeight += mainGridHeight + theme.gap + employeeListHeight + theme.gap + recentAssignmentsHeight;
+            }
+            canvas.style.height = `${requiredHeight}px`;
+
+            draw();
+        }
+        
+        // --- Simulation ---
+        function simulateNewCase() {
+            kpiData.neueFaelle++;
+            kpiData.automatisch++;
+
+            const availableMitarbeiter = mitarbeiterData.filter(m => m.status === 'Verfügbar' && m.workload < m.maxWorkload);
+            if (availableMitarbeiter.length === 0) return;
+            
+            const mitarbeiter = availableMitarbeiter[Math.floor(Math.random() * availableMitarbeiter.length)];
+            mitarbeiter.workload++;
+
+            const now = new Date();
+            const time = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+            const newCaseId = `SF-${Math.floor(10000 + Math.random() * 90000)}`;
+            const caseTypes = ["Kfz-Kasko", "Hausrat", "Wohngebäude", "Unfall"];
+            const randomType = caseTypes[Math.floor(Math.random() * caseTypes.length)];
+
+            letzteZuweisungenData.unshift({
+                time: time, id: newCaseId, type: randomType, mitarbeiter: mitarbeiter.name, status: "Zugewiesen"
+            });
+            if (letzteZuweisungenData.length > 10) letzteZuweisungenData.pop();
+            
+            highlightNewRow = true;
+            draw();
+            setTimeout(() => {
+                highlightNewRow = false;
+                draw();
+            }, 1500);
+        }
+
+
+        // --- Initialisation ---
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const menuButton = document.getElementById('menu-button');
+        const sidebar = document.querySelector('.sidebar');
+        menuButton.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+        
+        setInterval(simulateNewCase, 5000);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEV - Digitale Transformation durch Automatisierung</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Slides */
+        .slide {
+            display: none;
+            padding: 60px 80px 120px 80px;
+            min-height: 100vh;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Typography */
+        .slide-header {
+            border-bottom: 3px solid #01a999;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .slide-number {
+            color: #01a999;
+            font-size: 1em;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            color: #1a1a1a;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .slide-subtitle {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 300;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #1a1a1a;
+            font-weight: 400;
+            margin: 40px 0 20px 0;
+            padding-left: 20px;
+            border-left: 4px solid #01a999;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #01a999;
+            font-weight: 500;
+            margin: 30px 0 15px 0;
+        }
+
+        /* Content Elements */
+        .key-message {
+            background: #f8f9fa;
+            border-left: 5px solid #01a999;
+            padding: 25px 30px;
+            margin: 30px 0;
+            font-size: 1.2em;
+            color: #1a1a1a;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 20px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: #01a999;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-button:hover {
+            background: #019185;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(1, 169, 153, 0.3);
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-indicator {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Story Timeline Styles */
+        .story-timeline {
+            position: relative;
+            padding: 40px 0;
+            margin-top: 20px;
+        }
+        .story-line {
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(to bottom, #01a999, #019185);
+            left: 50%;
+            top: 60px;
+            bottom: 60px;
+            transform: translateX(-50%);
+        }
+        .story-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .story-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+        .story-content {
+            width: 45%;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .story-marker {
+            width: 50px;
+            height: 50px;
+            background: #01a999;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3em;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 0 0 4px white, 0 0 0 5px #01a999;
+        }
+        .story-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #01a999;
+            margin-bottom: 10px;
+        }
+        .story-description {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slides-container" id="slidesContainer">
+
+            <!-- Slide 1: Gründervorstellung -->
+            <div class="slide active">
+                <div class="slide-header">
+                    <h1>Gründervorstellung</h1>
+                </div>
+
+                <div style="display: flex; justify-content: center; gap: 100px; margin-top: 40px;">
+                    <!-- Fabian Profile -->
+                    <div style="max-width: 500px; text-align: center;">
+                        <div style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #01a999, #019185); margin: 0 auto 30px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(1, 169, 153, 0.3);">
+                            <img src="../../assets/img/Fabian.png" alt="Fabian" style="width: 190px; height: 190px; border-radius: 50%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'color: white; font-size: 60px; font-weight: bold;\'>FK</div>';">
+                        </div>
+                        <h2 style="font-size: 2em; color: #1a1a1a; margin-bottom: 10px;">Fabian Kashi</h2>
+                        <div style="color: #01a999; font-size: 1.2em; font-weight: 500; margin-bottom: 20px;">Co-Founder & CEO</div>
+                        
+                        <div style="text-align: left; margin-top: 30px;">
+                            <div style="margin-bottom: 25px;">
+                                <div style="font-weight: 600; color: #666; margin-bottom: 10px; font-size: 1.1em;">Ausbildung & Expertise</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; color: #1a1a1a; font-size: 0.95em;">
+                                    <div>Bachelor of Arts E-Commerce</div>
+                                    <div>Sales & Kundenbetreuung</div>
+                                    <div>Marketing Koordination</div>
+                                    <div>High-Budget Kampagnen</div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 25px;">
+                                <div style="font-weight: 600; color: #666; margin-bottom: 10px; font-size: 1.1em;">Unternehmensführung</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; color: #1a1a1a; font-size: 0.95em;">
+                                    <div>Strategieentwicklung</div>
+                                    <div>Rechtliche Aspekte</div>
+                                    <div>Finanzmanagement</div>
+                                    <div>Trailerproduktion</div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div style="font-weight: 600; color: #666; margin-bottom: 10px; font-size: 1.1em;">Erfolge</div>
+                                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; color: #1a1a1a; font-size: 0.95em;">
+                                    <div>Erstunternehmen über 1 Mio. € Umsatz (B2C)</div>
+                                    <div>Erfolgreiche Großkampagnen-Entwicklung</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Daniel Profile -->
+                    <div style="max-width: 500px; text-align: center;">
+                        <div style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #01a999, #019185); margin: 0 auto 30px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(1, 169, 153, 0.3);">
+                            <img src="../../assets/img/Daniel.png" alt="Daniel" style="width: 190px; height: 190px; border-radius: 50%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'color: white; font-size: 60px; font-weight: bold;\'>DK</div>'">
+                        </div>
+                        <h2 style="font-size: 2em; color: #1a1a1a; margin-bottom: 10px;">Daniel Kashi</h2>
+                        <div style="color: #01a999; font-size: 1.2em; font-weight: 500; margin-bottom: 20px;">Co-Founder & CTO</div>
+                        
+                        <div style="text-align: left; margin-top: 30px;">
+                            <div style="margin-bottom: 25px;">
+                                <div style="font-weight: 600; color: #666; margin-bottom: 10px; font-size: 1.1em;">Ausbildung & Expertise</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; color: #1a1a1a; font-size: 0.95em;">
+                                    <div>Bachelor Wirtschaftsinformatik</div>
+                                    <div>Technische Koordination</div>
+                                    <div>Strategieentwicklung</div>
+                                    <div>Technisches Netzwerk</div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 25px;">
+                                <div style="font-weight: 600; color: #666; margin-bottom: 10px; font-size: 1.1em;">Kundenmanagement</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; color: #1a1a1a; font-size: 0.95em;">
+                                    <div>32.000+ Kunden (B2C)</div>
+                                    <div>50+ direkte Prozessagent-+Kunden</div>
+                                    <div>Teamführung</div>
+                                    <div>Prozessoptimierung</div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div style="font-weight: 600; color: #666; margin-bottom: 10px; font-size: 1.1em;">Erfolge</div>
+                                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; color: #1a1a1a; font-size: 0.95em;">
+                                    <div>Über 1 Mio. € Umsatz (B2C)</div>
+                                    <div>Erfolgreiche Skalierung auf 32.000+ Kunden</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-message" style="margin-top: 40px;">
+                    <strong>Unsere Mission:</strong> Wir kombinieren tiefes Branchenwissen mit modernster Technologie, um deutsche Unternehmen nachhaltig zu transformieren.
+                </div>
+            </div>
+
+            <!-- Slide 2: Wie Prozessagent ins Leben gerufen wurde -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">UNSERE GESCHICHTE</div>
+                    <h1>Wie Prozessagent ins Leben gerufen wurde</h1>
+                    <div class="slide-subtitle">Von einer Zahnarztpraxis zur deutschlandweiten Lösung</div>
+                </div>
+
+                <div class="story-timeline">
+                    <div class="story-line"></div>
+                    
+                    <div class="story-item">
+                        <div class="story-content">
+                            <div class="story-title">Der Besuch in der Praxis</div>
+                            <div class="story-description">Vater ist Zahnarzt - bei einem Besuch in seiner Praxis erlebte ich hautnah die täglichen Herausforderungen</div>
+                        </div>
+                        <div class="story-marker">1</div>
+                    </div>
+
+                    <div class="story-item">
+                        <div class="story-content">
+                            <div class="story-title">Der kritische Tag</div>
+                            <div class="story-description">3 Helferinnen krank, nur Mutter im Betrieb - absolute Überlastung und Chaos in der Praxis</div>
+                        </div>
+                        <div class="story-marker">2</div>
+                    </div>
+
+                    <div class="story-item">
+                        <div class="story-content">
+                            <div class="story-title">Das Problem erkannt</div>
+                            <div class="story-description">Telefon klingelte ununterbrochen, viele Patienten zu behandeln, alles musste manuell ins System eingegeben werden</div>
+                        </div>
+                        <div class="story-marker">3</div>
+                    </div>
+
+                    <div class="story-item">
+                        <div class="story-content">
+                            <div class="story-title">Die Innovation</div>
+                            <div class="story-description">Erstes Produkt als Erste in Deutschland: KI-Agent für automatische Dokumentation, Befund-Transkription mit PVS-Schnittstelle und DSGVO-konforme Telefonassistenz</div>
+                        </div>
+                        <div class="story-marker">4</div>
+                    </div>
+
+                    <div class="story-item">
+                        <div class="story-content">
+                            <div class="story-title">Mund-zu-Mund Propaganda</div>
+                            <div class="story-description">Vater war begeistert und empfahl Prozessagent an Kollegen weiter - Zahnärzte, Kieferchirurgen, Kliniken</div>
+                        </div>
+                        <div class="story-marker">5</div>
+                    </div>
+
+                    <div class="story-item">
+                        <div class="story-content">
+                            <div class="story-title">Team-Aufbau</div>
+                            <div class="story-description">Hohe Nachfrage führte zu Expansion - Top-Programmierer aus meinem Studiengang und deren Netzwerk rekrutiert</div>
+                        </div>
+                        <div class="story-marker">6</div>
+                    </div>
+
+                    <div class="story-item">
+                        <div class="story-content">
+                            <div class="story-title">Branchen-Expansion</div>
+                            <div class="story-description">Prozessagent auf weitere Branchen ausgeweitet: Modehersteller, Vertriebe, mittelgroße bis große Busunternehmen</div>
+                        </div>
+                        <div class="story-marker">7</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Dashboard Auswahl -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">LIVE DEMO</div>
+                    <h1>Unsere Lösungen in Aktion</h1>
+                    <div class="slide-subtitle">Erleben Sie unsere Dashboards live</div>
+                </div>
+
+                <div style="display: flex; justify-content: center; align-items: center; min-height: 60vh;">
+                    <a href="/src/dashboards/konzept.html" style="text-decoration: none;">
+                        <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 16px; padding: 30px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" 
+                             onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(1,169,153,0.3)'" 
+                             onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'">
+                            <div style="background: #10B981; width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                                <svg style="width: 30px; height: 30px; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <h2 style="font-size: 2em; font-weight: 600; margin-bottom: 15px; color: #1a1a1a; border: none; padding: 0;">GEV Zuteilungscockpit</h2>
+                            <p style="color: #666; margin-bottom: 20px; font-size: 1.1em;">Intelligente Fallverteilung mit KI-Unterstützung und Echtzeit-Monitoring</p>
+                            <div style="color: #10B981; font-weight: 600; font-size: 1.1em;">
+                                Dashboard öffnen →
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">← Zurück</button>
+            <div class="slide-indicator">
+                <span id="currentSlide">1</span> / <span id="totalSlides">3</span>
+            </div>
+            <button class="nav-button" id="nextBtn" onclick="changeSlide(1)">Weiter →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+
+            if (index >= 0 && index < totalSlides) {
+                slides[index].classList.add('active');
+                currentSlideIndex = index;
+
+                document.getElementById('currentSlide').textContent = index + 1;
+                document.getElementById('prevBtn').disabled = index === 0;
+                document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+            }
+        }
+
+        function changeSlide(direction) {
+            const newIndex = currentSlideIndex + direction;
+            if (newIndex >= 0 && newIndex < totalSlides) {
+                showSlide(newIndex);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'Home') showSlide(0);
+            if (e.key === 'End') showSlide(totalSlides - 1);
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1);  // Swipe left
+            if (touchEndX > touchStartX + 50) changeSlide(-1); // Swipe right
+        }
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

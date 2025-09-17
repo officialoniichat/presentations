@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prozessagent - Referenzprojekte</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Slides */
+        .slide {
+            display: none;
+            padding: 60px 80px 120px 80px;
+            min-height: 100vh;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Typography */
+        .slide-header {
+            border-bottom: 3px solid #01a999;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .slide-number {
+            color: #01a999;
+            font-size: 1em;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            color: #1a1a1a;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .slide-subtitle {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 300;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #1a1a1a;
+            font-weight: 400;
+            margin: 40px 0 20px 0;
+            padding-left: 20px;
+            border-left: 4px solid #01a999;
+        }
+
+        /* Content Elements */
+        .key-message {
+            background: #f8f9fa;
+            border-left: 5px solid #01a999;
+            padding: 25px 30px;
+            margin: 30px 0;
+            font-size: 1.2em;
+            color: #1a1a1a;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 20px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: #01a999;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-button:hover {
+            background: #019185;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(1, 169, 153, 0.3);
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-indicator {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Problem-Solution Layout */
+        .problem-solution-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 1.6em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .problem-section {
+            border-top: 3px solid #ef4444;
+        }
+
+        .solution-section {
+            border-top: 3px solid #10b981;
+        }
+
+        .problem-title {
+            color: #ef4444;
+        }
+
+        .solution-title {
+            color: #10b981;
+        }
+
+        .point-item {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .point-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+            font-size: 0.9em;
+        }
+
+        .problem-number {
+            background: #ef4444;
+        }
+
+        .solution-number {
+            background: #10b981;
+        }
+
+        .point-content {
+            flex: 1;
+        }
+
+        .point-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #1a1a1a;
+            font-size: 1.1em;
+        }
+
+        .point-description {
+            color: #666;
+            line-height: 1.5;
+            font-size: 0.95em;
+        }
+
+        /* Result Box */
+        .result-box {
+            background: linear-gradient(135deg, #01a999 0%, #019185 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .result-metrics {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        /* Fragen Button */
+        .fragen-button {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 12px 25px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .fragen-button:hover {
+            background: rgba(255,119,38,0.15);
+            border-color: #f97316;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(249,115,22,0.2);
+        }
+
+        .fragen-icon {
+            width: 35px;
+            height: 35px;
+            background: #f97316;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .fragen-text {
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .fragen-link {
+            color: #f97316;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fragen Button -->
+    <a href="/src/presentations/fragen.html" class="fragen-button">
+        <div class="fragen-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+        <div>
+            <div class="fragen-text">Fragen</div>
+            <div class="fragen-link">Kontakt aufnehmen →</div>
+        </div>
+    </a>
+
+    <div class="presentation-container">
+        <div class="slides-container" id="slidesContainer">
+
+            <!-- Slide 1: BusAgent -->
+            <div class="slide active">
+                <div class="slide-header">
+                    <div class="slide-number">REFERENZPROJEKT #1</div>
+                    <h1>BusAgent</h1>
+                    <div class="slide-subtitle">Intelligente Fahrerzuteilung für Busunternehmen</div>
+                </div>
+
+                <div class="problem-solution-container">
+                    <!-- Problem Section -->
+                    <div class="section problem-section">
+                        <div class="section-title problem-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Problem
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number problem-number">1</div>
+                            <div class="point-content">
+                                <div class="point-title">Tägliche manuelle Routenzuteilung</div>
+                                <div class="point-description">Disponenten müssen jeden Tag Routen manuell den Fahrern zuteilen - zeitaufwändig und ineffizient</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number problem-number">2</div>
+                            <div class="point-content">
+                                <div class="point-title">Komplette Neuplanung bei Änderungen</div>
+                                <div class="point-description">Bei neuen Aufträgen oder Reiseaufträgen muss die Route komplett neu geplant werden</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number problem-number">3</div>
+                            <div class="point-content">
+                                <div class="point-title">Keine Berücksichtigung von Präferenzen</div>
+                                <div class="point-description">Fahrerwünsche wie bevorzugte Dienste oder Strecken werden nicht systematisch einbezogen</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number problem-number">4</div>
+                            <div class="point-content">
+                                <div class="point-title">Ungleiche Arbeitsverteilung</div>
+                                <div class="point-description">Manche Fahrer haben Überstunden, während andere unterausgelastet sind</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solution Section -->
+                    <div class="section solution-section">
+                        <div class="section-title solution-title">
+                            <i class="fas fa-check-circle"></i>
+                            Lösung mit BusAgent
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number solution-number">✓</div>
+                            <div class="point-content">
+                                <div class="point-title">Ein-Klick-Zuteilung</div>
+                                <div class="point-description">Verwaltungsdashboard mit intelligentem Algorithmus - nur ein Knopfdruck nötig</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number solution-number">✓</div>
+                            <div class="point-content">
+                                <div class="point-title">Intelligente Faktoren-Analyse</div>
+                                <div class="point-description">Berücksichtigt Job-Typ (Fest/Mini/Teilzeit), verfügbare Stunden, Qualifikationen</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number solution-number">✓</div>
+                            <div class="point-content">
+                                <div class="point-title">Personalisierte Fahrerprofile</div>
+                                <div class="point-description">Bevorzugte Dienste (Tag/Nacht), Lieblingsziele, feste Busse - alles wird einbezogen</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number solution-number">✓</div>
+                            <div class="point-content">
+                                <div class="point-title">Optimale Ressourcennutzung</div>
+                                <div class="point-description">Gleichmäßige Verteilung und maximale Fahrerzufriedenheit</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-box">
+                    <div class="result-title">🚍 Erreichte Ergebnisse</div>
+                    <div class="result-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">70%</div>
+                            <div class="metric-label">Zeitersparnis Disposition</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">95%</div>
+                            <div class="metric-label">Fahrerzufriedenheit</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">-30%</div>
+                            <div class="metric-label">Überstunden</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">3 Mon.</div>
+                            <div class="metric-label">ROI erreicht</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: PackAgent -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">REFERENZPROJEKT #2</div>
+                    <h1>PackAgent</h1>
+                    <div class="slide-subtitle">Intelligente Paketverteilung für Modevertriebe</div>
+                </div>
+
+                <div class="problem-solution-container">
+                    <!-- Problem Section -->
+                    <div class="section problem-section">
+                        <div class="section-title problem-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Problem
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number problem-number">1</div>
+                            <div class="point-content">
+                                <div class="point-title">Hunderte Kleinsendungen täglich</div>
+                                <div class="point-description">Viele Pakete von DHL, DPD etc. - jedes mit eigenem Lieferschein</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number problem-number">2</div>
+                            <div class="point-content">
+                                <div class="point-title">Verschiedene Prozessvarianten</div>
+                                <div class="point-description">Auspacken, Auszeichnen, Sichern, Aufbügeln - je nach Warengruppe unterschiedlich</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number problem-number">3</div>
+                            <div class="point-content">
+                                <div class="point-title">Cherry-Picking Problem</div>
+                                <div class="point-description">Mitarbeiter wählen Lieblingsmarken oder "schnelle" Pakete - schwierige bleiben liegen</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number problem-number">4</div>
+                            <div class="point-content">
+                                <div class="point-title">Papierbasierte Arbeitsschritte</div>
+                                <div class="point-description">Digital hinterlegt, aber auf Papier ausgegeben - ineffizient und fehleranfällig</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solution Section -->
+                    <div class="section solution-section">
+                        <div class="section-title solution-title">
+                            <i class="fas fa-check-circle"></i>
+                            Lösung mit PackAgent
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number solution-number">✓</div>
+                            <div class="point-content">
+                                <div class="point-title">"Ich bin frei" - Button</div>
+                                <div class="point-description">Mitarbeiter klickt nur einen Button - perfekt passendes Paket wird zugeteilt</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number solution-number">✓</div>
+                            <div class="point-content">
+                                <div class="point-title">Datenerfassung im Hintergrund</div>
+                                <div class="point-description">Touch-Screen stoppt Zeit pro Schritt, Produktklasse und Größe automatisch</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number solution-number">✓</div>
+                            <div class="point-content">
+                                <div class="point-title">Intelligente Priorisierung</div>
+                                <div class="point-description">Basierend auf Priorität, Rest-Schichtzeit und individuellen Skills</div>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-number solution-number">✓</div>
+                            <div class="point-content">
+                                <div class="point-title">Vollständig digitaler Prozess</div>
+                                <div class="point-description">Arbeiterdashboard mit Touch-Interface - kein Papier mehr nötig</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-box">
+                    <div class="result-title">📦 Erreichte Ergebnisse</div>
+                    <div class="result-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">50%</div>
+                            <div class="metric-label">Schnellere Bearbeitung</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">0</div>
+                            <div class="metric-label">Liegengebliebene Pakete</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">85%</div>
+                            <div class="metric-label">Weniger Fehler</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">100%</div>
+                            <div class="metric-label">Digitale Prozesse</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">← Zurück</button>
+            <div class="slide-indicator">
+                <span id="currentSlide">1</span> / <span id="totalSlides">2</span>
+            </div>
+            <button class="nav-button" id="nextBtn" onclick="changeSlide(1)">Weiter →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+
+            if (index >= 0 && index < totalSlides) {
+                slides[index].classList.add('active');
+                currentSlideIndex = index;
+
+                document.getElementById('currentSlide').textContent = index + 1;
+                document.getElementById('prevBtn').disabled = index === 0;
+                document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+            }
+        }
+
+        function changeSlide(direction) {
+            const newIndex = currentSlideIndex + direction;
+            if (newIndex >= 0 && newIndex < totalSlides) {
+                showSlide(newIndex);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'Home') showSlide(0);
+            if (e.key === 'End') showSlide(totalSlides - 1);
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1);
+            if (touchEndX > touchStartX + 50) changeSlide(-1);
+        }
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
