@@ -23,6 +23,38 @@
             width: 100%;
             height: 100%;
         }
+        @keyframes fadeInScale {
+            from { 
+                opacity: 0;
+                transform: scale(0.95) translateX(-10px);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1) translateX(0);
+            }
+        }
+        .dragging {
+            opacity: 0.5;
+            cursor: grabbing !important;
+        }
+        .drag-over {
+            background-color: #e0f2fe !important;
+            border: 2px dashed #3b82f6 !important;
+        }
+        .draggable-handle {
+            cursor: grab;
+            transition: transform 0.2s;
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        .draggable-handle:hover {
+            transform: translateX(2px);
+            text-decoration: underline;
+            color: #2563eb;
+        }
+        .draggable-handle:active {
+            cursor: grabbing;
+        }
     </style>
 </head>
 <body class="text-gray-800">
@@ -36,21 +68,21 @@
                 <span class="text-2xl font-extrabold">GEV Secure</span>
             </a>
             <nav>
-                <a href="#" class="flex items-center space-x-3 bg-blue-500 bg-opacity-30 text-white py-2 px-4 rounded transition duration-200">
+                <a href="#" id="nav-dashboard" onclick="showDashboard()" class="nav-item flex items-center space-x-3 bg-blue-500 bg-opacity-30 text-white py-2 px-4 rounded transition duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
                     <span>Dashboard</span>
                 </a>
-                 <a href="#" class="flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
+                 <a href="#" id="nav-cases" onclick="showCaseManagement()" class="nav-item flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>
-                     <span>Alle Fälle</span>
+                     <span>Alle Neufälle</span>
                  </a>
-                 <a href="#" class="flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
+                 <a href="#" id="nav-employees" onclick="showEmployeeManagement()" class="nav-item flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
                      <span>Mitarbeiter</span>
                  </a>
-                 <a href="#" class="flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>
-                     <span>Regelwerk</span>
+                 <a href="#" id="nav-sketch" onclick="showTechnicalSketch()" class="nav-item flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
+                     <span>Technische Skizze</span>
                  </a>
             </nav>
         </aside>
@@ -86,14 +118,38 @@
     // --- Mock Data --- 
     // (Same data as in the previous example)
     const mitarbeiterData = [
-        { id: 1, name: "Anna Schmidt", status: "Verfügbar", workload: 15, maxWorkload: 20, skills: ["Kfz", "Standard"], avatar: "AS" },
-        { id: 2, name: "Bernd Maier", status: "Verfügbar", workload: 12, maxWorkload: 20, skills: ["Hausrat", "Kfz", "Standard"], avatar: "BM" },
-        { id: 3, name: "Carla Huber", status: "Beschäftigt", workload: 19, maxWorkload: 20, skills: ["Kfz", "Großschaden", "Betrug"], avatar: "CH" },
-        { id: 4, name: "David Fuchs", status: "Verfügbar", workload: 8, maxWorkload: 15, skills: ["Wohngebäude", "Standard"], avatar: "DF", isNew: true },
-        { id: 5, name: "Eva Klein", status: "Urlaub", workload: 0, maxWorkload: 20, skills: ["Hausrat", "Großschaden"], avatar: "EK" },
-        { id: 6, name: "Frank Nagel", status: "Verfügbar", workload: 18, maxWorkload: 25, skills: ["Kfz", "Regress", "Experte"], avatar: "FN" },
-        { id: 7, name: "Gabi Lorenz", status: "Krank", workload: 5, maxWorkload: 20, skills: ["Wohngebäude", "Standard"], avatar: "GL" },
-        { id: 8, name: "Hans Richter", status: "Verfügbar", workload: 11, maxWorkload: 20, skills: ["Hausrat", "Standard"], avatar: "HR" },
+        // Junior Sachbearbeiter
+        { id: 1, name: "Anna Schmidt", status: "Verfügbar", position: "junior", employmentType: "vollzeit", abteilung: "KFZ-Schäden", workload: 15, maxWorkload: 20, skills: ["Kfz", "Standard"], avatar: "AS", casesToday: 12, avgTime: 45 },
+        { id: 2, name: "Bernd Maier", status: "Verfügbar", position: "junior", employmentType: "teilzeit", abteilung: "Hausrat", workload: 12, maxWorkload: 15, skills: ["Hausrat", "Kfz", "Standard"], avatar: "BM", casesToday: 10, avgTime: 48 },
+        { id: 12, name: "Lisa Müller", status: "Verfügbar", position: "junior", employmentType: "minijob", abteilung: "Hausrat", workload: 4, maxWorkload: 8, skills: ["Hausrat", "Standard"], avatar: "LM", casesToday: 5, avgTime: 50 },
+        { id: 15, name: "Oliver Schmidt", status: "Verfügbar", position: "junior", employmentType: "teilzeit", abteilung: "Haftpflicht", workload: 8, maxWorkload: 12, skills: ["Haftpflicht", "Standard"], avatar: "OS", casesToday: 8, avgTime: 46 },
+
+        // Sachbearbeiter (erweitert)
+        { id: 3, name: "Carla Huber", status: "Beschäftigt", position: "sachbearbeiter", employmentType: "vollzeit", abteilung: "KFZ-Schäden", workload: 19, maxWorkload: 20, skills: ["Kfz", "Großschaden", "Betrug"], avatar: "CH", casesToday: 9, avgTime: 35 },
+        { id: 4, name: "David Fuchs", status: "Verfügbar", position: "sachbearbeiter", employmentType: "vollzeit", abteilung: "Wohngebäude", workload: 8, maxWorkload: 20, skills: ["Wohngebäude", "Standard"], avatar: "DF", isNew: true, casesToday: 15, avgTime: 32 },
+        { id: 5, name: "Eva Klein", status: "Verfügbar", position: "sachbearbeiter", employmentType: "teilzeit", abteilung: "Hausrat", workload: 0, maxWorkload: 15, skills: ["Hausrat", "Großschaden"], avatar: "EK", casesToday: 12, avgTime: 38 },
+        { id: 9, name: "Ina Becker", status: "Verfügbar", position: "sachbearbeiter", employmentType: "minijob", abteilung: "Haftpflicht", workload: 5, maxWorkload: 8, skills: ["Haftpflicht", "Standard"], avatar: "IB", casesToday: 6, avgTime: 40 },
+        { id: 13, name: "Max Weber", status: "Verfügbar", position: "sachbearbeiter", employmentType: "vollzeit", abteilung: "KFZ-Schäden", workload: 16, maxWorkload: 20, skills: ["Kfz", "Standard"], avatar: "MW", casesToday: 11, avgTime: 33 },
+        { id: 16, name: "Paula Klein", status: "Verfügbar", position: "sachbearbeiter", employmentType: "minijob", abteilung: "Hausrat", workload: 6, maxWorkload: 8, skills: ["Hausrat"], avatar: "PK", casesToday: 4, avgTime: 42 },
+        { id: 17, name: "Robert Wagner", status: "Verfügbar", position: "sachbearbeiter", employmentType: "vollzeit", abteilung: "KFZ-Schäden", workload: 14, maxWorkload: 20, skills: ["Kfz", "Standard"], avatar: "RW", casesToday: 13, avgTime: 34 },
+        { id: 18, name: "Sabine Hoffmann", status: "Verfügbar", position: "sachbearbeiter", employmentType: "vollzeit", abteilung: "Wohngebäude", workload: 17, maxWorkload: 20, skills: ["Wohngebäude", "Großschaden"], avatar: "SH", casesToday: 14, avgTime: 36 },
+        { id: 19, name: "Thomas Bauer", status: "Verfügbar", position: "sachbearbeiter", employmentType: "teilzeit", abteilung: "Hausrat", workload: 10, maxWorkload: 15, skills: ["Hausrat", "Standard"], avatar: "TB", casesToday: 9, avgTime: 37 },
+        { id: 20, name: "Ursula Schulz", status: "Verfügbar", position: "sachbearbeiter", employmentType: "vollzeit", abteilung: "Haftpflicht", workload: 15, maxWorkload: 20, skills: ["Haftpflicht", "Betrug"], avatar: "US", casesToday: 12, avgTime: 35 },
+        { id: 21, name: "Viktor Lang", status: "Verfügbar", position: "sachbearbeiter", employmentType: "minijob", abteilung: "KFZ-Schäden", workload: 6, maxWorkload: 8, skills: ["Kfz"], avatar: "VL", casesToday: 5, avgTime: 41 },
+        { id: 22, name: "Wanda Peters", status: "Verfügbar", position: "sachbearbeiter", employmentType: "teilzeit", abteilung: "Wohngebäude", workload: 11, maxWorkload: 15, skills: ["Wohngebäude"], avatar: "WP", casesToday: 10, avgTime: 39 },
+        { id: 23, name: "Xaver Braun", status: "Verfügbar", position: "sachbearbeiter", employmentType: "vollzeit", abteilung: "Großschäden", workload: 18, maxWorkload: 20, skills: ["Großschaden", "Regress"], avatar: "XB", casesToday: 11, avgTime: 33 },
+        { id: 24, name: "Yvonne Wolf", status: "Verfügbar", position: "sachbearbeiter", employmentType: "vollzeit", abteilung: "KFZ-Schäden", workload: 16, maxWorkload: 20, skills: ["Kfz", "Betrug"], avatar: "YW", casesToday: 13, avgTime: 34 },
+        { id: 25, name: "Zacharias Krüger", status: "Verfügbar", position: "sachbearbeiter", employmentType: "teilzeit", abteilung: "Hausrat", workload: 12, maxWorkload: 15, skills: ["Hausrat", "Standard"], avatar: "ZK", casesToday: 10, avgTime: 38 },
+
+        // Senior Sachbearbeiter
+        { id: 6, name: "Frank Nagel", status: "Verfügbar", position: "senior", employmentType: "vollzeit", abteilung: "KFZ-Schäden", workload: 18, maxWorkload: 25, skills: ["Kfz", "Regress", "Experte"], avatar: "FN", casesToday: 18, avgTime: 25 },
+        { id: 7, name: "Gabi Lorenz", status: "Verfügbar", position: "senior", employmentType: "vollzeit", abteilung: "Wohngebäude", workload: 5, maxWorkload: 25, skills: ["Wohngebäude", "Standard"], avatar: "GL", casesToday: 16, avgTime: 28 },
+        { id: 10, name: "Julia Weiss", status: "Verfügbar", position: "senior", employmentType: "teilzeit", abteilung: "Haftpflicht", workload: 12, maxWorkload: 18, skills: ["Haftpflicht", "Großschaden"], avatar: "JW", casesToday: 14, avgTime: 26 },
+        { id: 14, name: "Nina Fischer", status: "Verfügbar", position: "senior", employmentType: "vollzeit", abteilung: "Großschäden", workload: 20, maxWorkload: 25, skills: ["Großschaden", "Experte"], avatar: "NF", casesToday: 16, avgTime: 24 },
+
+        // Schadenexperte
+        { id: 8, name: "Hans Richter", status: "Verfügbar", position: "experte", employmentType: "vollzeit", abteilung: "Großschäden", workload: 11, maxWorkload: 20, skills: ["Hausrat", "Großschaden", "Experte"], avatar: "HR", casesToday: 8, avgTime: 20 },
+        { id: 11, name: "Karl Meyer", status: "Verfügbar", position: "experte", employmentType: "vollzeit", abteilung: "Betrug", workload: 14, maxWorkload: 20, skills: ["Betrug", "Regress", "Experte"], avatar: "KM", casesToday: 6, avgTime: 18 },
     ];
 
     const manuelleFaelleData = [
@@ -209,15 +265,13 @@
 
         // --- Main Drawing Functions ---
         function drawKPIs(x, y, width) {
-            const cardCount = 4;
+            const cardCount = 2;
             const cardWidth = (width - (cardCount - 1) * theme.gap) / cardCount;
             const cardHeight = 110;
             
             const cards = [
                 { title: 'Neue Fälle (heute)', value: kpiData.neueFaelle, color: theme.colors.blue, lightColor: theme.colors.blueLight, icon: 'new_case' },
-                { title: 'Automatisch zugewiesen', value: kpiData.automatisch, color: theme.colors.green, lightColor: theme.colors.greenLight, icon: 'auto_assign' },
-                { title: 'Manuelle Prüfung', value: kpiData.manuell, color: theme.colors.orange, lightColor: theme.colors.orangeLight, icon: 'manual_review' },
-                { title: 'Mitarbeiter verfügbar', value: `${mitarbeiterData.filter(m => m.status === 'Verfügbar' || m.status === 'Beschäftigt').length} / ${mitarbeiterData.length}`, color: theme.colors.indigo, lightColor: theme.colors.indigoLight, icon: 'available_staff' }
+                { title: 'Automatisch zugewiesen', value: kpiData.automatisch, color: theme.colors.green, lightColor: theme.colors.greenLight, icon: 'auto_assign' }
             ];
 
             cards.forEach((card, i) => {
@@ -448,23 +502,7 @@
             const kpiHeight = drawKPIs(p, p, totalWidth);
             const mainY = p + kpiHeight + gap;
 
-            // Main Grid
-            const isWide = canvas.width > 1024;
-            const mainGridHeight = 350;
-            const recentAssignmentsHeight = 300;
-            const employeeListHeight = mitarbeiterData.length * 90 + 80;
-
-            if (isWide) {
-                const manualWidth = totalWidth * (2/3) - gap / 2;
-                const employeeWidth = totalWidth * (1/3) - gap / 2;
-                drawManualCases(p, mainY, manualWidth, mainGridHeight);
-                drawEmployeeUtilization(p + manualWidth + gap, mainY, employeeWidth, employeeListHeight);
-                drawRecentAssignments(p, mainY + mainGridHeight + gap, manualWidth, recentAssignmentsHeight, highlightNewRow);
-            } else {
-                drawManualCases(p, mainY, totalWidth, mainGridHeight);
-                drawEmployeeUtilization(p, mainY + mainGridHeight + gap, totalWidth, employeeListHeight);
-                drawRecentAssignments(p, mainY + mainGridHeight + gap + employeeListHeight + gap, totalWidth, recentAssignmentsHeight, highlightNewRow);
-            }
+            // Only draw KPI cards - removed other sections
         }
 
         function resizeCanvas() {
@@ -535,6 +573,2591 @@
         
         setInterval(simulateNewCase, 5000);
     });
+
+    // LocalStorage management
+    function loadEmployeesFromStorage() {
+        // Always return the hardcoded data with all properties
+        return mitarbeiterData;
+    }
+
+    function saveEmployeeToStorage(employee) {
+        let employees = loadEmployeesFromStorage();
+        
+        // Generate unique ID
+        employee.id = Date.now();
+        employee.avatar = employee.name.split(' ').map(n => n[0]).join('').toUpperCase();
+        employee.workload = 0;
+        employee.maxWorkload = 20;
+        
+        employees.push(employee);
+        localStorage.setItem('gevEmployees', JSON.stringify(employees));
+        return employees;
+    }
+
+    function updateSidebarNavigation(activeItem) {
+        // Remove active class from all nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('bg-blue-500', 'bg-opacity-30');
+            item.classList.add('hover:bg-slate-700');
+        });
+        
+        // Add active class to selected item
+        const activeNav = document.getElementById(activeItem);
+        if (activeNav) {
+            activeNav.classList.add('bg-blue-500', 'bg-opacity-30');
+            activeNav.classList.remove('hover:bg-slate-700');
+        }
+    }
+
+    // Employee Management Functions
+    function showEmployeeManagement() {
+        // Hide dashboard canvas
+        document.getElementById('dashboardCanvas').style.display = 'none';
+
+        // Hide case view
+        const caseView = document.getElementById('case-management');
+        if (caseView) {
+            caseView.classList.add('hidden');
+        }
+
+        // Hide technical sketch
+        const sketchView = document.getElementById('technical-sketch');
+        if (sketchView) {
+            sketchView.classList.add('hidden');
+        }
+
+        // Hide analytics dashboard
+        const analyticsView = document.getElementById('analytics-dashboard');
+        if (analyticsView) {
+            analyticsView.classList.add('hidden');
+        }
+        
+        // Show employee management view
+        const employeeView = document.getElementById('employee-management');
+        if (employeeView) {
+            employeeView.classList.remove('hidden');
+        } else {
+            // Create employee management view if it doesn't exist
+            createEmployeeManagementView();
+        }
+        
+        // Update page title
+        const pageTitle = document.querySelector('h1');
+        if (pageTitle) {
+            pageTitle.textContent = 'Mitarbeiterverwaltung';
+        }
+        
+        // Update sidebar navigation
+        updateSidebarNavigation('nav-employees');
+        
+        // Refresh employee list
+        refreshEmployeeList();
+    }
+
+    function showDashboard() {
+        // Hide dashboard canvas (no longer used)
+        document.getElementById('dashboardCanvas').style.display = 'none';
+        
+        // Hide other views
+        const employeeView = document.getElementById('employee-management');
+        if (employeeView) {
+            employeeView.classList.add('hidden');
+        }
+        const caseView = document.getElementById('case-management');
+        if (caseView) {
+            caseView.classList.add('hidden');
+        }
+        const sketchView = document.getElementById('technical-sketch');
+        if (sketchView) {
+            sketchView.classList.add('hidden');
+        }
+        
+        // Show analytics dashboard
+        const analyticsView = document.getElementById('analytics-dashboard');
+        if (!analyticsView) {
+            createAnalyticsDashboard();
+        } else {
+            analyticsView.classList.remove('hidden');
+        }
+        
+        // Update page title
+        const pageTitle = document.querySelector('h1');
+        if (pageTitle) {
+            pageTitle.textContent = 'GEV Analytics Dashboard';
+        }
+        
+        // Update sidebar navigation
+        updateSidebarNavigation('nav-dashboard');
+    }
+
+    function showCaseManagement() {
+        // Hide dashboard canvas
+        document.getElementById('dashboardCanvas').style.display = 'none';
+
+        // Hide employee view
+        const employeeView = document.getElementById('employee-management');
+        if (employeeView) {
+            employeeView.classList.add('hidden');
+        }
+
+        // Hide technical sketch
+        const sketchView = document.getElementById('technical-sketch');
+        if (sketchView) {
+            sketchView.classList.add('hidden');
+        }
+
+        // Hide analytics dashboard
+        const analyticsView = document.getElementById('analytics-dashboard');
+        if (analyticsView) {
+            analyticsView.classList.add('hidden');
+        }
+        
+        // Show case management view
+        const caseView = document.getElementById('case-management');
+        if (caseView) {
+            caseView.classList.remove('hidden');
+            // Refresh employee list in case view
+            refreshCaseEmployeeList();
+        } else {
+            // Create case management view if it doesn't exist
+            createCaseManagementView();
+            refreshCaseEmployeeList();
+        }
+        
+        // Update page title
+        const pageTitle = document.querySelector('h1');
+        if (pageTitle) {
+            pageTitle.textContent = 'Neufallverwaltung';
+        }
+        
+        // Update sidebar navigation
+        updateSidebarNavigation('nav-cases');
+    }
+
+    function refreshEmployeeList() {
+        const employees = loadEmployeesFromStorage();
+        const tbody = document.getElementById('employee-list');
+        if (!tbody) return;
+        
+        // Map position values to display labels
+        const positionLabels = {
+            'junior': 'Junior Sachbearbeiter',
+            'sachbearbeiter': 'Sachbearbeiter',
+            'senior': 'Senior Sachbearbeiter',
+            'experte': 'Schadenexperte'
+        };
+        
+        tbody.innerHTML = employees.map(emp => `
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="h-10 w-10 flex-shrink-0 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">${emp.avatar}</div>
+                        <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">${emp.name}</div>
+                            ${emp.email ? `<div class="text-sm text-gray-500">${emp.email}</div>` : ''}
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${emp.abteilung || (emp.skills ? emp.skills[0] : 'Standard')}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div>
+                        <div class="text-sm font-semibold text-gray-900">${positionLabels[emp.position] || emp.position || 'Sachbearbeiter'}</div>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            ${(emp.spezialisierungen || emp.skills || []).map(skill => `
+                                <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-800">
+                                    ${skill}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        emp.status === 'aktiv' || emp.status === 'Verfügbar' ? 'bg-green-100 text-green-800' :
+                        emp.status === 'Beschäftigt' ? 'bg-yellow-100 text-yellow-800' :
+                        emp.status === 'urlaub' || emp.status === 'Urlaub' ? 'bg-gray-100 text-gray-800' :
+                        'bg-red-100 text-red-800'
+                    }">${emp.status || 'Verfügbar'}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="flex-1 bg-gray-200 rounded-full h-2 mr-2">
+                            <div class="bg-blue-500 h-2 rounded-full" style="width: ${(emp.workload/emp.maxWorkload)*100}%"></div>
+                        </div>
+                        <span class="text-sm text-gray-600">${emp.workload}/${emp.maxWorkload}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <button onclick="editEmployee(${emp.id})" class="text-blue-600 hover:text-blue-900 mr-2">Bearbeiten</button>
+                    <button onclick="deleteEmployee(${emp.id})" class="text-red-600 hover:text-red-900">Löschen</button>
+                </td>
+            </tr>
+        `).join('');
+        
+        // Update employee count
+        const countEl = document.getElementById('employee-count');
+        if (countEl) {
+            countEl.textContent = `${employees.length} Mitarbeiter`;
+        }
+    }
+
+    function deleteEmployee(id) {
+        if (confirm('Möchten Sie diesen Mitarbeiter wirklich löschen?')) {
+            let employees = loadEmployeesFromStorage();
+            employees = employees.filter(emp => emp.id !== id);
+            localStorage.setItem('gevEmployees', JSON.stringify(employees));
+            refreshEmployeeList();
+        }
+    }
+
+    function editEmployee(id) {
+        alert('Bearbeitungsfunktion wird in Kürze verfügbar sein.');
+    }
+
+    // Tags management
+    let employeeTags = [];
+    let isEditingTags = true; // Start in edit mode for new employee
+    
+    function handleTagInput(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const input = event.target;
+            const tagValue = input.value.trim();
+            if (tagValue && !employeeTags.includes(tagValue)) {
+                addTag(tagValue);
+                input.value = '';
+            }
+        }
+    }
+    
+    function addTag(tagValue) {
+        if (!employeeTags.includes(tagValue)) {
+            employeeTags.push(tagValue);
+            renderTags();
+            updateTagsDisplay();
+            updateTagSuggestions();
+        }
+    }
+    
+    function removeTag(tagValue) {
+        employeeTags = employeeTags.filter(tag => tag !== tagValue);
+        renderTags();
+        updateTagsDisplay();
+        updateTagSuggestions();
+    }
+    
+    function updateTagSuggestions() {
+        // Show/hide suggestion buttons based on selected tags
+        const suggestionButtons = document.querySelectorAll('.tag-suggestion');
+        suggestionButtons.forEach(button => {
+            const tagName = button.getAttribute('data-tag');
+            if (employeeTags.includes(tagName)) {
+                button.classList.add('hidden');
+            } else {
+                button.classList.remove('hidden');
+            }
+        });
+    }
+    
+    function renderTags() {
+        const container = document.getElementById('tags-container');
+        const input = document.getElementById('tags-input');
+        
+        // Clear existing tags but keep input
+        const existingTags = container.querySelectorAll('.tag-item');
+        existingTags.forEach(tag => tag.remove());
+        
+        // Add tags before input
+        employeeTags.forEach(tag => {
+            const tagElement = document.createElement('span');
+            tagElement.className = 'tag-item inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 rounded-lg text-sm';
+            tagElement.innerHTML = `
+                ${tag}
+                <button type="button" onclick="removeTag('${tag}')" class="ml-1 hover:text-blue-600">
+                    <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            `;
+            container.insertBefore(tagElement, input);
+        });
+    }
+    
+    function updateTagsDisplay() {
+        const displayList = document.getElementById('tags-display-list');
+        if (displayList) {
+            displayList.innerHTML = '';
+            if (employeeTags.length === 0) {
+                displayList.innerHTML = '<span class="text-gray-500 text-xs italic">Keine Tags ausgewählt</span>';
+            } else {
+                employeeTags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'inline-flex px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs font-medium';
+                    tagElement.textContent = tag;
+                    displayList.appendChild(tagElement);
+                });
+            }
+        }
+    }
+    
+    function finishTagsEdit() {
+        isEditingTags = false;
+        const displayContainer = document.getElementById('tags-display');
+        const editContainer = document.getElementById('tags-edit');
+        const finishBtn = document.getElementById('finish-tags-btn');
+        const editBtn = document.getElementById('edit-tags-btn');
+        
+        // Switch to compact display mode
+        displayContainer.classList.remove('hidden');
+        editContainer.classList.add('hidden');
+        finishBtn.classList.add('hidden');
+        editBtn.classList.remove('hidden');
+        
+        updateTagsDisplay();
+    }
+    
+    function toggleTagsEdit() {
+        isEditingTags = true;
+        const displayContainer = document.getElementById('tags-display');
+        const editContainer = document.getElementById('tags-edit');
+        const finishBtn = document.getElementById('finish-tags-btn');
+        const editBtn = document.getElementById('edit-tags-btn');
+
+        // Switch back to edit mode
+        displayContainer.classList.add('hidden');
+        editContainer.classList.remove('hidden');
+        finishBtn.classList.remove('hidden');
+        editBtn.classList.add('hidden');
+
+        document.getElementById('tags-input').focus();
+    }
+
+    // Working hours functions
+    function addTimeSlot(day) {
+        const checkbox = document.getElementById(`workday_${day}`);
+        const container = document.getElementById(`timeslots_${day}`);
+
+        // Enable the day if not already enabled
+        if (!checkbox.checked) {
+            checkbox.checked = true;
+            container.classList.remove('hidden');
+        }
+
+        // Create new time slot
+        const timeSlotDiv = document.createElement('div');
+        timeSlotDiv.className = 'flex gap-2 items-center';
+        timeSlotDiv.innerHTML = `
+            <input type="time" class="px-2 py-1 border border-gray-300 rounded" data-day="${day}" data-type="start" placeholder="Von">
+            <span class="text-gray-500">-</span>
+            <input type="time" class="px-2 py-1 border border-gray-300 rounded" data-day="${day}" data-type="end" placeholder="Bis">
+            <button type="button" onclick="removeTimeSlot(this)" class="text-red-500 hover:text-red-700">
+                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+            </button>
+        `;
+        container.appendChild(timeSlotDiv);
+    }
+
+    function removeTimeSlot(button) {
+        const timeSlotDiv = button.parentElement;
+        const container = timeSlotDiv.parentElement;
+        timeSlotDiv.remove();
+
+        // If no more time slots, uncheck the day
+        if (container.children.length === 0) {
+            const day = container.id.replace('timeslots_', '');
+            const checkbox = document.getElementById(`workday_${day}`);
+            checkbox.checked = false;
+            container.classList.add('hidden');
+        }
+    }
+
+    function setupWorkingHoursVisibility() {
+        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
+        // Setup checkbox listeners for each day
+        days.forEach(day => {
+            const checkbox = document.getElementById(`workday_${day}`);
+            if (checkbox) {
+                checkbox.addEventListener('change', function() {
+                    const container = document.getElementById(`timeslots_${day}`);
+                    if (this.checked) {
+                        container.classList.remove('hidden');
+                        // Add default time slot if none exists
+                        if (container.children.length === 0) {
+                            addTimeSlot(day);
+                        }
+                    } else {
+                        container.classList.add('hidden');
+                    }
+                });
+            }
+        });
+
+        // Show/hide working hours section based on employment type
+        const employmentTypeSelect = document.getElementById('emp_employment_type');
+        if (employmentTypeSelect) {
+            employmentTypeSelect.addEventListener('change', function() {
+                const workingHoursSection = document.getElementById('working-hours-section');
+                if (workingHoursSection) {
+                    if (this.value === 'minijob' || this.value === 'teilzeit') {
+                        workingHoursSection.classList.remove('hidden');
+                    } else {
+                        workingHoursSection.classList.add('hidden');
+                        // Clear all checkboxes when hiding
+                        days.forEach(day => {
+                            const checkbox = document.getElementById(`workday_${day}`);
+                            if (checkbox) {
+                                checkbox.checked = false;
+                                const container = document.getElementById(`timeslots_${day}`);
+                                if (container) {
+                                    container.classList.add('hidden');
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    function saveEmployee(event) {
+        event.preventDefault();
+
+        // Collect working hours data
+        const workingHours = {};
+        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
+        days.forEach(day => {
+            const checkbox = document.getElementById(`workday_${day}`);
+            if (checkbox && checkbox.checked) {
+                const container = document.getElementById(`timeslots_${day}`);
+                const timeSlots = [];
+
+                // Get all time slots for this day
+                const slots = container.querySelectorAll('div.flex');
+                slots.forEach(slot => {
+                    const startInput = slot.querySelector('input[data-type="start"]');
+                    const endInput = slot.querySelector('input[data-type="end"]');
+
+                    if (startInput && endInput && startInput.value && endInput.value) {
+                        timeSlots.push({
+                            start: startInput.value,
+                            end: endInput.value
+                        });
+                    }
+                });
+
+                if (timeSlots.length > 0) {
+                    workingHours[day] = timeSlots;
+                }
+            }
+        });
+
+        const formData = {
+            name: document.getElementById('emp_name').value,
+            personalNr: document.getElementById('emp_personalNr').value,
+            abteilung: document.getElementById('emp_abteilung').value,
+            position: document.getElementById('emp_position').value,
+            email: document.getElementById('emp_email').value,
+            telefon: document.getElementById('emp_telefon').value || '',
+            employmentType: document.getElementById('emp_employment_type').value,
+            workingHours: workingHours,
+            spezialisierungen: employeeTags,
+            status: document.getElementById('emp_status').value
+        };
+        
+        console.log('Neuer Mitarbeiter:', formData);
+        
+        // Save to LocalStorage
+        saveEmployeeToStorage(formData);
+        
+        alert('Mitarbeiterprofil wurde erfolgreich angelegt!');
+        
+        // Reset form and tags
+        document.getElementById('employeeForm').reset();
+        employeeTags = [];
+        renderTags();
+        updateTagSuggestions();
+        
+        // Refresh employee list
+        refreshEmployeeList();
+    }
+
+    function createEmployeeManagementView() {
+        const mainContent = document.querySelector('main');
+        const employeeHTML = `
+            <div id="employee-management" class="w-full">
+                <!-- Create Employee Section -->
+                <div class="bg-white rounded-lg shadow-lg mb-8">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-t-lg">
+                        <h2 class="text-xl font-bold flex items-center">
+                            <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                            </svg>
+                            Neuen Mitarbeiter anlegen
+                        </h2>
+                    </div>
+                    
+                    <form id="employeeForm" onsubmit="saveEmployee(event)" class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                                <input type="text" id="emp_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Max Mustermann">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Personal-Nr. *</label>
+                                <input type="text" id="emp_personalNr" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="GEV-2024-001">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Abteilung *</label>
+                                <select id="emp_abteilung" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Wählen Sie eine Abteilung</option>
+                                    <option value="kfz">KFZ-Schäden</option>
+                                    <option value="haftpflicht">Haftpflicht</option>
+                                    <option value="gebaeude">Gebäudeschäden</option>
+                                    <option value="hausrat">Hausratschäden</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Position *</label>
+                                <select id="emp_position" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Wählen Sie eine Position</option>
+                                    <option value="junior">Junior Sachbearbeiter</option>
+                                    <option value="sachbearbeiter">Sachbearbeiter</option>
+                                    <option value="senior">Senior Sachbearbeiter</option>
+                                    <option value="experte">Schadenexperte</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">E-Mail *</label>
+                                <input type="email" id="emp_email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="max.mustermann@gev.de">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Telefon</label>
+                                <input type="tel" id="emp_telefon" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+49 123 456789">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Beschäftigungsart *</label>
+                                <select id="emp_employment_type" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Wählen Sie eine Beschäftigungsart</option>
+                                    <option value="minijob">Minijobber</option>
+                                    <option value="teilzeit">Teilzeit</option>
+                                    <option value="vollzeit">Vollzeit</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                <select id="emp_status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="aktiv">Aktiv</option>
+                                    <option value="urlaub">Im Urlaub</option>
+                                    <option value="krank">Krankheit</option>
+                                    <option value="inaktiv">Inaktiv</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Arbeitszeiten für Neufälle -->
+                            <div class="col-span-3 hidden" id="working-hours-section">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Arbeitszeiten für Neufälle</label>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="space-y-4" id="workingHoursContainer">
+                                        <!-- Monday -->
+                                        <div class="border-l-4 border-blue-500 pl-3">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <label class="flex items-center">
+                                                    <input type="checkbox" id="workday_monday" class="mr-2 rounded border-gray-300 text-blue-500 focus:ring-blue-500">
+                                                    <span class="font-medium">Montag</span>
+                                                </label>
+                                                <button type="button" onclick="addTimeSlot('monday')" class="text-sm text-blue-600 hover:text-blue-800">
+                                                    + Zeitfenster hinzufügen
+                                                </button>
+                                            </div>
+                                            <div id="timeslots_monday" class="space-y-2 hidden">
+                                                <div class="flex gap-2 items-center">
+                                                    <input type="time" class="px-2 py-1 border border-gray-300 rounded" placeholder="Von">
+                                                    <span class="text-gray-500">-</span>
+                                                    <input type="time" class="px-2 py-1 border border-gray-300 rounded" placeholder="Bis">
+                                                    <button type="button" onclick="removeTimeSlot(this)" class="text-red-500 hover:text-red-700">
+                                                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tuesday -->
+                                        <div class="border-l-4 border-blue-500 pl-3">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <label class="flex items-center">
+                                                    <input type="checkbox" id="workday_tuesday" class="mr-2 rounded border-gray-300 text-blue-500 focus:ring-blue-500">
+                                                    <span class="font-medium">Dienstag</span>
+                                                </label>
+                                                <button type="button" onclick="addTimeSlot('tuesday')" class="text-sm text-blue-600 hover:text-blue-800">
+                                                    + Zeitfenster hinzufügen
+                                                </button>
+                                            </div>
+                                            <div id="timeslots_tuesday" class="space-y-2 hidden">
+                                                <div class="flex gap-2 items-center">
+                                                    <input type="time" class="px-2 py-1 border border-gray-300 rounded" placeholder="Von">
+                                                    <span class="text-gray-500">-</span>
+                                                    <input type="time" class="px-2 py-1 border border-gray-300 rounded" placeholder="Bis">
+                                                    <button type="button" onclick="removeTimeSlot(this)" class="text-red-500 hover:text-red-700">
+                                                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Wednesday -->
+                                        <div class="border-l-4 border-blue-500 pl-3">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <label class="flex items-center">
+                                                    <input type="checkbox" id="workday_wednesday" class="mr-2 rounded border-gray-300 text-blue-500 focus:ring-blue-500">
+                                                    <span class="font-medium">Mittwoch</span>
+                                                </label>
+                                                <button type="button" onclick="addTimeSlot('wednesday')" class="text-sm text-blue-600 hover:text-blue-800">
+                                                    + Zeitfenster hinzufügen
+                                                </button>
+                                            </div>
+                                            <div id="timeslots_wednesday" class="space-y-2 hidden">
+                                                <div class="flex gap-2 items-center">
+                                                    <input type="time" class="px-2 py-1 border border-gray-300 rounded" placeholder="Von">
+                                                    <span class="text-gray-500">-</span>
+                                                    <input type="time" class="px-2 py-1 border border-gray-300 rounded" placeholder="Bis">
+                                                    <button type="button" onclick="removeTimeSlot(this)" class="text-red-500 hover:text-red-700">
+                                                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Thursday -->
+                                        <div class="border-l-4 border-blue-500 pl-3">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <label class="flex items-center">
+                                                    <input type="checkbox" id="workday_thursday" class="mr-2 rounded border-gray-300 text-blue-500 focus:ring-blue-500">
+                                                    <span class="font-medium">Donnerstag</span>
+                                                </label>
+                                                <button type="button" onclick="addTimeSlot('thursday')" class="text-sm text-blue-600 hover:text-blue-800">
+                                                    + Zeitfenster hinzufügen
+                                                </button>
+                                            </div>
+                                            <div id="timeslots_thursday" class="space-y-2 hidden">
+                                                <div class="flex gap-2 items-center">
+                                                    <input type="time" class="px-2 py-1 border border-gray-300 rounded" placeholder="Von">
+                                                    <span class="text-gray-500">-</span>
+                                                    <input type="time" class="px-2 py-1 border border-gray-300 rounded" placeholder="Bis">
+                                                    <button type="button" onclick="removeTimeSlot(this)" class="text-red-500 hover:text-red-700">
+                                                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Friday -->
+                                        <div class="border-l-4 border-blue-500 pl-3">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <label class="flex items-center">
+                                                    <input type="checkbox" id="workday_friday" class="mr-2 rounded border-gray-300 text-blue-500 focus:ring-blue-500">
+                                                    <span class="font-medium">Freitag</span>
+                                                </label>
+                                                <button type="button" onclick="addTimeSlot('friday')" class="text-sm text-blue-600 hover:text-blue-800">
+                                                    + Zeitfenster hinzufügen
+                                                </button>
+                                            </div>
+                                            <div id="timeslots_friday" class="space-y-2 hidden">
+                                                <div class="flex gap-2 items-center">
+                                                    <input type="time" class="px-2 py-1 border border-gray-300 rounded" placeholder="Von">
+                                                    <span class="text-gray-500">-</span>
+                                                    <input type="time" class="px-2 py-1 border border-gray-300 rounded" placeholder="Bis">
+                                                    <button type="button" onclick="removeTimeSlot(this)" class="text-red-500 hover:text-red-700">
+                                                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Spezialisierungen Tags -->
+                            <div class="col-span-3">
+                                <label class="block text-sm font-medium text-gray-700 mb-1 flex items-center justify-between">
+                                    <span>Spezialisierungen (optional)</span>
+                                    <button type="button" id="edit-tags-btn" onclick="toggleTagsEdit()" class="text-blue-600 hover:text-blue-800 hidden">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </button>
+                                </label>
+                                
+                                <!-- Tags Display Container (Compact View) -->
+                                <div id="tags-display" class="hidden">
+                                    <div class="flex flex-wrap gap-1 p-2 bg-gray-50 border border-gray-200 rounded-lg" id="tags-display-list">
+                                        <!-- Tags will be displayed here when not editing -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Tags Edit Container -->
+                                <div id="tags-edit" class="relative">
+                                    <div id="tags-container" class="w-full min-h-[42px] px-3 py-2 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent flex flex-wrap gap-2 items-center bg-white">
+                                        <input type="text" id="tags-input" class="flex-1 min-w-[150px] outline-none border-none p-0" placeholder="" onkeydown="handleTagInput(event)">
+                                    </div>
+                                    <div class="mt-2 flex flex-wrap gap-2" id="tags-suggestions">
+                                        <span class="text-xs text-gray-500">Tags:</span>
+                                        <button type="button" onclick="addTag('Regress')" data-tag="Regress" class="tag-suggestion text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">Regress</button>
+                                        <button type="button" onclick="addTag('Großschaden')" data-tag="Großschaden" class="tag-suggestion text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">Großschaden</button>
+                                        <button type="button" onclick="addTag('Betrugserkennung')" data-tag="Betrugserkennung" class="tag-suggestion text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">Betrugserkennung</button>
+                                        <button type="button" onclick="addTag('Haftpflicht Ausland')" data-tag="Haftpflicht Ausland" class="tag-suggestion text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">Haftpflicht Ausland</button>
+                                        <button type="button" onclick="addTag('Personenschaden')" data-tag="Personenschaden" class="tag-suggestion text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">Personenschaden</button>
+                                        <button type="button" onclick="addTag('Gutachterkoordination')" data-tag="Gutachterkoordination" class="tag-suggestion text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">Gutachterkoordination</button>
+                                        <button type="button" onclick="addTag('Komplexschaden')" data-tag="Komplexschaden" class="tag-suggestion text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">Komplexschaden</button>
+                                        <button type="button" onclick="addTag('Regressprüfung')" data-tag="Regressprüfung" class="tag-suggestion text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">Regressprüfung</button>
+                                    </div>
+                                    <div class="mt-2 flex justify-end">
+                                        <button type="button" id="finish-tags-btn" onclick="finishTagsEdit()" class="text-xs px-3 py-1 text-green-600 hover:text-green-800 bg-green-100 hover:bg-green-200 rounded transition-colors">
+                                            Fertig
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 flex justify-end">
+                            <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center">
+                                <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+                                </svg>
+                                Mitarbeiter anlegen
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Employee List Section -->
+                <div class="bg-white rounded-lg shadow-lg">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-800 flex items-center justify-between">
+                            <span class="flex items-center">
+                                <svg class="h-6 w-6 mr-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                                </svg>
+                                Mitarbeiterübersicht
+                            </span>
+                            <span class="text-sm text-gray-500" id="employee-count">8 Mitarbeiter</span>
+                        </h2>
+                    </div>
+                    
+                    <div class="p-6 overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Abteilung</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Auslastung</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employee-list" class="bg-white divide-y divide-gray-200">
+                                <!-- Employee list will be populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Insert after canvas
+        const canvas = document.getElementById('dashboardCanvas');
+        canvas.insertAdjacentHTML('afterend', employeeHTML);
+        
+        // Hide the new element initially
+        document.getElementById('employee-management').classList.add('hidden');
+    }
+    
+    // Case Management Functions
+    let caseSimulationInterval;
+    let caseIdCounter = 98360;
+    
+    function createCaseManagementView() {
+        const mainContent = document.querySelector('main');
+        
+        // Static case data - initially unassigned
+        const staticCases = [
+            { id: 'SF-98362', time: '09:15', type: 'KFZ-Haftpflicht', amount: 7785, employee: 'Frank Nagel', avatar: 'FN', status: 'Neu', priority: 'Normal' },
+            { id: 'SF-98363', time: '09:22', type: 'Hausrat', amount: 43522, employee: 'David Fuchs', avatar: 'DF', status: 'Neu', priority: 'Mittel' },
+            { id: 'SF-98364', time: '09:28', type: 'Unfall', amount: 41078, employee: 'Frank Nagel', avatar: 'FN', status: 'Neu', priority: 'Normal' },
+            { id: 'SF-98365', time: '09:35', type: 'Haftpflicht', amount: 22858, employee: 'David Fuchs', avatar: 'DF', status: 'Neu', priority: 'Hoch' },
+            { id: 'SF-98366', time: '09:41', type: 'KFZ-Kasko', amount: 37421, employee: 'Bernd Maier', avatar: 'BM', status: 'Neu', priority: 'Hoch' },
+            { id: 'SF-98367', time: '09:48', type: 'Wohngebäude', amount: 1434, employee: 'David Fuchs', avatar: 'DF', status: 'Neu', priority: 'Normal' },
+            { id: 'SF-98368', time: '09:55', type: 'Haftpflicht', amount: 37330, employee: 'Hans Richter', avatar: 'HR', status: 'Neu', priority: 'Normal' },
+            { id: 'SF-98369', time: '10:02', type: 'KFZ-Kasko', amount: 36088, employee: 'Hans Richter', avatar: 'HR', status: 'Neu', priority: 'Mittel' },
+            { id: 'SF-98370', time: '10:08', type: 'Wohngebäude', amount: 11004, employee: 'David Fuchs', avatar: 'DF', status: 'Neu', priority: 'Normal' },
+            { id: 'SF-98371', time: '10:15', type: 'KFZ-Haftpflicht', amount: 39477, employee: 'Frank Nagel', avatar: 'FN', status: 'Neu', priority: 'Normal' },
+            { id: 'SF-98372', time: '10:22', type: 'Wohngebäude', amount: 14185, employee: 'Anna Schmidt', avatar: 'AS', status: 'Neu', priority: 'Mittel' },
+            { id: 'SF-98373', time: '10:28', type: 'KFZ-Kasko', amount: 9743, employee: 'Bernd Maier', avatar: 'BM', status: 'Neu', priority: 'Normal' },
+            { id: 'SF-98374', time: '10:35', type: 'Wohngebäude', amount: 7483, employee: 'Frank Nagel', avatar: 'FN', status: 'Neu', priority: 'Mittel' },
+            { id: 'SF-98375', time: '10:41', type: 'Hausrat', amount: 3174, employee: 'David Fuchs', avatar: 'DF', status: 'Neu', priority: 'Normal' },
+            { id: 'SF-98376', time: '10:48', type: 'KFZ-Kasko', amount: 29521, employee: 'Bernd Maier', avatar: 'BM', status: 'Neu', priority: 'Mittel' },
+            { id: 'SF-98377', time: '10:55', type: 'KFZ-Kasko', amount: 32741, employee: 'Bernd Maier', avatar: 'BM', status: 'Neu', priority: 'Hoch' },
+            { id: 'SF-98378', time: '11:02', type: 'Hausrat', amount: 1509, employee: 'David Fuchs', avatar: 'DF', status: 'Neu', priority: 'Normal' },
+            { id: 'SF-98379', time: '11:08', type: 'Haftpflicht', amount: 37497, employee: 'Hans Richter', avatar: 'HR', status: 'Neu', priority: 'Normal' }
+        ];
+        
+        // Check if auto-assignment is active
+        const isAutoAssigned = localStorage.getItem('autoAssignmentActive') === 'true';
+        
+        const caseHTML = `
+            <div id="case-management" class="w-full hidden">
+                <!-- Statistics Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white rounded-lg shadow p-4">
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 rounded-lg p-3 mr-3">
+                                <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Neue Fälle heute</p>
+                                <p class="text-2xl font-bold text-gray-800">124</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow p-4">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 rounded-lg p-3 mr-3">
+                                <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Automatisch zugewiesen</p>
+                                <p class="text-2xl font-bold text-gray-800">118</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow p-4">
+                        <div class="flex items-center">
+                            <div class="bg-yellow-100 rounded-lg p-3 mr-3">
+                                <svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">In Bearbeitung</p>
+                                <p class="text-2xl font-bold text-gray-800">45</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow p-4">
+                        <div class="flex items-center">
+                            <div class="bg-purple-100 rounded-lg p-3 mr-3">
+                                <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Verfügbare Mitarbeiter</p>
+                                <p class="text-2xl font-bold text-gray-800">6</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Two Column Layout -->
+                <div class="flex gap-4">
+                    <!-- Employee List (Left) -->
+                    <div class="bg-white rounded-lg shadow flex-1">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h2 class="text-xl font-semibold text-gray-800">Mitarbeiterübersicht</h2>
+                            <p class="text-sm text-gray-600 mt-1">Aktuelle Auslastung und Verfügbarkeit</p>
+                        </div>
+                        
+                        <div class="p-4 overflow-x-auto max-h-[600px] overflow-y-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50 sticky top-0">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Mitarbeiter</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Abteilung</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Auslastung</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="case-employee-list" class="bg-white divide-y divide-gray-200">
+                                    <!-- Employees will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Cases Table (Right) -->
+                    <div class="bg-white rounded-lg shadow flex-1">
+                        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-800">Fallzuteilung</h2>
+                                <p class="text-sm text-gray-600 mt-1">Übersicht der zugewiesenen Schadensfälle</p>
+                            </div>
+                            <button id="auto-assign-btn" onclick="toggleAutoAssignment()" class="relative group p-3 ${isAutoAssigned ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'} text-white rounded-lg transition-colors">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                <div class="absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                    ${isAutoAssigned ? 'Automatische Zuweisung deaktivieren' : 'Starte automatische Zuweisung'}
+                                </div>
+                            </button>
+                        </div>
+                        
+                        <div class="p-4 overflow-x-auto max-h-[600px] overflow-y-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50 sticky top-0">
+                                    <tr>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Fall-ID</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Zeit</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Typ</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Betrag</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Mitarbeiter</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cases-table-body" class="bg-white divide-y divide-gray-200">
+                                    ${staticCases.map(c => {
+                                        const assigned = isAutoAssigned;
+                                        return `
+                                        <tr>
+                                            <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">${c.id}</td>
+                                            <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-500">${c.time}</td>
+                                            <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-900">${c.type}</td>
+                                            <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-900">${c.amount.toLocaleString('de-DE')} €</td>
+                                            <td class="px-3 py-2 whitespace-nowrap">
+                                                ${assigned ? `
+                                                <div class="flex items-center">
+                                                    <div class="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold mr-1">
+                                                        ${c.avatar}
+                                                    </div>
+                                                    <span class="text-xs text-gray-900">${c.employee}</span>
+                                                </div>
+                                                ` : `
+                                                <span class="text-xs text-gray-500 italic">Nicht zugewiesen</span>
+                                                `}
+                                            </td>
+                                            <td class="px-3 py-2 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                                    assigned ? 
+                                                        (c.status === 'In Bearbeitung' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800') :
+                                                        'bg-red-100 text-red-800'
+                                                }">
+                                                    ${assigned ? 'Zugewiesen' : 'Neu'}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    `}).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mehrauftragszuweisung Label -->
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-500 italic">(Mehrauftragszuweisung -> Wenn mehrere Aufträge, dann nach Priorität gelistet. Wenn nur ein Auftrag, dann nach priorität zugeteilt)</p>
+                </div
+                
+            </div>
+        `;
+        
+        // Insert after canvas
+        const canvas = document.getElementById('dashboardCanvas');
+        canvas.insertAdjacentHTML('afterend', caseHTML);
+    }
+    
+    function refreshCaseEmployeeList() {
+        const employees = loadEmployeesFromStorage();
+        const tbody = document.getElementById('case-employee-list');
+        if (!tbody) return;
+        
+        const isAutoAssigned = localStorage.getItem('autoAssignmentActive') === 'true';
+        
+        // Create employee case mapping
+        const employeeCases = {
+            'Frank Nagel': ['SF-98362', 'SF-98364', 'SF-98371', 'SF-98374'],
+            'David Fuchs': ['SF-98363', 'SF-98365', 'SF-98367', 'SF-98370', 'SF-98375', 'SF-98378'],
+            'Bernd Maier': ['SF-98366', 'SF-98373', 'SF-98376', 'SF-98377'],
+            'Hans Richter': ['SF-98368', 'SF-98369', 'SF-98379'],
+            'Anna Schmidt': ['SF-98372'],
+            'Carla Huber': [],
+            'Eva Klein': [],
+            'Gabi Lorenz': []
+        };
+        
+        tbody.innerHTML = employees.map((emp, index) => {
+            const cases = isAutoAssigned ? (employeeCases[emp.name] || []) : [];
+            const caseCount = cases.length;
+            const maxCases = 8; // Maximum cases per employee
+            return `
+            <tr class="drop-zone" 
+                data-employee-name="${emp.name}"
+                ondrop="handleCaseDrop(event, '${emp.name}')"
+                ondragover="handleDragOver(event)"
+                ondragleave="handleDragLeave(event)"
+                ondragenter="handleDragEnter(event)">
+                <td class="px-4 py-2 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="h-8 w-8 flex-shrink-0 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">${emp.avatar}</div>
+                        <div class="ml-2">
+                            <div class="text-sm font-medium text-gray-900 employee-name">${emp.name}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">${emp.abteilung || (emp.skills ? emp.skills[0] : 'Standard')}</td>
+                <td class="px-4 py-2 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        emp.status === 'aktiv' || emp.status === 'Verfügbar' ? 'bg-green-100 text-green-800' :
+                        emp.status === 'Beschäftigt' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-800'
+                    }">${emp.status || 'Verfügbar'}</span>
+                </td>
+                <td class="px-4 py-2 whitespace-nowrap">
+                    <div class="flex items-center ${isAutoAssigned ? 'cursor-pointer hover:opacity-80' : ''}" ${isAutoAssigned ? `onclick="showEmployeeCasesModal('${emp.name}')"` : ''}>
+                        <div class="flex-1 bg-gray-200 rounded-full h-2 mr-2 max-w-[100px]">
+                            <div class="bg-${isAutoAssigned && caseCount > 0 ? 'blue' : 'gray'}-500 h-2 rounded-full employee-workload-bar" style="width: ${(caseCount/maxCases)*100}%"></div>
+                        </div>
+                        <span class="text-xs text-gray-600 employee-workload-text">${caseCount}/${maxCases}</span>
+                    </div>
+                </td>
+            </tr>
+        `}).join('');
+    }
+    
+    // Static case details for reference
+    const caseDetails = {
+        'SF-98362': { type: 'KFZ-Haftpflicht', amount: 7785, priority: 'Normal' },
+        'SF-98363': { type: 'Hausrat', amount: 43522, priority: 'Mittel' },
+        'SF-98364': { type: 'Unfall', amount: 41078, priority: 'Normal' },
+        'SF-98365': { type: 'Haftpflicht', amount: 22858, priority: 'Hoch' },
+        'SF-98366': { type: 'KFZ-Kasko', amount: 37421, priority: 'Hoch' },
+        'SF-98367': { type: 'Wohngebäude', amount: 1434, priority: 'Normal' },
+        'SF-98368': { type: 'Haftpflicht', amount: 37330, priority: 'Normal' },
+        'SF-98369': { type: 'KFZ-Kasko', amount: 36088, priority: 'Mittel' },
+        'SF-98370': { type: 'Wohngebäude', amount: 11004, priority: 'Normal' },
+        'SF-98371': { type: 'KFZ-Haftpflicht', amount: 39477, priority: 'Normal' },
+        'SF-98372': { type: 'Wohngebäude', amount: 14185, priority: 'Mittel' },
+        'SF-98373': { type: 'KFZ-Kasko', amount: 9743, priority: 'Normal' },
+        'SF-98374': { type: 'Wohngebäude', amount: 7483, priority: 'Mittel' },
+        'SF-98375': { type: 'Hausrat', amount: 3174, priority: 'Normal' },
+        'SF-98376': { type: 'KFZ-Kasko', amount: 29521, priority: 'Mittel' },
+        'SF-98377': { type: 'KFZ-Kasko', amount: 32741, priority: 'Hoch' },
+        'SF-98378': { type: 'Hausrat', amount: 1509, priority: 'Normal' },
+        'SF-98379': { type: 'Haftpflicht', amount: 37497, priority: 'Normal' }
+    };
+    
+    function showEmployeeCasesModal(employeeName) {
+        // Get current case assignments from the table (reflects drag and drop changes)
+        const employeeCases = [];
+        const caseRows = document.querySelectorAll('#cases-table-body tr');
+        
+        // Collect cases assigned to this employee from the current table state
+        caseRows.forEach(row => {
+            const caseId = row.getAttribute('data-case-id');
+            const employeeNameElement = row.querySelector('.case-employee-name');
+            const currentEmployee = employeeNameElement ? employeeNameElement.textContent : '';
+            
+            if (currentEmployee === employeeName && caseDetails[caseId]) {
+                employeeCases.push({
+                    id: caseId,
+                    type: caseDetails[caseId].type,
+                    amount: caseDetails[caseId].amount,
+                    status: 'Zugewiesen',
+                    priority: caseDetails[caseId].priority
+                });
+            }
+        });
+        
+        const cases = employeeCases;
+        
+        // Remove existing modal if any
+        const existingModal = document.getElementById('cases-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        // Create modal HTML
+        const modalHTML = `
+            <div id="cases-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+                <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[80vh] overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
+                        <h2 class="text-xl font-bold flex items-center">
+                            <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            Aktuelle Fälle - ${employeeName}
+                        </h2>
+                        <button onclick="closeEmployeeCasesModal()" class="text-white hover:text-gray-200">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="p-6 overflow-y-auto" style="max-height: calc(80vh - 100px)">
+                        ${cases.length > 0 ? `
+                            <div class="mb-4">
+                                <p class="text-gray-600">Anzahl der Fälle: <span class="font-semibold">${cases.length}</span></p>
+                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fall-ID</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Typ</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Betrag</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Priorität</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${cases.map((c, index) => `
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                Fall ${index + 1}: ${c.id}
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">${c.type}</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">${c.amount.toLocaleString('de-DE')} €</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                                    c.status === 'In Bearbeitung' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                                                }">
+                                                    ${c.status}
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                                    c.priority === 'Hoch' ? 'bg-red-100 text-red-800' :
+                                                    c.priority === 'Mittel' ? 'bg-yellow-100 text-yellow-800' :
+                                                    'bg-gray-100 text-gray-800'
+                                                }">
+                                                    ${c.priority}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        ` : `
+                            <div class="text-center py-8">
+                                <svg class="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                </svg>
+                                <p class="text-gray-500">Keine Fälle zugewiesen</p>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Add modal to body
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+    
+    function closeEmployeeCasesModal() {
+        const modal = document.getElementById('cases-modal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+    
+    function toggleAutoAssignment() {
+        const currentState = localStorage.getItem('autoAssignmentActive') === 'true';
+        const newState = !currentState;
+        localStorage.setItem('autoAssignmentActive', newState);
+        
+        // If deactivating automatic assignment, clear all saved assignments from localStorage
+        if (!newState) {
+            localStorage.removeItem('caseAssignments');
+        }
+        
+        // Refresh the cases table
+        updateCasesTable(newState);
+        
+        // Refresh employee list
+        refreshCaseEmployeeList();
+        
+        // Update button appearance
+        const button = document.getElementById('auto-assign-btn');
+        if (button) {
+            const tooltip = button.querySelector('.whitespace-nowrap');
+            if (newState) {
+                button.className = 'relative group p-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors';
+                if (tooltip) tooltip.textContent = 'Automatische Zuweisung deaktivieren';
+                
+                // Show success animation
+                showAssignmentAnimation();
+            } else {
+                button.className = 'relative group p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors';
+                if (tooltip) tooltip.textContent = 'Starte automatische Zuweisung';
+            }
+        }
+    }
+    
+    function updateCasesTable(isAssigned) {
+        const tbody = document.getElementById('cases-table-body');
+        if (!tbody) return;
+        
+        const staticCases = [
+            { id: 'SF-98362', time: '09:15', type: 'KFZ-Haftpflicht', amount: 7785, employee: 'Frank Nagel', avatar: 'FN' },
+            { id: 'SF-98363', time: '09:22', type: 'Hausrat', amount: 43522, employee: 'David Fuchs', avatar: 'DF' },
+            { id: 'SF-98364', time: '09:28', type: 'Unfall', amount: 41078, employee: 'Frank Nagel', avatar: 'FN' },
+            { id: 'SF-98365', time: '09:35', type: 'Haftpflicht', amount: 22858, employee: 'David Fuchs', avatar: 'DF' },
+            { id: 'SF-98366', time: '09:41', type: 'KFZ-Kasko', amount: 37421, employee: 'Bernd Maier', avatar: 'BM' },
+            { id: 'SF-98367', time: '09:48', type: 'Wohngebäude', amount: 1434, employee: 'David Fuchs', avatar: 'DF' },
+            { id: 'SF-98368', time: '09:55', type: 'Haftpflicht', amount: 37330, employee: 'Hans Richter', avatar: 'HR' },
+            { id: 'SF-98369', time: '10:02', type: 'KFZ-Kasko', amount: 36088, employee: 'Hans Richter', avatar: 'HR' },
+            { id: 'SF-98370', time: '10:08', type: 'Wohngebäude', amount: 11004, employee: 'David Fuchs', avatar: 'DF' },
+            { id: 'SF-98371', time: '10:15', type: 'KFZ-Haftpflicht', amount: 39477, employee: 'Frank Nagel', avatar: 'FN' },
+            { id: 'SF-98372', time: '10:22', type: 'Wohngebäude', amount: 14185, employee: 'Anna Schmidt', avatar: 'AS' },
+            { id: 'SF-98373', time: '10:28', type: 'KFZ-Kasko', amount: 9743, employee: 'Bernd Maier', avatar: 'BM' },
+            { id: 'SF-98374', time: '10:35', type: 'Wohngebäude', amount: 7483, employee: 'Frank Nagel', avatar: 'FN' },
+            { id: 'SF-98375', time: '10:41', type: 'Hausrat', amount: 3174, employee: 'David Fuchs', avatar: 'DF' },
+            { id: 'SF-98376', time: '10:48', type: 'KFZ-Kasko', amount: 29521, employee: 'Bernd Maier', avatar: 'BM' },
+            { id: 'SF-98377', time: '10:55', type: 'KFZ-Kasko', amount: 32741, employee: 'Bernd Maier', avatar: 'BM' },
+            { id: 'SF-98378', time: '11:02', type: 'Hausrat', amount: 1509, employee: 'David Fuchs', avatar: 'DF' },
+            { id: 'SF-98379', time: '11:08', type: 'Haftpflicht', amount: 37497, employee: 'Hans Richter', avatar: 'HR' }
+        ];
+        
+        // Load saved assignments from localStorage
+        const savedAssignments = loadAssignmentState();
+        
+        tbody.innerHTML = staticCases.map((c, index) => {
+            // Check if there's a saved assignment for this case
+            const assignedEmployee = savedAssignments[c.id];
+            const hasAssignment = isAssigned || assignedEmployee;
+            const displayEmployee = assignedEmployee || (isAssigned ? c.employee : null);
+            const displayAvatar = assignedEmployee ? 
+                displayEmployee.substring(0, 2).toUpperCase() : 
+                (isAssigned ? c.avatar : null);
+            
+            return `
+            <tr class="${hasAssignment ? 'assignment-animation' : ''}" 
+                data-case-id="${c.id}"
+                data-case-type="${c.type}"
+                data-case-amount="${c.amount}"
+                data-case-employee="${displayEmployee || ''}">
+                <td class="px-3 py-2 whitespace-nowrap">
+                    <span class="draggable-handle text-sm font-medium"
+                          draggable="true"
+                          ondragstart="handleCaseDragStart(event, '${c.id}', '${c.type}', ${c.amount}, '${c.employee}')"
+                          ondragend="handleCaseDragEnd(event)">
+                        ${c.id}
+                    </span>
+                </td>
+                <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-500">${c.time}</td>
+                <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-900">${c.type}</td>
+                <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-900">${c.amount.toLocaleString('de-DE')} €</td>
+                <td class="px-3 py-2 whitespace-nowrap">
+                    ${hasAssignment ? `
+                    <div class="flex items-center">
+                        <div class="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold mr-1">
+                            ${displayAvatar}
+                        </div>
+                        <span class="text-xs text-gray-900 case-employee-name">${displayEmployee}</span>
+                    </div>
+                    ` : `
+                    <span class="text-xs text-gray-500 italic case-employee-name">Nicht zugewiesen</span>
+                    `}
+                </td>
+                <td class="px-3 py-2 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full case-status-badge ${
+                        hasAssignment ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }">
+                        ${hasAssignment ? 'Zugewiesen' : 'Neu'}
+                    </span>
+                </td>
+            </tr>
+        `}).join('');
+        
+        // Enable drag and drop after table update
+        setTimeout(() => {
+            enableDragAndDrop();
+            // Update workload counts after loading saved assignments
+            updateWorkloadCounts();
+        }, 100);
+    }
+    
+    function showAssignmentAnimation() {
+        // Add animation class for visual feedback
+        const rows = document.querySelectorAll('.assignment-animation');
+        rows.forEach((row, index) => {
+            setTimeout(() => {
+                row.style.animation = 'fadeInScale 0.5s ease-out';
+            }, index * 50);
+        });
+    }
+    
+    // Drag and Drop Functions
+    let draggedCase = null;
+    
+    // Save case assignments to localStorage
+    function saveAssignmentState() {
+        const assignments = {};
+        const caseRows = document.querySelectorAll('#cases-table-body tr');
+        caseRows.forEach(row => {
+            const caseId = row.getAttribute('data-case-id');
+            const employeeNameElement = row.querySelector('.case-employee-name');
+            const employee = employeeNameElement ? employeeNameElement.textContent : null;
+            
+            if (caseId && employee && employee !== 'Nicht zugewiesen') {
+                assignments[caseId] = employee;
+            }
+        });
+        localStorage.setItem('caseAssignments', JSON.stringify(assignments));
+    }
+    
+    // Load case assignments from localStorage
+    function loadAssignmentState() {
+        const savedAssignments = localStorage.getItem('caseAssignments');
+        if (savedAssignments) {
+            return JSON.parse(savedAssignments);
+        }
+        return {};
+    }
+    
+    function handleCaseDragStart(event, caseId, caseType, caseAmount, currentEmployee) {
+        // Get the actual current employee from the row if assigned
+        const parentRow = event.target.closest('tr');
+        const employeeName = parentRow?.querySelector('.case-employee-name')?.textContent;
+        
+        draggedCase = {
+            id: caseId,
+            type: caseType,
+            amount: caseAmount,
+            currentEmployee: employeeName && employeeName !== 'Nicht zugewiesen' ? employeeName : null
+        };
+        
+        event.target.classList.add('dragging');
+        // Make the parent row semi-transparent
+        if (parentRow) {
+            parentRow.style.opacity = '0.5';
+        }
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/html', event.target.innerHTML);
+    }
+    
+    function handleCaseDragEnd(event) {
+        event.target.classList.remove('dragging');
+        // Reset the parent row opacity
+        const parentRow = event.target.closest('tr');
+        if (parentRow) {
+            parentRow.style.opacity = '1';
+        }
+        draggedCase = null;
+    }
+    
+    function handleDragOver(event) {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        event.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+    
+    function handleDragEnter(event) {
+        event.preventDefault();
+        const row = event.target.closest('tr.drop-zone');
+        if (row) {
+            row.classList.add('drag-over');
+        }
+    }
+    
+    function handleDragLeave(event) {
+        // Only remove drag-over if we're actually leaving the row
+        const row = event.target.closest('tr.drop-zone');
+        const relatedTarget = event.relatedTarget;
+        
+        if (row && relatedTarget) {
+            // Check if the related target is still within the same row
+            if (!row.contains(relatedTarget)) {
+                row.classList.remove('drag-over');
+            }
+        }
+    }
+    
+    function handleCaseDrop(event, newEmployee) {
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        }
+        event.preventDefault();
+        
+        const row = event.target.closest('tr.drop-zone');
+        if (row) {
+            row.classList.remove('drag-over');
+        }
+        
+        if (!draggedCase) return false;
+        
+        // Don't do anything if dropping on the same employee
+        if (draggedCase.currentEmployee === newEmployee) {
+            return false;
+        }
+        
+        // Update the case in the cases table
+        const caseRow = document.querySelector(`tr[data-case-id="${draggedCase.id}"]`);
+        if (caseRow) {
+            const employeeCell = caseRow.querySelector('td:nth-child(5)'); // Employee column
+            const statusBadge = caseRow.querySelector('.case-status-badge');
+            
+            if (employeeCell) {
+                const employees = loadEmployeesFromStorage();
+                const employee = employees.find(e => e.name === newEmployee);
+                const avatar = employee ? employee.avatar : newEmployee.substring(0, 2).toUpperCase();
+                
+                employeeCell.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold mr-1">
+                            ${avatar}
+                        </div>
+                        <span class="text-xs text-gray-900 case-employee-name">${newEmployee}</span>
+                    </div>
+                `;
+            }
+            
+            // Update status badge to show assigned
+            if (statusBadge) {
+                statusBadge.className = 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full case-status-badge bg-green-100 text-green-800';
+                statusBadge.textContent = 'Zugewiesen';
+            }
+            
+            // Save the new assignment state to localStorage
+            saveAssignmentState();
+            
+            // Update workload counts immediately after assignment
+            updateWorkloadCounts();
+            
+            // Update data attributes
+            caseRow.setAttribute('data-case-employee', newEmployee);
+            
+            // Visual feedback with animation
+            caseRow.style.animation = '';
+            setTimeout(() => {
+                caseRow.style.animation = 'fadeInScale 0.3s ease-out';
+            }, 10);
+            
+            // Update workload counts for both old and new employee
+            updateWorkloadCounts();
+            
+            // If auto-assignment is off, we should still enable it visually
+            const isAutoAssigned = localStorage.getItem('autoAssignmentActive') === 'true';
+            if (!isAutoAssigned) {
+                // Mark that we have manual assignments
+                localStorage.setItem('hasManualAssignments', 'true');
+            }
+            
+            // Save state to localStorage
+            saveAssignmentState();
+        }
+        
+        return false;
+    }
+    
+    function updateWorkloadCounts() {
+        // Get all cases from the table
+        const caseRows = document.querySelectorAll('#cases-table-body tr');
+        const employeeCaseCounts = {};
+        
+        // Count cases per employee
+        caseRows.forEach(row => {
+            const employeeName = row.querySelector('.case-employee-name')?.textContent;
+            if (employeeName && employeeName !== 'Nicht zugewiesen') {
+                employeeCaseCounts[employeeName] = (employeeCaseCounts[employeeName] || 0) + 1;
+            }
+        });
+        
+        // Update employee workload displays
+        const employeeRows = document.querySelectorAll('#case-employee-list tr');
+        employeeRows.forEach(row => {
+            const employeeName = row.querySelector('.employee-name')?.textContent;
+            if (employeeName) {
+                const count = employeeCaseCounts[employeeName] || 0;
+                const workloadBar = row.querySelector('.employee-workload-bar');
+                const workloadText = row.querySelector('.employee-workload-text');
+                
+                if (workloadBar) {
+                    workloadBar.style.width = `${(count/8)*100}%`;
+                    workloadBar.className = count > 0 ? 
+                        'bg-blue-500 h-2 rounded-full employee-workload-bar' : 
+                        'bg-gray-500 h-2 rounded-full employee-workload-bar';
+                }
+                if (workloadText) {
+                    workloadText.textContent = `${count}/8`;
+                }
+            }
+        });
+    }
+    
+    function loadAssignmentState() {
+        // Load saved assignments from localStorage
+        const savedAssignments = localStorage.getItem('caseAssignments');
+        if (savedAssignments) {
+            return JSON.parse(savedAssignments);
+        }
+        return {};
+    }
+    
+    function enableDragAndDrop() {
+        // This function is called after table updates to ensure drag and drop is working
+        const draggableHandles = document.querySelectorAll('.draggable-handle');
+        draggableHandles.forEach(handle => {
+            // Remove any existing listeners to prevent duplicates
+            const newHandle = handle.cloneNode(true);
+            handle.parentNode.replaceChild(newHandle, handle);
+            
+            newHandle.addEventListener('dragstart', (e) => {
+                e.target.classList.add('dragging');
+            });
+            newHandle.addEventListener('dragend', (e) => {
+                e.target.classList.remove('dragging');
+            });
+        });
+    }
+    
+    function createTechnicalSketchView() {
+        const sketchHTML = `
+            <div id="technical-sketch" class="w-full hidden">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Technische Erst-Skizze</h2>
+                    
+                    <!-- Phase 1: Eingang -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">1. Neufall-Eingang</h3>
+                        <div class="bg-gray-50 p-4 rounded font-mono text-sm">
+                            <p class="mb-2">SAP → (optional) LLM liest Neufälle via OData-Protokoll ODER Haupt-Klassifizierung in SAP per BR-Framework+ (Kategorie (z. B. 0IS_COMPLEX) in SAP schreiben)</p>
+                            <p class="ml-8 text-gray-600">↓</p>
+                            <p>(einfach/mittel/komplex/sehr komplex) → Fall landet in Alle Neufälle</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Phase 2: Verteilung -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">2. Fall-Verteilung</h3>
+                        <div class="bg-gray-50 p-4 rounded font-mono text-sm">
+                            <p class="mb-2">Alle Neufälle → Algorithmus holt Zahlen aus Workload Management for Claims</p>
+                            <p class="ml-8 text-gray-600">(Fälle gesamt, Bearbeiter gesamt, heute verfügbar, aktuelle Last)</p>
+                            <p class="ml-8 text-gray-600 mb-2">↓</p>
+                            <p class="mb-2">Regeln prüfen mit RBP/BRF+ (wer passt) / Kategorisierung LLM oder beides</p>
+                            <p class="ml-8 text-gray-600 mb-2">↓</p>
+                            <p>Fair verteilen über SAP → Bearbeiter sieht Fall in SAP/My Inbox oder im eigenen Dashboard</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Phase 3: Abschluss -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">3. Fall-Abschluss</h3>
+                        <div class="bg-gray-50 p-4 rounded font-mono text-sm">
+                            <p class="mb-2">Bearbeiter fertig → Task in Outbox abgeschlossen oder Claim-Status „Closed" oder eigenes Dashboard</p>
+                            <p class="ml-8 text-gray-600 mb-2">↓</p>
+                            <p class="mb-2">Info abholen oder per Event „Inform of Insurance Claim Closed" bekommen</p>
+                            <p class="ml-8 text-gray-600 mb-2">↓</p>
+                            <p>Bearbeiter kann neue Fälle aufnehmen</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Alternative Option -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">Alternative: Vorverteilung</h3>
+                        <div class="bg-gray-50 p-4 rounded font-mono text-sm">
+                            <p class="mb-2">(oder Vorverteilung von fester Maximalanzahl für gesamten Tag/Woche)</p>
+                            <p class="ml-8 text-gray-600">→ Tag empfohlen für Krankheitshandling</p>
+                            <p class="ml-8 text-gray-600">→ ansonsten mit Umplanungshandling</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Insert after canvas
+        const canvas = document.getElementById('dashboardCanvas');
+        canvas.insertAdjacentHTML('afterend', sketchHTML);
+    }
+    
+    function showTechnicalSketch() {
+        // Hide all views
+        document.getElementById('dashboardCanvas').style.display = 'none';
+
+        const employeeView = document.getElementById('employee-management');
+        if (employeeView) {
+            employeeView.classList.add('hidden');
+        }
+
+        const caseView = document.getElementById('case-management');
+        if (caseView) {
+            caseView.classList.add('hidden');
+        }
+
+        // Hide analytics dashboard
+        const analyticsView = document.getElementById('analytics-dashboard');
+        if (analyticsView) {
+            analyticsView.classList.add('hidden');
+        }
+        
+        // Show technical sketch view
+        let sketchView = document.getElementById('technical-sketch');
+        if (!sketchView) {
+            createTechnicalSketchView();
+            sketchView = document.getElementById('technical-sketch');
+        }
+        sketchView.classList.remove('hidden');
+        
+        // Update page title
+        const pageTitle = document.querySelector('h1');
+        if (pageTitle) {
+            pageTitle.textContent = 'Technische Skizze';
+        }
+        
+        // Update sidebar navigation
+        updateSidebarNavigation('nav-sketch');
+    }
+    
+    function startCaseSimulation() {
+        // Clear previous interval if exists
+        if (caseSimulationInterval) {
+            clearInterval(caseSimulationInterval);
+        }
+        
+        // Update statistics
+        updateCaseStatistics();
+        
+        // Simulate new cases every 3-7 seconds
+        caseSimulationInterval = setInterval(() => {
+            generateNewCase();
+        }, Math.random() * 4000 + 3000);
+    }
+    
+    function generateNewCase() {
+        const caseTypes = ['KFZ-Kasko', 'KFZ-Haftpflicht', 'Hausrat', 'Wohngebäude', 'Haftpflicht', 'Unfall'];
+        const employees = loadEmployeesFromStorage().filter(e => e.status === 'aktiv' || e.status === 'Verfügbar');
+        
+        const newCase = {
+            id: `SF-${caseIdCounter++}`,
+            time: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+            type: caseTypes[Math.floor(Math.random() * caseTypes.length)],
+            amount: Math.floor(Math.random() * 50000) + 1000,
+            employee: employees[Math.floor(Math.random() * employees.length)],
+            priority: Math.random() > 0.8 ? 'Hoch' : Math.random() > 0.5 ? 'Mittel' : 'Normal'
+        };
+        
+        // Add case to table
+        const tbody = document.getElementById('cases-list');
+        if (tbody) {
+            const row = document.createElement('tr');
+            row.className = 'fade-in';
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${newCase.id}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${newCase.time}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${newCase.type}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${newCase.amount.toLocaleString('de-DE')} €</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold mr-2">
+                            ${newCase.employee ? newCase.employee.avatar || newCase.employee.name.substring(0, 2).toUpperCase() : 'NA'}
+                        </div>
+                        <span class="text-sm text-gray-900">${newCase.employee ? newCase.employee.name : 'Nicht zugewiesen'}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        Zugewiesen
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        newCase.priority === 'Hoch' ? 'bg-red-100 text-red-800' :
+                        newCase.priority === 'Mittel' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-800'
+                    }">
+                        ${newCase.priority}
+                    </span>
+                </td>
+            `;
+            tbody.insertBefore(row, tbody.firstChild);
+            
+            // Keep only last 20 cases
+            while (tbody.children.length > 20) {
+                tbody.removeChild(tbody.lastChild);
+            }
+            
+            // Update counters
+            updateCaseStatistics();
+        }
+    }
+    
+    function updateCaseStatistics() {
+        const employees = loadEmployeesFromStorage();
+        const availableCount = employees.filter(e => e.status === 'aktiv' || e.status === 'Verfügbar').length;
+        
+        document.getElementById('available-employees').textContent = availableCount;
+        
+        // Update other counters
+        const newCasesEl = document.getElementById('new-cases-count');
+        if (newCasesEl) {
+            newCasesEl.textContent = parseInt(newCasesEl.textContent) + 1;
+        }
+        
+        const autoAssignedEl = document.getElementById('auto-assigned-count');
+        if (autoAssignedEl) {
+            autoAssignedEl.textContent = parseInt(autoAssignedEl.textContent) + 1;
+        }
+        
+        const inProgressEl = document.getElementById('in-progress-count');
+        if (inProgressEl) {
+            const cases = document.querySelectorAll('#cases-list tr').length;
+            inProgressEl.textContent = cases;
+        }
+    }
+
+    // Create Analytics Dashboard
+    function createAnalyticsDashboard() {
+        const mainContent = document.querySelector('main');
+        const analyticsHTML = `
+            <div id="analytics-dashboard" class="w-full">
+                <!-- KPI Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-gray-600 text-sm font-medium">Neue Fälle (Heute)</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Live</span>
+                        </div>
+                        <p class="text-3xl font-bold text-gray-900">18</p>
+                        <p class="text-sm text-gray-500 mt-2">+12% vs. Gestern</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-gray-600 text-sm font-medium">Automatisch zugewiesen</h3>
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">95%</span>
+                        </div>
+                        <p class="text-3xl font-bold text-gray-900">17</p>
+                        <p class="text-sm text-gray-500 mt-2">1 manuell zugewiesen</p>
+                    </div>
+                </div>
+
+                <!-- Employee Performance by Position -->
+                <div class="bg-white rounded-lg shadow-lg mb-8">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-800">Mitarbeiter-Performance nach Position</h2>
+                        <p class="text-sm text-gray-600 mt-1">Durchschnittliche Bearbeitungszeiten und Fälle</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="position-stats">
+                            <!-- Position stats will be dynamically loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart and Employee List - Reorganized Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Employee Analytics List (Now on the left) -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex flex-col gap-3">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h2 class="text-xl font-semibold text-gray-800">Mitarbeiter-Statistiken</h2>
+                                        <p class="text-sm text-gray-600 mt-1">Klicken Sie für detaillierte Analysen</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button onclick="filterEmployeesByType('all')" id="filter-all" class="employment-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">Alle</button>
+                                        <button onclick="filterEmployeesByType('vollzeit')" id="filter-vollzeit" class="employment-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Vollzeit</button>
+                                        <button onclick="filterEmployeesByType('teilzeit')" id="filter-teilzeit" class="employment-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Teilzeit</button>
+                                        <button onclick="filterEmployeesByType('minijob')" id="filter-minijob" class="employment-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Minijob</button>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2 border-t pt-2">
+                                    <span class="text-xs text-gray-500 self-center">Position:</span>
+                                    <button onclick="filterEmployeesByPosition('all')" id="position-filter-all" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">Alle</button>
+                                    <button onclick="filterEmployeesByPosition('junior')" id="position-filter-junior" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Junior</button>
+                                    <button onclick="filterEmployeesByPosition('sachbearbeiter')" id="position-filter-sachbearbeiter" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Sachbearbeiter</button>
+                                    <button onclick="filterEmployeesByPosition('senior')" id="position-filter-senior" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Senior</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 overflow-y-auto" style="max-height: 400px;">
+                            <div id="employee-analytics-list" class="space-y-3">
+                                <!-- Employee analytics will be loaded here -->
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-200 p-4">
+                            <button onclick="openComparisonModal()" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center">
+                                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                </svg>
+                                Analytics im Vergleich
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Cases Chart (Now on the right) -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-xl font-semibold text-gray-800">Fallbearbeitung im Zeitverlauf</h2>
+                                <div class="flex gap-2">
+                                    <button onclick="changeChartFilter('day')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">Tag</button>
+                                    <button onclick="changeChartFilter('week')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Woche</button>
+                                    <button onclick="changeChartFilter('month')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Monat</button>
+                                    <button onclick="changeChartFilter('year')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Jahr</button>
+                                    <button onclick="changeChartFilter('5years')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">5 Jahre</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <canvas id="casesChart" width="400" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Insert after canvas
+        const canvas = document.getElementById('dashboardCanvas');
+        canvas.insertAdjacentHTML('afterend', analyticsHTML);
+        
+        // Hide initially
+        document.getElementById('analytics-dashboard').classList.add('hidden');
+        
+        // Load initial data
+        setTimeout(() => {
+            loadPositionStats();
+            loadEmployeeAnalytics();
+            initializeChart();
+        }, 100);
+    }
+
+    function loadPositionStats() {
+        const employees = loadEmployeesFromStorage();
+        const juniorCount = employees.filter(e => e.position === 'junior').length;
+        const sachbearbeiterCount = employees.filter(e => e.position === 'sachbearbeiter').length;
+        const seniorCount = employees.filter(e => e.position === 'senior').length;
+
+        const positions = [
+            { title: 'Junior', count: juniorCount, avgTime: '45 Min', casesWeek: 28, color: 'blue' },
+            { title: 'Sachbearbeiter', count: sachbearbeiterCount, avgTime: '35 Min', casesWeek: 42, color: 'green' },
+            { title: 'Senior', count: seniorCount, avgTime: '25 Min', casesWeek: 56, color: 'purple' }
+        ];
+
+        const container = document.getElementById('position-stats');
+        if (!container) return;
+
+        container.innerHTML = positions.map(pos => `
+            <div class="bg-gray-50 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition" onclick="showPositionDetails('${pos.title}')">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-gray-700">${pos.title}</span>
+                    <span class="bg-${pos.color}-100 text-${pos.color}-800 text-xs px-2 py-1 rounded-full">${pos.count} MA</span>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-gray-500">Ø Zeit:</span>
+                        <span class="font-medium">${pos.avgTime}</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-gray-500">Fälle/Woche:</span>
+                        <span class="font-medium">${pos.casesWeek}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Store current filters for main employee list
+    let currentEmploymentFilter = 'all';
+    let currentPositionFilter = 'all';
+
+    function loadEmployeeAnalytics(employmentFilter = null, positionFilter = null) {
+        // Use provided filters or current stored filters
+        if (employmentFilter !== null) currentEmploymentFilter = employmentFilter;
+        if (positionFilter !== null) currentPositionFilter = positionFilter;
+
+        const employees = loadEmployeesFromStorage();
+        const container = document.getElementById('employee-analytics-list');
+        if (!container) return;
+
+        const positionLabels = {
+            'junior': 'Junior',
+            'sachbearbeiter': 'Sachbearbeiter',
+            'senior': 'Senior',
+            'experte': 'Experte'
+        };
+
+        const employmentTypeLabels = {
+            'vollzeit': 'VZ',
+            'teilzeit': 'TZ',
+            'minijob': 'MJ'
+        };
+
+        const employmentTypeColors = {
+            'vollzeit': 'bg-green-100 text-green-800',
+            'teilzeit': 'bg-yellow-100 text-yellow-800',
+            'minijob': 'bg-orange-100 text-orange-800'
+        };
+
+        // Apply both filters
+        let filteredEmployees = employees;
+
+        // Filter by employment type
+        if (currentEmploymentFilter !== 'all') {
+            filteredEmployees = filteredEmployees.filter(emp => emp.employmentType === currentEmploymentFilter);
+        }
+
+        // Filter by position
+        if (currentPositionFilter !== 'all') {
+            filteredEmployees = filteredEmployees.filter(emp => emp.position === currentPositionFilter);
+        }
+
+        container.innerHTML = filteredEmployees.map(emp => `
+            <div class="bg-gray-50 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition" onclick="showEmployeeStats('${emp.name}')" data-employment-type="${emp.employmentType}">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center flex-1">
+                        <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold mr-3">
+                            ${emp.avatar}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2">
+                                <p class="font-medium text-gray-900">${emp.name}</p>
+                                <span class="px-1.5 py-0.5 text-xs font-medium rounded ${employmentTypeColors[emp.employmentType] || 'bg-gray-100 text-gray-800'}">
+                                    ${employmentTypeLabels[emp.employmentType] || 'N/A'}
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-500">${positionLabels[emp.position] || emp.position || 'Sachbearbeiter'}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-gray-900">${emp.casesToday || Math.floor(Math.random() * 20 + 5)} Fälle</p>
+                        <p class="text-xs text-gray-500">Heute</p>
+                    </div>
+                </div>
+            </div>
+        `).join('') || '<p class="text-gray-500 text-center py-4">Keine Mitarbeiter gefunden</p>';
+    }
+
+    function filterEmployeesByType(type) {
+        // Update button styles
+        const buttons = document.querySelectorAll('.employment-filter-btn');
+        buttons.forEach(btn => {
+            btn.className = 'employment-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600';
+        });
+
+        const activeBtn = document.getElementById(`filter-${type}`);
+        if (activeBtn) {
+            activeBtn.className = 'employment-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800';
+        }
+
+        // Reload employee list with employment filter
+        loadEmployeeAnalytics(type, null);
+    }
+
+    function filterEmployeesByPosition(position) {
+        // Update button styles
+        const buttons = document.querySelectorAll('.position-main-filter-btn');
+        buttons.forEach(btn => {
+            btn.className = 'position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600';
+        });
+
+        const activeBtn = document.getElementById(`position-filter-${position}`);
+        if (activeBtn) {
+            activeBtn.className = 'position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800';
+        }
+
+        // Reload employee list with position filter
+        loadEmployeeAnalytics(null, position);
+    }
+
+    function initializeChart() {
+        const canvas = document.getElementById('casesChart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        drawBarChart(ctx, 'day');
+    }
+
+    function drawBarChart(ctx, filter) {
+        const canvas = ctx.canvas;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Sample data for different filters
+        const data = {
+            'day': [12, 15, 18, 14, 20, 16, 19, 22],
+            'week': [85, 92, 78, 95, 88, 91, 83],
+            'month': [320, 380, 350, 410, 390],
+            'year': [3800, 4200, 4500, 4100],
+            '5years': [15000, 16500, 17200, 18100, 19500]
+        };
+        
+        const labels = {
+            'day': ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
+            'week': ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+            'month': ['Woche 1', 'Woche 2', 'Woche 3', 'Woche 4', 'Woche 5'],
+            'year': ['Q1', 'Q2', 'Q3', 'Q4'],
+            '5years': ['2019', '2020', '2021', '2022', '2023']
+        };
+        
+        const values = data[filter] || data['day'];
+        const barLabels = labels[filter] || labels['day'];
+        const maxValue = Math.max(...values);
+        
+        const barWidth = (canvas.width - 60) / values.length - 10;
+        const chartHeight = canvas.height - 60;
+        
+        // Draw bars
+        values.forEach((value, index) => {
+            const barHeight = (value / maxValue) * chartHeight;
+            const x = 40 + index * (barWidth + 10);
+            const y = canvas.height - 40 - barHeight;
+            
+            // Bar
+            ctx.fillStyle = '#3B82F6';
+            ctx.fillRect(x, y, barWidth, barHeight);
+            
+            // Value label
+            ctx.fillStyle = '#1F2937';
+            ctx.font = '12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(value, x + barWidth/2, y - 5);
+            
+            // X-axis label
+            ctx.fillText(barLabels[index], x + barWidth/2, canvas.height - 20);
+        });
+        
+        // Y-axis
+        ctx.strokeStyle = '#E5E7EB';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(30, 10);
+        ctx.lineTo(30, canvas.height - 40);
+        ctx.stroke();
+        
+        // X-axis
+        ctx.beginPath();
+        ctx.moveTo(30, canvas.height - 40);
+        ctx.lineTo(canvas.width - 10, canvas.height - 40);
+        ctx.stroke();
+    }
+
+    function changeChartFilter(filter) {
+        // Update button styles
+        const buttons = document.querySelectorAll('.chart-filter-btn');
+        buttons.forEach(btn => {
+            btn.className = 'chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600';
+        });
+        event.target.className = 'chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800';
+        
+        // Redraw chart
+        const canvas = document.getElementById('casesChart');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            drawBarChart(ctx, filter);
+        }
+    }
+
+    function showEmployeeStats(employeeName) {
+        // Only show stats if analytics dashboard is visible
+        const analyticsDiv = document.getElementById('analytics-dashboard');
+        if (!analyticsDiv || analyticsDiv.classList.contains('hidden')) {
+            return;
+        }
+
+        // Remove existing modal if any
+        const existingModal = document.getElementById('employee-stats-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Create modal
+        const modalHTML = `
+            <div id="employee-stats-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+                <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
+                        <h2 class="text-xl font-bold">Mitarbeiter-Statistik: ${employeeName}</h2>
+                        <button onclick="closeEmployeeStatsModal()" class="text-white hover:text-gray-200">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <p class="text-sm text-gray-600 mb-1">Ø Bearbeitungszeit</p>
+                                <p class="text-2xl font-bold text-gray-900">${Math.floor(Math.random() * 30 + 20)} Min</p>
+                                <p class="text-xs text-green-600 mt-1">-5% vs. letzte Woche</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <p class="text-sm text-gray-600 mb-1">Fälle diese Woche</p>
+                                <p class="text-2xl font-bold text-gray-900">${Math.floor(Math.random() * 40 + 20)}</p>
+                                <p class="text-xs text-blue-600 mt-1">+12% vs. letzte Woche</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <p class="text-sm text-gray-600 mb-1">Erfolgsquote</p>
+                                <p class="text-2xl font-bold text-gray-900">${Math.floor(Math.random() * 10 + 90)}%</p>
+                                <p class="text-xs text-gray-500 mt-1">Sehr gut</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <p class="text-sm text-gray-600 mb-1">Spezialisierung</p>
+                                <p class="text-lg font-bold text-gray-900">KFZ, Haftpflicht</p>
+                                <p class="text-xs text-gray-500 mt-1">2 Bereiche</p>
+                            </div>
+                        </div>
+
+                        <div class="border-t pt-4">
+                            <h3 class="font-semibold text-gray-900 mb-3">Performance-Verlauf (letzte 7 Tage)</h3>
+                            <div class="h-32 bg-gray-50 rounded-lg flex items-end justify-around p-4">
+                                ${[1,2,3,4,5,6,7].map(() => {
+                                    const height = Math.floor(Math.random() * 80 + 20);
+                                    return `<div class="bg-blue-500 rounded-t" style="width: 30px; height: ${height}%;"></div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    function closeEmployeeStatsModal() {
+        const modal = document.getElementById('employee-stats-modal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+
+    function showPositionDetails(position) {
+        // Only show position details if analytics dashboard is visible
+        const analyticsDiv = document.getElementById('analytics-dashboard');
+        if (!analyticsDiv || analyticsDiv.classList.contains('hidden')) {
+            return;
+        }
+        alert(`Detailansicht für ${position} Sachbearbeiter - Weitere Statistiken können hier implementiert werden`);
+    }
+
+    // Position-specific chart functions
+    function changePositionChartFilter(position, filter) {
+        // Update button styles for this position
+        const buttons = event.target.parentElement.querySelectorAll('.position-chart-filter-btn');
+        buttons.forEach(btn => {
+            btn.className = 'position-chart-filter-btn px-2 py-1 text-xs font-medium rounded bg-gray-100 text-gray-600';
+        });
+        event.target.className = 'position-chart-filter-btn px-2 py-1 text-xs font-medium rounded bg-blue-100 text-blue-800';
+
+        // Redraw chart for this position
+        const canvas = document.getElementById(`${position}Chart`);
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            drawBarChart(ctx, filter);
+        }
+    }
+
+    function openComparisonModal() {
+        // Remove existing modal if any
+        const existingModal = document.getElementById('comparison-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        const modalHTML = `
+            <div id="comparison-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+                <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-4 rounded-t-lg">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-xl font-bold">Analytics im Vergleich</h2>
+                            <button onclick="closeComparisonModal()" class="text-white hover:text-gray-200">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-6 overflow-y-auto" style="max-height: calc(90vh - 80px);">
+                        <!-- Filter Section -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Filter auswählen</h3>
+
+                            <!-- Employment Type Filter -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Beschäftigungsart</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" class="comparison-filter" data-type="employment" value="vollzeit" checked class="rounded border-gray-300 text-indigo-600">
+                                        <span class="ml-2 text-sm">Vollzeit</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" class="comparison-filter" data-type="employment" value="teilzeit" checked class="rounded border-gray-300 text-indigo-600">
+                                        <span class="ml-2 text-sm">Teilzeit</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" class="comparison-filter" data-type="employment" value="minijob" checked class="rounded border-gray-300 text-indigo-600">
+                                        <span class="ml-2 text-sm">Minijob</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Time Period Filter -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Zeitraum</label>
+                                <div class="flex gap-2">
+                                    <button onclick="setComparisonPeriod('day')" class="comparison-period-btn px-3 py-1 text-sm rounded bg-indigo-100 text-indigo-800">Tag</button>
+                                    <button onclick="setComparisonPeriod('week')" class="comparison-period-btn px-3 py-1 text-sm rounded bg-gray-100 text-gray-600">Woche</button>
+                                    <button onclick="setComparisonPeriod('month')" class="comparison-period-btn px-3 py-1 text-sm rounded bg-gray-100 text-gray-600">Monat</button>
+                                    <button onclick="setComparisonPeriod('year')" class="comparison-period-btn px-3 py-1 text-sm rounded bg-gray-100 text-gray-600">Jahr</button>
+                                </div>
+                            </div>
+
+                            <!-- Position Filter -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Positionen</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" class="comparison-filter" data-type="position" value="junior" checked class="rounded border-gray-300 text-indigo-600">
+                                        <span class="ml-2 text-sm">Junior</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" class="comparison-filter" data-type="position" value="sachbearbeiter" checked class="rounded border-gray-300 text-indigo-600">
+                                        <span class="ml-2 text-sm">Sachbearbeiter</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" class="comparison-filter" data-type="position" value="senior" checked class="rounded border-gray-300 text-indigo-600">
+                                        <span class="ml-2 text-sm">Senior</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" class="comparison-filter" data-type="position" value="experte" checked class="rounded border-gray-300 text-indigo-600">
+                                        <span class="ml-2 text-sm">Experte</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Exclude Employees -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Mitarbeiter ausschließen</label>
+                                <div class="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto p-2 border border-gray-200 rounded">
+                                    ${loadEmployeesFromStorage().map(emp => `
+                                        <label class="inline-flex items-center text-sm">
+                                            <input type="checkbox" class="exclude-employee" value="${emp.id}" class="rounded border-gray-300 text-red-600">
+                                            <span class="ml-1">${emp.name}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Team Comparison Toggle -->
+                            <div class="mb-4">
+                                <button onclick="toggleTeamComparison()" id="team-comparison-btn" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                    <svg class="h-5 w-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                    </svg>
+                                    Vergleich mit anderen Teams aktivieren
+                                </button>
+                            </div>
+
+                            <!-- Team Selection (Initially Hidden) -->
+                            <div id="team-selection" class="hidden mb-4 p-4 bg-gray-50 rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Team zum Vergleichen auswählen</label>
+                                <select id="comparison-team" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                    <option value="">Team auswählen...</option>
+                                    <option value="team-berlin">Team Berlin</option>
+                                    <option value="team-munich">Team München</option>
+                                    <option value="team-hamburg">Team Hamburg</option>
+                                    <option value="team-frankfurt">Team Frankfurt</option>
+                                    <option value="team-cologne">Team Köln</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Results Section -->
+                        <div class="border-t pt-4">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Vergleichsergebnis</h3>
+                                <button onclick="generateComparison()" class="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors">
+                                    Vergleich generieren
+                                </button>
+                            </div>
+
+                            <div id="comparison-results" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                <!-- Comparison results will be loaded here -->
+                                <div class="col-span-2 text-center text-gray-500 py-8">
+                                    Wählen Sie Filter aus und klicken Sie auf "Vergleich generieren"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    function closeComparisonModal() {
+        const modal = document.getElementById('comparison-modal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+
+    function toggleTeamComparison() {
+        const teamSelection = document.getElementById('team-selection');
+        const btn = document.getElementById('team-comparison-btn');
+
+        if (teamSelection.classList.contains('hidden')) {
+            teamSelection.classList.remove('hidden');
+            btn.innerHTML = `
+                <svg class="h-5 w-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                Teamvergleich deaktivieren
+            `;
+            btn.classList.remove('bg-gray-100', 'text-gray-700');
+            btn.classList.add('bg-indigo-100', 'text-indigo-700');
+        } else {
+            teamSelection.classList.add('hidden');
+            btn.innerHTML = `
+                <svg class="h-5 w-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Vergleich mit anderen Teams aktivieren
+            `;
+            btn.classList.remove('bg-indigo-100', 'text-indigo-700');
+            btn.classList.add('bg-gray-100', 'text-gray-700');
+        }
+    }
+
+    function setComparisonPeriod(period) {
+        const buttons = document.querySelectorAll('.comparison-period-btn');
+        buttons.forEach(btn => {
+            btn.className = 'comparison-period-btn px-3 py-1 text-sm rounded bg-gray-100 text-gray-600';
+        });
+        event.target.className = 'comparison-period-btn px-3 py-1 text-sm rounded bg-indigo-100 text-indigo-800';
+    }
+
+    function generateComparison() {
+        const resultsContainer = document.getElementById('comparison-results');
+        const teamSelection = document.getElementById('comparison-team').value;
+
+        // Generate comparison data
+        const ourTeamData = {
+            avgCases: 125,
+            avgTime: 32,
+            successRate: 94,
+            totalEmployees: 16
+        };
+
+        const otherTeamData = teamSelection ? {
+            avgCases: 118,
+            avgTime: 35,
+            successRate: 91,
+            totalEmployees: 14
+        } : null;
+
+        let resultsHTML = `
+            <div class="bg-white rounded-lg shadow p-4">
+                <h4 class="font-semibold text-gray-800 mb-3">Unser Team</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Ø Fälle/Tag:</span>
+                        <span class="font-medium">${ourTeamData.avgCases}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Ø Bearbeitungszeit:</span>
+                        <span class="font-medium">${ourTeamData.avgTime} Min</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Erfolgsquote:</span>
+                        <span class="font-medium">${ourTeamData.successRate}%</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Mitarbeiter:</span>
+                        <span class="font-medium">${ourTeamData.totalEmployees}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        if (otherTeamData) {
+            resultsHTML += `
+                <div class="bg-white rounded-lg shadow p-4">
+                    <h4 class="font-semibold text-gray-800 mb-3">${document.getElementById('comparison-team').options[document.getElementById('comparison-team').selectedIndex].text}</h4>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Ø Fälle/Tag:</span>
+                            <span class="font-medium">${otherTeamData.avgCases}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Ø Bearbeitungszeit:</span>
+                            <span class="font-medium">${otherTeamData.avgTime} Min</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Erfolgsquote:</span>
+                            <span class="font-medium">${otherTeamData.successRate}%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Mitarbeiter:</span>
+                            <span class="font-medium">${otherTeamData.totalEmployees}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        resultsContainer.innerHTML = resultsHTML;
+    }
+
+    // Store current filters for each position
+    const positionFilters = {
+        'junior': 'all',
+        'sachbearbeiter': 'all',
+        'senior': 'all'
+    };
+
+    function filterPositionEmployees(position, employmentType) {
+        // Update button styles
+        const buttons = document.querySelectorAll(`.position-filter-btn-${position}`);
+        buttons.forEach(btn => {
+            btn.className = `position-filter-btn-${position} px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600`;
+        });
+
+        event.target.className = `position-filter-btn-${position} px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800`;
+
+        // Store filter
+        positionFilters[position] = employmentType;
+
+        // Reload the list with filter
+        loadPositionEmployeeLists();
+    }
+
+    function loadPositionEmployeeLists() {
+        const employees = loadEmployeesFromStorage();
+
+        // Group employees by position
+        const positions = {
+            'junior': [],
+            'sachbearbeiter': [],
+            'senior': []
+        };
+
+        const employmentTypeLabels = {
+            'vollzeit': 'VZ',
+            'teilzeit': 'TZ',
+            'minijob': 'MJ'
+        };
+
+        const employmentTypeColors = {
+            'vollzeit': 'bg-green-100 text-green-800',
+            'teilzeit': 'bg-yellow-100 text-yellow-800',
+            'minijob': 'bg-orange-100 text-orange-800'
+        };
+
+        employees.forEach(emp => {
+            if (positions[emp.position]) {
+                positions[emp.position].push(emp);
+            }
+        });
+
+        // Update employee counts in headers
+        const juniorCountEl = document.getElementById('junior-count');
+        if (juniorCountEl) juniorCountEl.textContent = `${positions['junior'].length} Mitarbeiter`;
+
+        const sachbearbeiterCountEl = document.getElementById('sachbearbeiter-count');
+        if (sachbearbeiterCountEl) sachbearbeiterCountEl.textContent = `${positions['sachbearbeiter'].length} Mitarbeiter`;
+
+        const seniorCountEl = document.getElementById('senior-count');
+        if (seniorCountEl) seniorCountEl.textContent = `${positions['senior'].length} Mitarbeiter`;
+
+        // Render each position list with the same design as main statistics
+        Object.keys(positions).forEach(pos => {
+            const container = document.getElementById(`${pos}-list`);
+            if (container) {
+                // Apply filter
+                const filter = positionFilters[pos] || 'all';
+                const filteredEmployees = filter === 'all'
+                    ? positions[pos]
+                    : positions[pos].filter(emp => emp.employmentType === filter);
+
+                container.innerHTML = filteredEmployees.map(emp => `
+                    <div class="bg-gray-50 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition" onclick="showEmployeeStats('${emp.name}')" data-employment-type="${emp.employmentType}">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center flex-1">
+                                <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold mr-3">
+                                    ${emp.avatar}
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <p class="font-medium text-gray-900">${emp.name}</p>
+                                        <span class="px-1.5 py-0.5 text-xs font-medium rounded ${employmentTypeColors[emp.employmentType] || 'bg-gray-100 text-gray-800'}">
+                                            ${employmentTypeLabels[emp.employmentType] || 'N/A'}
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">${emp.abteilung || 'Keine Abteilung'}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-semibold text-gray-900">${emp.casesToday || Math.floor(Math.random() * 20 + 5)} Fälle</p>
+                                <p class="text-xs text-gray-500">Heute</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('') || '<p class="text-gray-500 text-sm text-center py-4">Keine Mitarbeiter in dieser Position</p>';
+            }
+        });
+
+        // Initialize charts for each position (excluding experte)
+        ['junior', 'sachbearbeiter', 'senior'].forEach(pos => {
+            const canvas = document.getElementById(`${pos}Chart`);
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                drawBarChart(ctx, 'day');
+            }
+        });
+    }
+
+    // Initialize views on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        createEmployeeManagementView();
+        createCaseManagementView();
+        createAnalyticsDashboard();
+
+        // Always reset with hardcoded data to ensure all properties are present
+        localStorage.setItem('gevEmployees', JSON.stringify(mitarbeiterData));
+
+        // Load and apply saved case assignments
+        const isAutoAssigned = localStorage.getItem('autoAssignmentActive') === 'true';
+        updateCasesTable(isAutoAssigned);
+        refreshCaseEmployeeList();
+
+        // Setup working hours visibility based on employment type
+        setupWorkingHoursVisibility();
+    });
 </script>
+
 </body>
 </html>

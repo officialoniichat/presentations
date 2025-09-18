@@ -4,8 +4,8 @@
   "description": "GEV Konzept Präsentation",
   "main": "server.js",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js"
+    "dev": "node server/server.js",
+    "start": "node server/server.js"
   },
   "keywords": ["presentation", "gev"],
   "author": "",
