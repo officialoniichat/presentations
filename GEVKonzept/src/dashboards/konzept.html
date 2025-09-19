@@ -61,12 +61,9 @@
     <div class="flex h-screen">
         <!-- Sidebar (unchanged from original) -->
         <aside class="sidebar bg-slate-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 z-20">
-            <a href="#" class="text-white flex items-center space-x-2 px-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-                <span class="text-2xl font-extrabold">GEV Secure</span>
-            </a>
+            <div class="text-white flex items-center space-x-2 px-2">
+                <span class="text-2xl font-extrabold">Zuteilungscockpit</span>
+            </div>
             <nav>
                 <a href="#" id="nav-dashboard" onclick="showDashboard()" class="nav-item flex items-center space-x-3 bg-blue-500 bg-opacity-30 text-white py-2 px-4 rounded transition duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
@@ -104,7 +101,7 @@
                         </svg>
                         <span class="text-sm font-medium">Referenz-Projekte</span>
                     </a>
-                    <span class="text-sm">Hallo, Herr Weber (Teamleiter)</span>
+                    <span class="text-sm">Hallo, Frau Schumann</span>
                     <img class="h-10 w-10 rounded-full object-cover" src="https://placehold.co/100x100/E2E8F0/4A5568?text=MW" alt="User Avatar">
                 </div>
             </header>
@@ -570,8 +567,13 @@
         menuButton.addEventListener('click', () => {
             sidebar.classList.toggle('-translate-x-full');
         });
-        
+
         setInterval(simulateNewCase, 5000);
+
+        // Start with Employee Management view instead of Dashboard
+        setTimeout(() => {
+            showEmployeeManagement();
+        }, 100);
     });
 
     // LocalStorage management
@@ -657,7 +659,7 @@
     function showDashboard() {
         // Hide dashboard canvas (no longer used)
         document.getElementById('dashboardCanvas').style.display = 'none';
-        
+
         // Hide other views
         const employeeView = document.getElementById('employee-management');
         if (employeeView) {

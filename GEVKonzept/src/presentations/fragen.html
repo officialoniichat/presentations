@@ -162,6 +162,59 @@
             opacity: 0.95;
         }
 
+        /* Action Buttons */
+        .action-buttons {
+            position: absolute;
+            top: 100px;
+            right: 500px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .action-button {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 12px 25px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .preis-button:hover {
+            background: rgba(255,193,7,0.15);
+            border-color: #ffc107;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255,193,7,0.3);
+        }
+
+        .preis-icon {
+            width: 35px;
+            height: 35px;
+            background: #ffc107;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .button-text {
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .preis-link {
+            color: #f59e0b;
+            font-size: 0.9em;
+        }
+
         /* Back Button */
         .back-button {
             position: fixed;
@@ -188,6 +241,21 @@
     </style>
 </head>
 <body>
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="/src/presentations/preis.html" class="action-button preis-button">
+            <div class="preis-icon">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div>
+                <div class="button-text">Preis</div>
+                <div class="preis-link">Preisübersicht →</div>
+            </div>
+        </a>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -211,7 +279,6 @@
                     Messung der Arbeitslast
                 </div>
                 <div class="question-content">
-                    Sie sprachen von einer "gerechten" Verteilung. Messen wir die Auslastung rein nach der Anzahl der Fälle pro Mitarbeiter, oder gibt es bereits eine Einschätzung des geschätzten Aufwands pro Fall?
                     <div class="sub-question">
                         <div class="sub-question-title">Beispiele zur Klassifizierung:</div>
                         • Kleinschaden (< 30 Min Bearbeitung)<br>
@@ -228,10 +295,9 @@
                     Temporäre Kapazitätsanpassung
                 </div>
                 <div class="question-content">
-                    Wie werden Sonderaufgaben (Projekte, Einarbeitung neuer Kollegen) aktuell erfasst? Gibt es eine Anforderung, dass ein Teamleiter die verfügbare Kapazität eines Mitarbeiters für einen bestimmten Zeitraum manuell anpassen kann?
                     <div class="sub-question">
                         <div class="sub-question-title">Szenarien:</div>
-                        • "Mitarbeiter A ist diese Woche nur zu 50% für Schadensfälle verfügbar"<br>
+                        • "Mitarbeiter A ist diese Woche nur zu 50% für Neuschadensfälle verfügbar"<br>
                         • Projektarbeit parallel zur regulären Tätigkeit<br>
                         • Mentoring-Aufgaben für neue Kollegen
                     </div>
@@ -241,27 +307,9 @@
             <div class="question-card">
                 <div class="question-title">
                     <span class="question-number">3</span>
-                    Eskalationspfad
-                </div>
-                <div class="question-content">
-                    Was soll passieren, wenn das System nach den definierten Regeln keinen passenden, verfügbaren Mitarbeiter finden kann? 
-                    <div class="sub-question">
-                        <div class="sub-question-title">Mögliche Optionen:</div>
-                        • Fall in allgemeinen Pool zur manuellen Prüfung durch Teamleiter<br>
-                        • Automatische Warteschlange bis Mitarbeiter frei wird<br>
-                        • Eskalation an übergeordnete Stelle<br>
-                        • Benachrichtigung bei kritischen Fällen
-                    </div>
-                </div>
-            </div>
-
-            <div class="question-card">
-                <div class="question-title">
-                    <span class="question-number">4</span>
                     Einarbeitung neuer Mitarbeiter
                 </div>
                 <div class="question-content">
-                    Wie sieht der Prozess für neue Sachbearbeiter genau aus? Erhalten sie nur Fälle bis zu einer bestimmten Schadenshöhe oder aus einer bestimmten Sparte? Wie lange dauert diese "Schonfrist"?
                     <div class="sub-question">
                         <div class="sub-question-title">Zu klären:</div>
                         • Stufenweise Erhöhung der Komplexität<br>
@@ -284,34 +332,16 @@
 
             <div class="question-card">
                 <div class="question-title">
-                    <span class="question-number">5</span>
+                    <span class="question-number">4</span>
                     Systemlandschaft
                 </div>
                 <div class="question-content">
-                    Sie erwähnten SAP. Handelt es sich um SAP FS-CM (Claims Management) für die Schadensakte? Welches System wird aktuell für die Erfassung von Urlaub, Krankheit und Arbeitszeitmodellen genutzt?
                     <div class="sub-question">
                         <div class="sub-question-title">Relevante Systeme:</div>
                         • SAP FS-CM für Schadensmanagement?<br>
                         • SAP HCM für Personalverwaltung?<br>
                         • SuccessFactors für HR-Prozesse?<br>
                         • Andere Zeiterfassungssysteme?
-                    </div>
-                </div>
-            </div>
-
-            <div class="question-card">
-                <div class="question-title">
-                    <span class="question-number">6</span>
-                    Datenschnittstellen
-                </div>
-                <div class="question-content">
-                    Wie können wir auf die Abwesenheits- und Kapazitätsdaten zugreifen? Gibt es eine dokumentierte API (Schnittstelle), einen direkten Datenbankzugriff oder wäre ein regelmäßiger Datenexport eine Option?
-                    <div class="sub-question">
-                        <div class="sub-question-title">Integrationsmöglichkeiten:</div>
-                        • REST/SOAP APIs vorhanden?<br>
-                        • Direkter Datenbankzugriff möglich?<br>
-                        • Batch-Export (z.B. nächtlich)?<br>
-                        • Real-time vs. Near-real-time Anforderungen
                     </div>
                 </div>
             </div>
@@ -328,28 +358,18 @@
 
             <div class="question-card">
                 <div class="question-title">
-                    <span class="question-number">7</span>
+                    <span class="question-number">5</span>
                     Leistungserfassung & Statistiken
                 </div>
                 <div class="question-content">
-                    Sollen Statistiken erhoben werden wie: Welcher Mitarbeiter ist wie schnell mit welchen Arten von Fällen fertig? Oder wird das bereits gemacht?
                     <div class="sub-question">
                         <div class="sub-question-title">Mögliche KPIs:</div>
                         • Durchschnittliche Bearbeitungszeit pro Falltyp<br>
                         • Mitarbeiter-Performance nach Schadenskategorie<br>
                         • Lernkurven neuer Mitarbeiter<br>
-                        • Basis für KI-gestützte Optimierung der Zuteilung
+                        • Basis für Algorithmisch-gestützte Optimierung der Zuteilung
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Info Box -->
-        <div class="info-box">
-            <div class="info-box-title">💡 Warum diese Fragen wichtig sind</div>
-            <div class="info-box-content">
-                Je genauer wir Ihre Prozesse und Anforderungen verstehen, desto passgenauer können wir die Lösung auf Ihre Bedürfnisse zuschneiden. 
-                Diese Informationen ermöglichen es uns, von Anfang an die richtigen technischen Entscheidungen zu treffen und Ihnen eine optimale Lösung zu liefern.
             </div>
         </div>
 

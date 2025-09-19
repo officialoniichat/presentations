@@ -25,8 +25,8 @@ app.get('/beispiel', (req, res) => {
     res.sendFile(path.join(__dirname, '../src/dashboards/beispiel.html'));
 });
 
-// Start server
-app.listen(PORT, () => {
+// Start server with error handling
+const server = app.listen(PORT, () => {
     console.log(`
     ╔═══════════════════════════════════════════╗
     ║                                           ║
@@ -47,4 +47,31 @@ app.listen(PORT, () => {
 
     // Automatically open browser
     open(`http://localhost:${PORT}`);
+});
+
+// Error handling for port conflicts
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`
+        ╔═══════════════════════════════════════════╗
+        ║           ⚠️  PORT KONFLIKT  ⚠️            ║
+        ║                                           ║
+        ║     Port ${PORT} ist bereits belegt!          ║
+        ║                                           ║
+        ║     Lösungsmöglichkeiten:                 ║
+        ║                                           ║
+        ║     1. Beenden Sie den anderen Prozess:   ║
+        ║        lsof -i :${PORT}                       ║
+        ║        kill <PID>                         ║
+        ║                                           ║
+        ║     2. Verwenden Sie einen anderen Port:  ║
+        ║        PORT=3001 npm start                ║
+        ║                                           ║
+        ╚═══════════════════════════════════════════╝
+        `);
+        process.exit(1);
+    } else {
+        console.error('Server error:', err);
+        process.exit(1);
+    }
 });

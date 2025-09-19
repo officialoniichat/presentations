@@ -267,14 +267,21 @@
             opacity: 0.9;
             margin-top: 5px;
         }
-        /* Fragen Button */
-        .fragen-button {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: rgba(255,255,255,0.1);
+        /* Action Buttons */
+        .action-buttons {
+            position: absolute;
+            top: 60px;
+            right: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .action-button {
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(0,0,0,0.1);
             border-radius: 12px;
             padding: 12px 25px;
             text-decoration: none;
@@ -282,14 +289,21 @@
             align-items: center;
             gap: 10px;
             transition: all 0.3s ease;
-            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         .fragen-button:hover {
-            background: rgba(255,119,38,0.15);
+            background: rgba(249,115,22,0.1);
             border-color: #f97316;
-            transform: translateY(-2px);
+            transform: translateX(5px);
             box-shadow: 0 4px 15px rgba(249,115,22,0.2);
+        }
+
+        .preis-button:hover {
+            background: rgba(255,193,7,0.15);
+            border-color: #ffc107;
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(255,193,7,0.3);
         }
 
         .fragen-icon {
@@ -303,7 +317,18 @@
             color: white;
         }
 
-        .fragen-text {
+        .preis-icon {
+            width: 35px;
+            height: 35px;
+            background: #ffc107;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .button-text {
             color: #1a1a1a;
             font-weight: 600;
             font-size: 0.95em;
@@ -313,21 +338,40 @@
             color: #f97316;
             font-size: 0.9em;
         }
+
+        .preis-link {
+            color: #f59e0b;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
-    <!-- Fragen Button -->
-    <a href="/src/presentations/fragen.html" class="fragen-button">
-        <div class="fragen-icon">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-        </div>
-        <div>
-            <div class="fragen-text">Fragen</div>
-            <div class="fragen-link">Kontakt aufnehmen →</div>
-        </div>
-    </a>
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="/src/presentations/fragen.html" class="action-button fragen-button">
+            <div class="fragen-icon">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div>
+                <div class="button-text">Fragen</div>
+                <div class="fragen-link">Kontakt aufnehmen →</div>
+            </div>
+        </a>
+
+        <a href="/src/presentations/preis.html" class="action-button preis-button">
+            <div class="preis-icon">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div>
+                <div class="button-text">Preis</div>
+                <div class="preis-link">Preisübersicht →</div>
+            </div>
+        </a>
+    </div>
 
     <div class="presentation-container">
         <div class="slides-container" id="slidesContainer">
@@ -545,7 +589,7 @@
                 </div>
 
                 <div class="result-box">
-                    <div class="result-title">📦 Erreichte Ergebnisse</div>
+                    <div class="result-title">Erreichte Ergebnisse</div>
                     <div class="result-metrics">
                         <div class="metric-item">
                             <div class="metric-value">40%</div>
