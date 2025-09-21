@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preisübersicht - Prozessagent für GEV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Slides */
+        .slide {
+            display: none;
+            padding: 60px 80px 120px 80px;
+            min-height: 100vh;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Typography */
+        .slide-header {
+            border-bottom: 3px solid #01a999;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .slide-number {
+            color: #01a999;
+            font-size: 1em;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            color: #1a1a1a;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .slide-subtitle {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 300;
+        }
+
+        /* Image Container */
+        .image-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 60vh;
+            padding: 40px 0 40px 100px;
+        }
+
+        .image-container img {
+            width: 85%;
+            height: auto;
+            max-width: 1000px;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 20px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: #01a999;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-button:hover {
+            background: #019185;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(1, 169, 153, 0.3);
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-indicator {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Additional Info */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            border-left: 4px solid #01a999;
+        }
+
+        .info-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-content {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* Contact Box */
+        .contact-box {
+            background: linear-gradient(135deg, #01a999 0%, #019185 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .contact-content {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            opacity: 0.95;
+        }
+
+        .contact-button {
+            background: white;
+            color: #01a999;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slides-container" id="slidesContainer">
+
+            <!-- Slide 1: Preisübersicht -->
+            <div class="slide active">
+                <div class="slide-header">
+                    <div class="slide-number">INVESTITION IN IHRE ZUKUNFT</div>
+                    <h1>Preisübersicht</h1>
+                    <div class="slide-subtitle">Die Neufallzuordung der gesamten GEV modernisieren und effizienter gestalten</div>
+                </div>
+
+                <!-- Image instead of pricing cards -->
+                <div class="image-container">
+                    <img src="../../assets/img/team.svg" alt="Preisübersicht">
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</body>
+</html>
