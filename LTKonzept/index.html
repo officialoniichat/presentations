@@ -14,18 +14,48 @@
     <div class="container mx-auto px-6 py-12">
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-5xl font-bold mb-4">
-                <span class="text-cyan-400">L-T</span> Digitalisierungskonzept
-            </h1>
-            <p class="text-xl text-gray-300">
-                Transforming Insurance Operations Through Intelligent Automation
-            </p>
+            <div class="flex items-center justify-center relative">
+                <div class="relative inline-block">
+                    <h1 class="text-5xl font-bold mb-4 inline-flex items-center relative">
+                        <span class="text-cyan-400">L-T</span> Digitalisierungskonzept
+                        <!-- Search Button directly after title -->
+                        <div class="relative ml-4">
+                            <button onclick="toggleSearch()" id="searchButton" class="p-3 hover:bg-white/10 rounded-lg transition-all duration-300" style="transition: opacity 0.3s;">
+                                <svg class="w-6 h-6 text-gray-300 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </button>
+
+                            <!-- Search Input Container (expands to the right) -->
+                            <div id="searchContainer" class="absolute top-1 left-full ml-2 overflow-hidden transition-all duration-300" style="width: 0;">
+                                <div class="bg-white/10 backdrop-blur-lg rounded-lg p-1 border border-white/20 flex items-center whitespace-nowrap">
+                                    <input
+                                        type="text"
+                                        id="searchInput"
+                                        placeholder="Suche Modul..."
+                                        class="bg-transparent text-white placeholder-gray-400 px-2 py-1 text-sm outline-none w-48"
+                                        onkeyup="handleSearch(event)"
+                                    >
+                                    <button onclick="closeSearch()" class="p-1 hover:bg-white/10 rounded transition-all duration-300">
+                                        <svg class="w-4 h-4 text-gray-300 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </h1>
+                    <p class="text-xl text-gray-300">
+                        Transforming Insurance Operations Through Intelligent Automation
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- Cards Grid -->
-        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <!-- Wer wir sind Card -->
-            <a href="/src/presentations/presentation.html" class="group">
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto" id="cardsGrid">
+            <!-- Wer wir sind Card (initially hidden) -->
+            <a href="/src/presentations/presentation.html" class="group hidden" id="werWirSindCard">
                 <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
                     <div class="bg-cyan-500 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,5 +130,89 @@
             </a>
         </div>
     </div>
+
+    <script>
+        function toggleSearch() {
+            const searchContainer = document.getElementById('searchContainer');
+            const searchButton = document.getElementById('searchButton');
+            const searchInput = document.getElementById('searchInput');
+
+            if (searchContainer.style.width === '0px' || searchContainer.style.width === '') {
+                // Expand search
+                searchContainer.style.width = '220px';
+                searchButton.style.opacity = '0';
+                searchButton.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 300);
+            } else {
+                closeSearch();
+            }
+        }
+
+        function closeSearch() {
+            const searchContainer = document.getElementById('searchContainer');
+            const searchButton = document.getElementById('searchButton');
+            const searchInput = document.getElementById('searchInput');
+
+            searchContainer.style.width = '0';
+            searchButton.style.opacity = '1';
+            searchButton.style.pointerEvents = 'auto';
+            searchInput.value = '';
+        }
+
+        function handleSearch(event) {
+            const searchValue = event.target.value.trim().toLowerCase();
+            const werWirSindCard = document.getElementById('werWirSindCard');
+
+            // Live search while typing
+            if (searchValue === 'unternehmen' || searchValue.includes('unternehmen')) {
+                // Show the "Wer wir sind" card with animation
+                werWirSindCard.classList.remove('hidden');
+                werWirSindCard.classList.add('animate-fade-in');
+            } else {
+                // Hide the card if search doesn't match
+                werWirSindCard.classList.add('hidden');
+            }
+
+            if (event.key === 'Enter' && searchValue === 'unternehmen') {
+                // Optional: Do something special on Enter
+                werWirSindCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            if (event.key === 'Escape') {
+                closeSearch();
+            }
+        }
+
+        // Close search when clicking outside
+        document.addEventListener('click', function(event) {
+            const searchContainer = document.getElementById('searchContainer');
+            const searchButton = event.target.closest('button[onclick="toggleSearch()"]');
+
+            if (!searchContainer.contains(event.target) && !searchButton) {
+                if (!searchContainer.classList.contains('hidden')) {
+                    closeSearch();
+                }
+            }
+        });
+    </script>
+
+    <style>
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.3s ease-out;
+        }
+    </style>
 </body>
 </html>

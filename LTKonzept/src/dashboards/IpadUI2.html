@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L-T.de | Wareneingangs-Dispatcher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-verfuegbar { background-color: #22c55e; } /* green-500 */
+        .status-beschaeftigt { background-color: #f97316; } /* orange-500 */
+        .status-pause { background-color: #3b82f6; } /* blue-500 */
+        .status-abwesend { background-color: #6b7280; } /* gray-500 */
+        .mde-screen {
+            box-shadow: 0 0 0 8px #1f2937, 0 0 0 10px #4b5563, 0 4px 20px 10px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 lg:p-8">
+
+    <!-- Hauptcontainer -->
+    <div class="max-w-screen-2xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">Wareneingangs-Dispatcher</h1>
+            <p class="text-lg text-gray-600">Echtzeit-Übersicht und Steuerung für L&T Osnabrück</p>
+        </header>
+
+        <!-- Grid für Dashboard und MDE-Simulation -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+
+            <!-- Linke Spalte: Dashboard-Elemente -->
+            <div class="xl:col-span-2 space-y-8">
+
+                <!-- KPI Karten -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-gray-500 font-medium">Lieferscheine Heute</h3>
+                        <p class="text-4xl font-bold mt-2">5</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-gray-500 font-medium">Bearbeitete Scheine Gesamt</h3>
+                        <p class="text-4xl font-bold mt-2">289</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-gray-500 font-medium">Diligence Score: Max</h3>
+                        <p class="text-4xl font-bold mt-2 text-green-600">0.86</p>
+                    </div>
+                </div>
+
+                <!-- Trackbare Parameter -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h3 class="text-xl font-bold mb-4">Trackbare Parameter im Hintergrund</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <!-- Bewegungsdaten -->
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-3 border border-blue-200">
+                            <div class="flex items-center mb-2">
+                                <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                </svg>
+                                <h4 class="font-semibold text-blue-900 text-sm">Bewegungsdaten</h4>
+                            </div>
+                            <ul class="text-xs text-blue-700 space-y-1">
+                                <li>• GPS-Position (XYZ)</li>
+                                <li>• Zurückgelegte Wege</li>
+                                <li>• Bewegungsgeschwindigkeit</li>
+                                <li>• Zonen-Aufenthalt</li>
+                            </ul>
+                        </div>
+
+                        <!-- Zeiterfassung -->
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-3 border border-green-200">
+                            <div class="flex items-center mb-2">
+                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <h4 class="font-semibold text-green-900 text-sm">Zeiterfassung</h4>
+                            </div>
+                            <ul class="text-xs text-green-700 space-y-1">
+                                <li>• Arbeitszeit (ABC)</li>
+                                <li>• Pausenzeiten</li>
+                                <li>• Produktive vs Idle</li>
+                                <li>• Task-Dauer</li>
+                            </ul>
+                        </div>
+
+                        <!-- Leistungsdaten -->
+                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-3 border border-purple-200">
+                            <div class="flex items-center mb-2">
+                                <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                </svg>
+                                <h4 class="font-semibold text-purple-900 text-sm">Leistungsdaten</h4>
+                            </div>
+                            <ul class="text-xs text-purple-700 space-y-1">
+                                <li>• Bearbeitete Scheine</li>
+                                <li>• Fehlerquote (DEF)</li>
+                                <li>• Durchsatz/Stunde</li>
+                                <li>• Qualitäts-Score</li>
+                            </ul>
+                        </div>
+
+                        <!-- Geräte-Interaktion -->
+                        <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-3 border border-orange-200">
+                            <div class="flex items-center mb-2">
+                                <svg class="w-5 h-5 text-orange-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                                <h4 class="font-semibold text-orange-900 text-sm">Geräte-Interaktion</h4>
+                            </div>
+                            <ul class="text-xs text-orange-700 space-y-1">
+                                <li>• Scanner-Nutzung (GHI)</li>
+                                <li>• iPad-Aktivität</li>
+                                <li>• Tastatur-Input/Min</li>
+                                <li>• App-Wechsel</li>
+                            </ul>
+                        </div>
+
+                        <!-- Umgebungsdaten -->
+                        <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-3 border border-red-200">
+                            <div class="flex items-center mb-2">
+                                <svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                                <h4 class="font-semibold text-red-900 text-sm">Umgebungsdaten</h4>
+                            </div>
+                            <ul class="text-xs text-red-700 space-y-1">
+                                <li>• Temperatur (JKL)</li>
+                                <li>• Lichtverhältnisse</li>
+                                <li>• Geräuschpegel</li>
+                                <li>• Luftfeuchtigkeit</li>
+                            </ul>
+                        </div>
+
+                        <!-- Biometrische Daten -->
+                        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg p-3 border border-indigo-200">
+                            <div class="flex items-center mb-2">
+                                <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                </svg>
+                                <h4 class="font-semibold text-indigo-900 text-sm">Biometrie (optional)</h4>
+                            </div>
+                            <ul class="text-xs text-indigo-700 space-y-1">
+                                <li>• Herzfrequenz (MNO)</li>
+                                <li>• Schrittzähler</li>
+                                <li>• Stress-Level</li>
+                                <li>• Ermüdung</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <p class="text-xs text-blue-800">
+                            <strong>DSGVO-Hinweis:</strong> Alle Parameter werden anonymisiert erfasst und nur zur Prozessoptimierung verwendet.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Eingehende Lieferungen -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <h3 class="text-xl font-bold mb-4">Bearbeitete Scheine:</h3>
+                    <div class="space-y-3">
+                        <!-- Lieferung 1 -->
+                        <div class="flex items-center justify-between bg-red-50 border border-red-200 p-3 rounded-lg">
+                            <div>
+                                <p class="font-bold">Lieferschein #4712 <span class="text-red-600 font-semibold text-xs ml-2 py-0.5 px-2 bg-red-100 rounded-full">HOHE PRIORITÄT</span></p>
+                                <p class="text-sm text-gray-600">Lieferant: Premium Outerwear GmbH (ETA: 10 Min)</p>
+                            </div>
+                            <button onclick="openAssignmentModal('4712')" class="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-700">Siehe Specs</button>
+                        </div>
+                        <!-- Lieferung 2 -->
+                         <div class="flex items-center justify-between bg-gray-50 border border-gray-200 p-3 rounded-lg">
+                            <div>
+                                <p class="font-bold">Lieferschein #4713</p>
+                                <p class="text-sm text-gray-600">Lieferant: Basic T-Shirts Inc. (ETA: 25 Min)</p>
+                            </div>
+                            <button onclick="openAssignmentModal('4713')" class="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-700">Siehe Specs</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Rechte Spalte: MDE-Simulation -->
+            <div class="flex flex-col items-center">
+                <h3 class="text-xl font-bold mb-4">MDE-Ansicht (Mitarbeiter)</h3>
+                <div class="bg-gray-800 w-full max-w-sm h-[700px] rounded-3xl p-4 mde-screen">
+                    <div id="mde-content" class="bg-white w-full h-full rounded-2xl overflow-hidden flex flex-col">
+                        <!-- MDE Screen Content will be injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Assignment Modal -->
+    <div id="assignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold" id="modalTitle">Lieferschein Details</h2>
+                    <button onclick="closeAssignmentModal()" class="text-white hover:text-gray-200 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div id="modalContent" class="p-6 overflow-y-auto" style="max-height: calc(90vh - 200px);">
+                <!-- Content will be injected here -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="border-t p-4 bg-gray-50">
+                <div class="flex gap-3 justify-end">
+                    <button onclick="closeAssignmentModal()" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-semibold">
+                        Schließen
+                    </button>
+                    <button onclick="confirmAssignment()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+                        Zuweisen bestätigen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const mdeContent = document.getElementById('mde-content');
+        let currentStep = 0;
+        let currentDeliveryId = '';
+
+        // Lieferschein Daten
+        const deliveryData = {
+            '4712': {
+                id: '4712',
+                supplier: 'Premium Outerwear GmbH',
+                priority: 'Hoch',
+                products: [
+                    { name: 'Lederjacke "Biker"', quantity: 15, skillScore: 0.85, category: 'Oberbekleidung' },
+                    { name: 'Wintermantel "Classic"', quantity: 8, skillScore: 0.75, category: 'Oberbekleidung' }
+                ],
+                brand: 'Premium Outerwear',
+                eanFlags: ['Hochwertig', 'Sicherung erforderlich', 'Hängeware'],
+                estimatedTime: 45,
+                actualTime: null,
+                completionTime: '14:35',
+                remainingShift: '2h 15min',
+                shiftPercentage: 28,
+                weekday: 'Montag',
+                time: '12:50',
+                totalItems: 23,
+                skillLevel: 'Komplex'
+            },
+            '4713': {
+                id: '4713',
+                supplier: 'Basic T-Shirts Inc.',
+                priority: 'Normal',
+                products: [
+                    { name: 'T-Shirt "Basic White"', quantity: 50, skillScore: 0.25, category: 'Textilien' },
+                    { name: 'T-Shirt "Basic Black"', quantity: 50, skillScore: 0.25, category: 'Textilien' },
+                    { name: 'T-Shirt "Basic Grey"', quantity: 30, skillScore: 0.25, category: 'Textilien' }
+                ],
+                brand: 'Basic Wear',
+                eanFlags: ['Standard', 'Keine Sicherung', 'Faltware'],
+                estimatedTime: 25,
+                actualTime: null,
+                completionTime: '13:15',
+                remainingShift: '3h 35min',
+                shiftPercentage: 45,
+                weekday: 'Montag',
+                time: '12:50',
+                totalItems: 130,
+                skillLevel: 'Einfach'
+            }
+        };
+
+        function openAssignmentModal(deliveryId) {
+            currentDeliveryId = deliveryId;
+            const modal = document.getElementById('assignmentModal');
+            const modalContent = document.getElementById('modalContent');
+            const modalTitle = document.getElementById('modalTitle');
+            const data = deliveryData[deliveryId];
+
+            modalTitle.textContent = `Lieferschein #${deliveryId} - Detaillierte Spezifikationen`;
+
+            const content = `
+                <div class="space-y-6">
+                    <!-- Allgemeine Informationen -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800">Allgemeine Informationen</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-500">Lieferant</p>
+                                <p class="font-semibold">${data.supplier}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Priorität</p>
+                                <p class="font-semibold ${data.priority === 'Hoch' ? 'text-red-600' : 'text-gray-800'}">${data.priority}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Wochentag</p>
+                                <p class="font-semibold">${data.weekday}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Uhrzeit</p>
+                                <p class="font-semibold">${data.time}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Marke</p>
+                                <p class="font-semibold">${data.brand}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Skill-Level</p>
+                                <span class="px-3 py-1 rounded-full text-sm font-semibold ${
+                                    data.skillLevel === 'Einfach' ? 'bg-green-100 text-green-800' :
+                                    data.skillLevel === 'Mittel' ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-red-100 text-red-800'
+                                }">${data.skillLevel}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produkte -->
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800">Produktdetails</h3>
+                        <div class="space-y-3">
+                            ${data.products.map(product => `
+                                <div class="bg-white rounded-lg p-3 border border-blue-200">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="font-semibold">${product.name}</p>
+                                            <p class="text-sm text-gray-600">Kategorie: ${product.category}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-lg font-bold">${product.quantity} Stück</p>
+                                            <p class="text-sm text-gray-600">Skill-Score: ${product.skillScore}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                            <div class="mt-2 pt-2 border-t border-blue-300">
+                                <p class="text-right font-bold">Gesamt: ${data.totalItems} Artikel</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Zeit & Performance -->
+                    <div class="bg-green-50 rounded-lg p-4">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800">Zeit & Performance</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-500">Geschätzte Bearbeitungszeit</p>
+                                <p class="font-semibold">${data.estimatedTime} Minuten</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Voraussichtliche Fertigstellung</p>
+                                <p class="font-semibold">${data.completionTime}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Restschicht nach Fertigstellung</p>
+                                <p class="font-semibold text-green-600">${data.remainingShift}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Schicht-Auslastung</p>
+                                <div class="mt-1">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-600 h-2 rounded-full" style="width: ${data.shiftPercentage}%"></div>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mt-1">${data.shiftPercentage}% der Schicht</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EAN Flags & Besonderheiten -->
+                    <div class="bg-yellow-50 rounded-lg p-4">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800">EAN Flags & Besonderheiten</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${data.eanFlags.map(flag => `
+                                <span class="px-3 py-1 bg-yellow-200 text-yellow-800 rounded-full text-sm font-semibold">
+                                    ${flag}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Weitere Interaktionen -->
+                    <div class="bg-purple-50 rounded-lg p-4">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800">Erwartete Interaktionen</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Scanner-Nutzung: ${data.totalItems}x</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                </svg>
+                                <span>Etikettierung: ${data.skillLevel === 'Einfach' ? 'Standard' : 'Erweitert mit Sicherung'}</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                <span>Teamunterstützung: ${data.skillLevel === 'Komplex' ? 'Möglicherweise erforderlich' : 'Nicht erforderlich'}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+
+            modalContent.innerHTML = content;
+            modal.classList.remove('hidden');
+        }
+
+        function closeAssignmentModal() {
+            const modal = document.getElementById('assignmentModal');
+            modal.classList.add('hidden');
+        }
+
+        function confirmAssignment() {
+            alert(`Lieferschein #${currentDeliveryId} wurde erfolgreich zugewiesen!`);
+            closeAssignmentModal();
+        }
+
+        // MDE Content (existing code)
+        // Generate individual T-Shirt steps
+        const tshirtSteps = [];
+        for (let i = 1; i <= 20; i++) {
+            tshirtSteps.push({
+                type: 'tshirt',
+                step: i + 1,
+                totalSteps: 22,
+                itemNumber: i,
+                totalItems: 20,
+                title: `T-Shirt ${i}/20: Auszeichnen`,
+                instruction: `Scanne und verarbeite <span class="font-bold">T-Shirt ${i} von 20</span>`,
+                subtask: 'Nur auszeichnen',
+                icon: '🏷️',
+                button: 'Erledigt'
+            });
+        }
+
+        const taskSteps = [
+            {
+                type: 'start',
+                title: 'Neue Aufgabe zugewiesen!',
+                details: {
+                    'Lieferschein-Nr.': '4711',
+                    'Lieferant': 'Muster-GmbH',
+                    'Priorität': 'Mittel',
+                    'Standort': 'Rampe 3',
+                },
+                button: 'Aufgabe starten'
+            },
+            {
+                type: 'action',
+                step: 1,
+                totalSteps: 22,
+                title: 'Palette holen',
+                instruction: 'Hole die Palette mit dem Lieferschein #4711 von <span class="font-bold">Rampe 3</span>.',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500"><path d="M5 18H3c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2h3.2a1 1 0 0 1 .8.4L9 8h5a1 1 0 0 1 1 1v2"/><path d="M8 18h9c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-2.2a1 1 0 0 0-.8.4L13 8H8a1 1 0 0 0-1 1v7c0 1.1.9 2 2 2Z"/><path d="M2 12h20"/><path d="M12 12v6"/></svg>`,
+                button: 'Erledigt'
+            },
+            ...tshirtSteps,
+            {
+                type: 'finish',
+                title: 'Sehr gut!',
+                instruction: 'Alle Artikel des Lieferscheins #4711 wurden erfolgreich bearbeitet. Das System sucht nun nach der nächsten passenden Aufgabe für dich.',
+                icon: `🎉`,
+                button: 'Neue Aufgabe suchen'
+            }
+        ];
+
+        function renderStep(step) {
+            let content = '';
+            const data = taskSteps[step];
+
+            const header = `
+                <div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center">
+                    <p class="font-bold text-lg">Max Mustermann</p>
+                    <div class="text-right">
+                        <p class="text-sm font-medium text-gray-500">Schichtzeit übrig</p>
+                        <p class="font-bold text-green-600">3h 45min</p>
+                    </div>
+                </div>
+            `;
+            const footer = `
+                <div class="p-4 mt-auto">
+                    <button id="next-step-btn" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition-colors">${data.button}</button>
+                    ${data.type === 'action' ? '<button class="w-full text-center text-red-600 font-semibold mt-4">Problem melden</button>' : ''}
+                </div>
+            `;
+
+            if (data.type === 'start') {
+                content = `
+                    ${header}
+                    <div class="p-6 text-center flex-grow flex flex-col justify-center items-center">
+                        <div class="bg-blue-100 text-blue-600 rounded-full w-20 h-20 flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <h2 class="text-2xl font-bold mb-2">${data.title}</h2>
+                        <div class="text-left bg-gray-50 rounded-lg p-4 w-full mt-4">
+                            ${Object.entries(data.details).map(([key, value]) => `
+                                <div class="flex justify-between py-1">
+                                    <span class="text-gray-500">${key}:</span>
+                                    <span class="font-semibold">${value}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ${footer}
+                `;
+            }
+
+            if (data.type === 'action') {
+                content = `
+                    ${header}
+                    <div class="p-6 flex-grow">
+                        <p class="text-sm font-semibold text-gray-400">SCHRITT ${data.step} VON ${data.totalSteps}</p>
+                        <h2 class="text-2xl font-bold mb-4 mt-1">${data.title}</h2>
+                        <div class="flex items-center bg-gray-50 p-4 rounded-lg">
+                            <div class="mr-4">${data.icon}</div>
+                            <p class="text-lg">${data.instruction}</p>
+                        </div>
+
+                        ${data.subtasks ? `
+                            <div class="mt-6">
+                                <h3 class="font-bold mb-2">Arbeitsschritte:</h3>
+                                <ul class="space-y-2">
+                                    ${data.subtasks.map(task => `
+                                        <li class="flex items-center text-lg bg-white border border-gray-200 p-3 rounded-lg">
+                                            <span class="text-2xl mr-3">${task.icon}</span>
+                                            <span>${task.text}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${footer}
+                `;
+            }
+
+            if (data.type === 'tshirt') {
+                content = `
+                    ${header}
+                    <div class="p-6 flex-grow">
+                        <p class="text-sm font-semibold text-gray-400">SCHRITT ${data.step} VON ${data.totalSteps}</p>
+                        <h2 class="text-2xl font-bold mb-4 mt-1">${data.title}</h2>
+
+                        <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-4">
+                            <div class="flex items-center justify-center mb-4">
+                                <div class="bg-white rounded-full p-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
+                                        <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <p class="text-center text-lg mb-2">${data.instruction}</p>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-bold mb-3">Arbeitsschritt:</h3>
+                            <div class="bg-white border border-gray-200 p-4 rounded-lg mb-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="text-3xl mr-4">${data.icon}</span>
+                                        <span class="font-medium text-lg">${data.subtask}</span>
+                                    </div>
+                                </div>
+                                <button onclick="currentStep = (currentStep + 1) % taskSteps.length; renderStep(currentStep);" class="w-full mt-3 bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition-colors">
+                                    ✓ Fertig
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                            <p class="text-sm text-yellow-800">
+                                <strong>Fortschritt:</strong> ${data.itemNumber - 1} von ${data.totalItems} T-Shirts bearbeitet
+                            </p>
+                            <div class="w-full bg-yellow-200 rounded-full h-2 mt-2">
+                                <div class="bg-yellow-600 h-2 rounded-full transition-all duration-300" style="width: ${((data.itemNumber - 1)/data.totalItems)*100}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 mt-auto">
+                        <button class="w-full text-center text-red-600 font-semibold">Problem melden</button>
+                    </div>
+                `;
+            }
+
+            if (data.type === 'finish') {
+                content = `
+                    ${header}
+                    <div class="p-6 text-center flex-grow flex flex-col justify-center items-center">
+                        <span class="text-6xl mb-4">${data.icon}</span>
+                        <h2 class="text-3xl font-bold mb-2">${data.title}</h2>
+                        <p class="text-lg text-gray-600">${data.instruction}</p>
+                    </div>
+                    ${footer}
+                `;
+            }
+
+            mdeContent.innerHTML = content;
+            document.getElementById('next-step-btn').addEventListener('click', () => {
+                currentStep = (currentStep + 1) % taskSteps.length;
+                renderStep(currentStep);
+            });
+        }
+
+        // Initial render
+        renderStep(0);
+    </script>
+</body>
+</html>

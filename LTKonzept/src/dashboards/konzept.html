@@ -77,9 +77,23 @@
                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
                      <span>Mitarbeiter</span>
                  </a>
+                 <!-- Technische Skizze auskommentiert
                  <a href="#" id="nav-sketch" onclick="showTechnicalSketch()" class="nav-item flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
                      <span>Technische Skizze</span>
+                 </a>
+                 -->
+                 <a href="#" id="nav-arbeiter" onclick="showArbeiterUI()" class="nav-item flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                     </svg>
+                     <span>ArbeiterUI</span>
+                 </a>
+                 <a href="#" id="nav-arbeiter2" onclick="showArbeiterUI2()" class="nav-item flex items-center space-x-3 hover:bg-slate-700 py-2 px-4 rounded transition duration-200">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                     </svg>
+                     <span>ArbeiterUI 2</span>
                  </a>
             </nav>
         </aside>
@@ -644,7 +658,19 @@
         if (analyticsView) {
             analyticsView.classList.add('hidden');
         }
-        
+
+        // Hide arbeiter UI
+        const arbeiterView = document.getElementById('arbeiter-ui');
+        if (arbeiterView) {
+            arbeiterView.classList.add('hidden');
+        }
+
+        // Hide arbeiter UI 2
+        const arbeiterView2 = document.getElementById('arbeiter-ui-2');
+        if (arbeiterView2) {
+            arbeiterView2.classList.add('hidden');
+        }
+
         // Show employee management view
         const employeeView = document.getElementById('employee-management');
         if (employeeView) {
@@ -684,7 +710,19 @@
         if (sketchView) {
             sketchView.classList.add('hidden');
         }
-        
+
+        // Hide arbeiter UI
+        const arbeiterView = document.getElementById('arbeiter-ui');
+        if (arbeiterView) {
+            arbeiterView.classList.add('hidden');
+        }
+
+        // Hide arbeiter UI 2
+        const arbeiterView2 = document.getElementById('arbeiter-ui-2');
+        if (arbeiterView2) {
+            arbeiterView2.classList.add('hidden');
+        }
+
         // Show analytics dashboard
         const analyticsView = document.getElementById('analytics-dashboard');
         if (!analyticsView) {
@@ -724,7 +762,19 @@
         if (analyticsView) {
             analyticsView.classList.add('hidden');
         }
-        
+
+        // Hide arbeiter UI
+        const arbeiterView = document.getElementById('arbeiter-ui');
+        if (arbeiterView) {
+            arbeiterView.classList.add('hidden');
+        }
+
+        // Hide arbeiter UI 2
+        const arbeiterView2 = document.getElementById('arbeiter-ui-2');
+        if (arbeiterView2) {
+            arbeiterView2.classList.add('hidden');
+        }
+
         // Show case management view
         const caseView = document.getElementById('case-management');
         if (caseView) {
@@ -1381,7 +1431,7 @@
                             <span class="text-sm text-gray-500" id="employee-count">8 Mitarbeiter</span>
                         </h2>
                     </div>
-                    
+
                     <div class="p-6 overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
@@ -1401,8 +1451,9 @@
                     </div>
                 </div>
             </div>
+
         `;
-        
+
         // Insert after canvas
         const canvas = document.getElementById('dashboardCanvas');
         canvas.insertAdjacentHTML('afterend', employeeHTML);
@@ -1616,25 +1667,19 @@
         const employees = loadEmployeesFromStorage();
         const tbody = document.getElementById('case-employee-list');
         if (!tbody) return;
-        
+
         const isAutoAssigned = localStorage.getItem('autoAssignmentActive') === 'true';
-        
-        // Create employee case mapping
-        const employeeCases = {
-            'Frank Nagel': ['SF-98362', 'SF-98364', 'SF-98371', 'SF-98374'],
-            'David Fuchs': ['SF-98363', 'SF-98365', 'SF-98367', 'SF-98370', 'SF-98375', 'SF-98378'],
-            'Bernd Maier': ['SF-98366', 'SF-98373', 'SF-98376', 'SF-98377'],
-            'Hans Richter': ['SF-98368', 'SF-98369', 'SF-98379'],
-            'Anna Schmidt': ['SF-98372'],
-            'Carla Huber': [],
-            'Eva Klein': [],
-            'Gabi Lorenz': []
-        };
-        
+
         tbody.innerHTML = employees.map((emp, index) => {
-            const cases = isAutoAssigned ? (employeeCases[emp.name] || []) : [];
-            const workloadPercent = (emp.workload / emp.maxWorkload) * 100;
-            const statusColor = workloadPercent >= 90 ? 'yellow' : 'blue';
+            // If auto-assignment is off, workload should be 0
+            const workload = isAutoAssigned ? (emp.workload || 0) : 0;
+            const workloadPercent = isAutoAssigned ? (workload / emp.maxWorkload) * 100 : 0;
+            const availableMinutes = emp.maxWorkload - workload;
+
+            // Determine status based on available time
+            const isBusy = availableMinutes <= 20;
+            const statusColor = isBusy ? 'yellow' : (workloadPercent > 0 ? 'blue' : 'gray');
+
             return `
             <tr class="drop-zone"
                 data-employee-name="${emp.name}"
@@ -1653,17 +1698,16 @@
                 <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">${emp.abteilung || 'Allgemein'}</td>
                 <td class="px-4 py-2 whitespace-nowrap">
                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        workloadPercent < 90 ? 'bg-green-100 text-green-800' :
-                        workloadPercent >= 90 ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-gray-100 text-gray-800'
-                    }">${workloadPercent >= 90 ? 'Beschäftigt' : 'Verfügbar'}</span>
+                        isBusy ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-green-100 text-green-800'
+                    }">${isBusy ? 'Beschäftigt' : 'Verfügbar'}</span>
                 </td>
                 <td class="px-4 py-2 whitespace-nowrap">
                     <div class="flex items-center ${isAutoAssigned ? 'cursor-pointer hover:opacity-80' : ''}" ${isAutoAssigned ? `onclick="showEmployeeCasesModal('${emp.name}')"` : ''}>
                         <div class="flex-1 bg-gray-200 rounded-full h-2 mr-2 max-w-[100px]">
                             <div class="bg-${statusColor}-500 h-2 rounded-full employee-workload-bar" style="width: ${workloadPercent}%"></div>
                         </div>
-                        <span class="text-xs text-gray-600 employee-workload-text">${emp.workload}/${emp.maxWorkload} Min</span>
+                        <span class="text-xs text-gray-600 employee-workload-text">${workload}/${emp.maxWorkload} Min</span>
                     </div>
                 </td>
             </tr>
@@ -1693,27 +1737,24 @@
     };
     
     function showEmployeeCasesModal(employeeName) {
-        // Get current case assignments from the table (reflects drag and drop changes)
+        // Get current case assignments from localStorage
+        const assignments = JSON.parse(localStorage.getItem('caseAssignments') || '{}');
         const employeeCases = [];
-        const caseRows = document.querySelectorAll('#cases-table-body tr');
-        
-        // Collect cases assigned to this employee from the current table state
-        caseRows.forEach(row => {
-            const caseId = row.getAttribute('data-case-id');
-            const employeeNameElement = row.querySelector('.case-employee-name');
-            const currentEmployee = employeeNameElement ? employeeNameElement.textContent : '';
-            
-            if (currentEmployee === employeeName && caseDetails[caseId]) {
+
+        // Collect cases assigned to this employee
+        for (const [caseId, assignedEmployee] of Object.entries(assignments)) {
+            if (assignedEmployee === employeeName && caseDetails[caseId]) {
                 employeeCases.push({
                     id: caseId,
                     type: caseDetails[caseId].type,
                     amount: caseDetails[caseId].amount,
+                    items: caseDetails[caseId].items,
                     status: 'Zugewiesen',
                     priority: caseDetails[caseId].priority
                 });
             }
-        });
-        
+        }
+
         const cases = employeeCases;
         
         // Remove existing modal if any
@@ -1815,13 +1856,8 @@
         localStorage.setItem('autoAssignmentActive', newState);
 
         if (!newState) {
+            // Clear assignments when deactivating
             localStorage.removeItem('caseAssignments');
-            // Reset workloads when deactivating
-            const employees = loadEmployeesFromStorage();
-            employees.forEach(emp => {
-                emp.workload = 0;
-            });
-            localStorage.setItem('employees', JSON.stringify(employees));
         } else {
             // Perform automatic assignment based on minutes
             performMinuteBasedAssignment();
@@ -1874,6 +1910,12 @@
         ];
 
         const assignments = {};
+        const employeeWorkloads = {}; // Track workloads temporarily
+
+        // Initialize workloads
+        employees.forEach(emp => {
+            employeeWorkloads[emp.name] = 0;
+        });
 
         // Sort cases by priority (more items = higher priority)
         staticCases.sort((a, b) => b.items - a.items);
@@ -1886,20 +1928,24 @@
             const availableEmployee = employees
                 .filter(emp => {
                     const hasSkill = checkEmployeeSkillMatch(emp, lieferschein.type);
-                    const hasCapacity = (emp.workload + requiredTime) <= emp.maxWorkload;
+                    const currentWorkload = employeeWorkloads[emp.name] || 0;
+                    const hasCapacity = (currentWorkload + requiredTime) <= emp.maxWorkload;
                     return hasSkill && hasCapacity;
                 })
-                .sort((a, b) => a.workload - b.workload)[0]; // Choose employee with lowest current workload
+                .sort((a, b) => {
+                    const workloadA = employeeWorkloads[a.name] || 0;
+                    const workloadB = employeeWorkloads[b.name] || 0;
+                    return workloadA - workloadB;
+                })[0]; // Choose employee with lowest current workload
 
             if (availableEmployee) {
                 assignments[lieferschein.id] = availableEmployee.name;
-                availableEmployee.workload += requiredTime;
+                employeeWorkloads[availableEmployee.name] += requiredTime;
             }
         });
 
-        // Save assignments and updated workloads
+        // Save assignments only (don't save workloads to employees)
         localStorage.setItem('caseAssignments', JSON.stringify(assignments));
-        localStorage.setItem('employees', JSON.stringify(employees));
     }
 
     function checkEmployeeSkillMatch(employee, caseType) {
@@ -2177,35 +2223,89 @@
     }
     
     function updateWorkloadCounts() {
+        // Check if auto-assignment is active
+        const isAutoAssigned = localStorage.getItem('autoAssignmentActive') === 'true';
+
+        if (!isAutoAssigned) {
+            // If auto-assignment is off, reset all workloads to 0
+            const employees = loadEmployeesFromStorage();
+            const employeeRows = document.querySelectorAll('#case-employee-list tr');
+
+            employeeRows.forEach(row => {
+                const employeeName = row.querySelector('.employee-name')?.textContent;
+                if (employeeName) {
+                    const employee = employees.find(emp => emp.name === employeeName);
+                    const maxWorkload = employee?.maxWorkload || 180;
+
+                    const workloadBar = row.querySelector('.employee-workload-bar');
+                    const workloadText = row.querySelector('.employee-workload-text');
+
+                    if (workloadBar) {
+                        workloadBar.style.width = '0%';
+                        workloadBar.className = 'bg-gray-500 h-2 rounded-full employee-workload-bar';
+                    }
+                    if (workloadText) {
+                        workloadText.textContent = `0/${maxWorkload} Min`;
+                    }
+                }
+            });
+            return;
+        }
+
         // Get all cases from the table
         const caseRows = document.querySelectorAll('#cases-table-body tr');
-        const employeeCaseCounts = {};
-        
-        // Count cases per employee
+        const employeeWorkloads = {};
+
+        // Calculate total minutes per employee based on assigned cases
         caseRows.forEach(row => {
             const employeeName = row.querySelector('.case-employee-name')?.textContent;
-            if (employeeName && employeeName !== 'Nicht zugewiesen') {
-                employeeCaseCounts[employeeName] = (employeeCaseCounts[employeeName] || 0) + 1;
+            const minutesText = row.querySelectorAll('td')[4]?.textContent; // 5th column contains minutes
+
+            if (employeeName && employeeName !== 'Nicht zugewiesen' && minutesText) {
+                const minutes = parseInt(minutesText.replace(' Min', ''));
+                employeeWorkloads[employeeName] = (employeeWorkloads[employeeName] || 0) + minutes;
             }
         });
-        
+
+        // Load employees to get their max workload
+        const employees = loadEmployeesFromStorage();
+        const employeeMap = {};
+        employees.forEach(emp => {
+            employeeMap[emp.name] = emp;
+        });
+
         // Update employee workload displays
         const employeeRows = document.querySelectorAll('#case-employee-list tr');
         employeeRows.forEach(row => {
             const employeeName = row.querySelector('.employee-name')?.textContent;
             if (employeeName) {
-                const count = employeeCaseCounts[employeeName] || 0;
+                const workload = employeeWorkloads[employeeName] || 0;
+                const maxWorkload = employeeMap[employeeName]?.maxWorkload || 180;
+                const workloadPercent = (workload / maxWorkload) * 100;
+                const availableMinutes = maxWorkload - workload;
+
+                // Determine status based on available time
+                const isBusy = availableMinutes <= 20;
+
+                // Update status badge
+                const statusBadge = row.querySelector('td:nth-child(3) span');
+                if (statusBadge) {
+                    statusBadge.className = `px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        isBusy ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                    }`;
+                    statusBadge.textContent = isBusy ? 'Beschäftigt' : 'Verfügbar';
+                }
+
                 const workloadBar = row.querySelector('.employee-workload-bar');
                 const workloadText = row.querySelector('.employee-workload-text');
-                
+
                 if (workloadBar) {
-                    workloadBar.style.width = `${(count/8)*100}%`;
-                    workloadBar.className = count > 0 ? 
-                        'bg-blue-500 h-2 rounded-full employee-workload-bar' : 
-                        'bg-gray-500 h-2 rounded-full employee-workload-bar';
+                    workloadBar.style.width = `${Math.min(workloadPercent, 100)}%`;
+                    const statusColor = isBusy ? 'yellow' : (workloadPercent > 0 ? 'blue' : 'gray');
+                    workloadBar.className = `bg-${statusColor}-500 h-2 rounded-full employee-workload-bar`;
                 }
                 if (workloadText) {
-                    workloadText.textContent = `${count}/8`;
+                    workloadText.textContent = `${workload}/${maxWorkload} Min`;
                 }
             }
         });
@@ -2315,7 +2415,19 @@
         if (analyticsView) {
             analyticsView.classList.add('hidden');
         }
-        
+
+        // Hide arbeiter UI
+        const arbeiterView = document.getElementById('arbeiter-ui');
+        if (arbeiterView) {
+            arbeiterView.classList.add('hidden');
+        }
+
+        // Hide arbeiter UI 2
+        const arbeiterView2 = document.getElementById('arbeiter-ui-2');
+        if (arbeiterView2) {
+            arbeiterView2.classList.add('hidden');
+        }
+
         // Show technical sketch view
         let sketchView = document.getElementById('technical-sketch');
         if (!sketchView) {
@@ -2333,7 +2445,137 @@
         // Update sidebar navigation
         updateSidebarNavigation('nav-sketch');
     }
-    
+
+    function showArbeiterUI() {
+        // Hide all views
+        document.getElementById('dashboardCanvas').style.display = 'none';
+
+        const employeeView = document.getElementById('employee-management');
+        if (employeeView) {
+            employeeView.classList.add('hidden');
+        }
+
+        const caseView = document.getElementById('case-management');
+        if (caseView) {
+            caseView.classList.add('hidden');
+        }
+
+        const analyticsView = document.getElementById('analytics-dashboard');
+        if (analyticsView) {
+            analyticsView.classList.add('hidden');
+        }
+
+        const sketchView = document.getElementById('technical-sketch');
+        if (sketchView) {
+            sketchView.classList.add('hidden');
+        }
+
+        // Hide ArbeiterUI 2 if exists
+        const arbeiterView2 = document.getElementById('arbeiter-ui-2');
+        if (arbeiterView2) {
+            arbeiterView2.classList.add('hidden');
+        }
+
+        // Show ArbeiterUI view
+        let arbeiterView = document.getElementById('arbeiter-ui');
+        if (!arbeiterView) {
+            createArbeiterUIView();
+            arbeiterView = document.getElementById('arbeiter-ui');
+        }
+        arbeiterView.classList.remove('hidden');
+
+        // Update page title
+        const pageTitle = document.querySelector('h1');
+        if (pageTitle) {
+            pageTitle.textContent = 'ArbeiterUI - Wareneingangs-Dispatcher';
+        }
+
+        // Update sidebar navigation
+        updateSidebarNavigation('nav-arbeiter');
+    }
+
+    function showArbeiterUI2() {
+        // Hide all views
+        document.getElementById('dashboardCanvas').style.display = 'none';
+
+        const employeeView = document.getElementById('employee-management');
+        if (employeeView) {
+            employeeView.classList.add('hidden');
+        }
+
+        const caseView = document.getElementById('case-management');
+        if (caseView) {
+            caseView.classList.add('hidden');
+        }
+
+        const analyticsView = document.getElementById('analytics-dashboard');
+        if (analyticsView) {
+            analyticsView.classList.add('hidden');
+        }
+
+        const sketchView = document.getElementById('technical-sketch');
+        if (sketchView) {
+            sketchView.classList.add('hidden');
+        }
+
+        // Hide ArbeiterUI 1
+        const arbeiterView = document.getElementById('arbeiter-ui');
+        if (arbeiterView) {
+            arbeiterView.classList.add('hidden');
+        }
+
+        // Show ArbeiterUI 2 view
+        let arbeiterView2 = document.getElementById('arbeiter-ui-2');
+        if (!arbeiterView2) {
+            createArbeiterUI2View();
+            arbeiterView2 = document.getElementById('arbeiter-ui-2');
+        }
+        arbeiterView2.classList.remove('hidden');
+
+        // Update page title
+        const pageTitle = document.querySelector('h1');
+        if (pageTitle) {
+            pageTitle.textContent = 'ArbeiterUI 2 - Wareneingangs-Dispatcher';
+        }
+
+        // Update sidebar navigation
+        updateSidebarNavigation('nav-arbeiter2');
+    }
+
+    function createArbeiterUIView() {
+        const arbeiterHTML = `
+            <div id="arbeiter-ui" class="w-full hidden">
+                <div class="bg-white rounded-lg shadow-lg p-4">
+                    <iframe src="./IpadUI.html"
+                            class="w-full border-0 rounded-lg"
+                            style="height: calc(100vh - 150px); min-height: 800px;">
+                    </iframe>
+                </div>
+            </div>
+        `;
+
+        // Insert after canvas
+        const canvas = document.getElementById('dashboardCanvas');
+        canvas.insertAdjacentHTML('afterend', arbeiterHTML);
+    }
+
+    function createArbeiterUI2View() {
+        const arbeiterHTML = `
+            <div id="arbeiter-ui-2" class="w-full hidden">
+                <div class="bg-white rounded-lg shadow-lg p-4">
+                    <iframe src="./IpadUI2.html"
+                            class="w-full border-0 rounded-lg"
+                            style="height: calc(100vh - 150px); min-height: 800px;">
+                    </iframe>
+                </div>
+            </div>
+        `;
+
+        // Insert after canvas
+        const canvas = document.getElementById('dashboardCanvas');
+        canvas.insertAdjacentHTML('afterend', arbeiterHTML);
+    }
+
     function startCaseSimulation() {
         // Clear previous interval if exists
         if (caseSimulationInterval) {
@@ -2491,9 +2733,9 @@
                                 <div class="flex gap-2 border-t pt-2">
                                     <span class="text-xs text-gray-500 self-center">Position:</span>
                                     <button onclick="filterEmployeesByPosition('all')" id="position-filter-all" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">Alle</button>
-                                    <button onclick="filterEmployeesByPosition('junior')" id="position-filter-junior" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Junior</button>
-                                    <button onclick="filterEmployeesByPosition('lagerarbeiter')" id="position-filter-lagerarbeiter" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Lagerarbeiter</button>
-                                    <button onclick="filterEmployeesByPosition('senior')" id="position-filter-senior" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Senior</button>
+                                    <button onclick="filterEmployeesByPosition('neuling')" id="position-filter-neuling" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Neuling</button>
+                                    <button onclick="filterEmployeesByPosition('normal')" id="position-filter-normal" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Normal</button>
+                                    <button onclick="filterEmployeesByPosition('experte')" id="position-filter-experte" class="position-main-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Experte</button>
                                 </div>
                             </div>
                         </div>
@@ -2515,14 +2757,25 @@
                     <!-- Cases Chart (Now on the right) -->
                     <div class="bg-white rounded-lg shadow-lg">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <div class="flex items-center justify-between">
-                                <h2 class="text-xl font-semibold text-gray-800">Lieferscheinbearbeitung im Zeitverlauf</h2>
-                                <div class="flex gap-2">
-                                    <button onclick="changeChartFilter('day')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">Tag</button>
-                                    <button onclick="changeChartFilter('week')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Woche</button>
-                                    <button onclick="changeChartFilter('month')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Monat</button>
-                                    <button onclick="changeChartFilter('year')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Jahr</button>
-                                    <button onclick="changeChartFilter('5years')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">5 Jahre</button>
+                            <div class="flex flex-col space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-xl font-semibold text-gray-800" id="chart-title">Diligence-Scores im Vergleich</h2>
+                                    <div class="flex gap-2">
+                                        <button onclick="changeChartFilter('day')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">Tag</button>
+                                        <button onclick="changeChartFilter('week')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Woche</button>
+                                        <button onclick="changeChartFilter('month')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Monat</button>
+                                        <button onclick="changeChartFilter('year')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Jahr</button>
+                                        <button onclick="changeChartFilter('5years')" class="chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">5 Jahre</button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm text-gray-600">Metrik:</span>
+                                    <div class="flex gap-2">
+                                        <button onclick="changeMetricFilter('ds')" class="metric-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800" title="Diligence Score">DS</button>
+                                        <button onclick="changeMetricFilter('lfz')" class="metric-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600" title="Lieferscheinzahl">LFZ</button>
+                                        <button onclick="changeMetricFilter('lfz-ss')" class="metric-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600" title="Lieferscheinzahl nach Skill-Level">LFZ/S-S</button>
+                                        <button onclick="changeMetricFilter('lfz-std')" class="metric-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600" title="Lieferscheine pro Stunde">LFZ/Std</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2556,9 +2809,9 @@
         const seniorCount = employees.filter(e => e.position === 'senior').length;
 
         const positions = [
-            { title: 'Junior', count: juniorCount, avgTime: '45 Min', casesWeek: 28, color: 'blue' },
-            { title: 'Lagerarbeiter', count: sachbearbeiterCount, avgTime: '35 Min', casesWeek: 42, color: 'green' },
-            { title: 'Senior', count: seniorCount, avgTime: '25 Min', casesWeek: 56, color: 'purple' }
+            { title: 'Neuling', count: juniorCount, avgTime: '45 Min', casesWeek: 28, color: 'blue' },
+            { title: 'Normal', count: sachbearbeiterCount, avgTime: '35 Min', casesWeek: 42, color: 'green' },
+            { title: 'Experte', count: seniorCount, avgTime: '25 Min', casesWeek: 56, color: 'purple' }
         ];
 
         const container = document.getElementById('position-stats');
@@ -2598,9 +2851,8 @@
         if (!container) return;
 
         const positionLabels = {
-            'junior': 'Junior',
-            'lagerarbeiter': 'Lagerarbeiter',
-            'senior': 'Senior',
+            'neuling': 'Neuling',
+            'normal': 'Normal',
             'experte': 'Experte'
         };
 
@@ -2695,53 +2947,148 @@
         drawBarChart(ctx, 'day');
     }
 
-    function drawBarChart(ctx, filter) {
+    function drawBarChart(ctx, filter, metric = 'ds') {
         const canvas = ctx.canvas;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Sample data for different filters
-        const data = {
-            'day': [12, 15, 18, 14, 20, 16, 19, 22],
-            'week': [85, 92, 78, 95, 88, 91, 83],
-            'month': [320, 380, 350, 410, 390],
-            'year': [3800, 4200, 4500, 4100],
-            '5years': [15000, 16500, 17200, 18100, 19500]
-        };
-        
-        const labels = {
-            'day': ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
+
+        // Different data based on metric type
+        let data, labels;
+
+        if (metric === 'ds') {
+            // Diligence Score data (as decimal values)
+            data = {
+                'day': [0.85, 0.92, 0.88, 0.94, 0.90, 0.87, 0.93, 0.95],
+                'week': [0.88, 0.91, 0.86, 0.93, 0.89, 0.92, 0.87],
+                'month': [0.89, 0.91, 0.88, 0.92, 0.90],
+                'year': [0.88, 0.90, 0.91, 0.89],
+                '5years': [0.85, 0.87, 0.88, 0.90, 0.92]
+            };
+        } else if (metric === 'lfz') {
+            // Lieferscheinzahl data
+            data = {
+                'day': [12, 15, 18, 14, 20, 16, 19, 22],
+                'week': [85, 92, 78, 95, 88, 91, 83],
+                'month': [320, 380, 350, 410, 390],
+                'year': [3800, 4200, 4500, 4100],
+                '5years': [15000, 16500, 17200, 18100, 19500]
+            };
+        } else if (metric === 'lfz-ss') {
+            // Lieferscheinzahl nach Skill-Level (showing stacked data)
+            data = {
+                'day': [[4, 5, 3], [5, 6, 4], [6, 7, 5], [5, 5, 4], [7, 8, 5], [6, 6, 4], [7, 7, 5], [8, 8, 6]],
+                'week': [[28, 30, 27], [30, 32, 30], [26, 28, 24], [32, 33, 30], [29, 30, 29], [30, 31, 30], [28, 28, 27]],
+                'month': [[105, 110, 105], [125, 130, 125], [115, 120, 115], [135, 140, 135], [128, 132, 130]],
+                'year': [[1250, 1300, 1250], [1380, 1420, 1400], [1480, 1520, 1500], [1350, 1380, 1370]],
+                '5years': [[4900, 5000, 5100], [5400, 5500, 5600], [5600, 5700, 5900], [5900, 6100, 6100], [6400, 6500, 6600]]
+            };
+        } else if (metric === 'lfz-std') {
+            // Lieferscheine pro Stunde
+            data = {
+                'day': [1.5, 1.9, 2.3, 1.8, 2.5, 2.0, 2.4, 2.8],
+                'week': [2.1, 2.3, 2.0, 2.4, 2.2, 2.3, 2.1],
+                'month': [2.2, 2.4, 2.3, 2.5, 2.4],
+                'year': [2.3, 2.4, 2.5, 2.4],
+                '5years': [2.1, 2.2, 2.3, 2.4, 2.5]
+            };
+        }
+
+        labels = {
+            'day': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
             'week': ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
             'month': ['Woche 1', 'Woche 2', 'Woche 3', 'Woche 4', 'Woche 5'],
             'year': ['Q1', 'Q2', 'Q3', 'Q4'],
             '5years': ['2019', '2020', '2021', '2022', '2023']
         };
-        
+
         const values = data[filter] || data['day'];
         const barLabels = labels[filter] || labels['day'];
-        const maxValue = Math.max(...values);
-        
-        const barWidth = (canvas.width - 60) / values.length - 10;
-        const chartHeight = canvas.height - 60;
-        
-        // Draw bars
-        values.forEach((value, index) => {
-            const barHeight = (value / maxValue) * chartHeight;
-            const x = 40 + index * (barWidth + 10);
-            const y = canvas.height - 40 - barHeight;
-            
-            // Bar
-            ctx.fillStyle = '#3B82F6';
-            ctx.fillRect(x, y, barWidth, barHeight);
-            
-            // Value label
-            ctx.fillStyle = '#1F2937';
-            ctx.font = '12px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(value, x + barWidth/2, y - 5);
-            
-            // X-axis label
-            ctx.fillText(barLabels[index], x + barWidth/2, canvas.height - 20);
-        });
+
+        // Handle stacked bars for LFZ/S-S
+        if (metric === 'lfz-ss') {
+            const maxValue = Math.max(...values.map(v => v.reduce((a, b) => a + b, 0)));
+            const barWidth = (canvas.width - 60) / values.length - 10;
+            const chartHeight = canvas.height - 60;
+            const colors = ['#10B981', '#3B82F6', '#8B5CF6']; // Einfach, Mittel, Komplex
+            const skillLabels = ['Einfach', 'Mittel', 'Komplex'];
+
+            // Draw stacked bars
+            values.forEach((stackValues, index) => {
+                const x = 40 + index * (barWidth + 10);
+                let currentY = canvas.height - 40;
+                const total = stackValues.reduce((a, b) => a + b, 0);
+
+                stackValues.forEach((value, stackIndex) => {
+                    const barHeight = (value / maxValue) * chartHeight;
+                    const y = currentY - barHeight;
+
+                    // Bar segment
+                    ctx.fillStyle = colors[stackIndex];
+                    ctx.fillRect(x, y, barWidth, barHeight);
+
+                    // Value in segment if large enough
+                    if (barHeight > 15) {
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.font = '10px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(value, x + barWidth/2, y + barHeight/2 + 3);
+                    }
+
+                    currentY = y;
+                });
+
+                // Total value label
+                ctx.fillStyle = '#1F2937';
+                ctx.font = '12px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(total, x + barWidth/2, currentY - 5);
+
+                // X-axis label
+                ctx.fillText(barLabels[index], x + barWidth/2, canvas.height - 20);
+            });
+
+            // Draw legend horizontally at top center
+            ctx.font = '11px sans-serif';
+            const legendWidth = skillLabels.length * 90;
+            const startX = (canvas.width - legendWidth) / 2;
+
+            skillLabels.forEach((label, i) => {
+                const legendX = startX + i * 90;
+                const legendY = 15;
+                // Draw color box more to the left
+                ctx.fillStyle = colors[i];
+                ctx.fillRect(legendX - 15, legendY, 12, 12);
+                // Draw text label
+                ctx.fillStyle = '#1F2937';
+                ctx.textAlign = 'left';
+                ctx.fillText(label, legendX + 2, legendY + 9);
+            });
+        } else {
+            // Regular bars for other metrics
+            const maxValue = Math.max(...values);
+            const barWidth = (canvas.width - 60) / values.length - 10;
+            const chartHeight = canvas.height - 60;
+
+            values.forEach((value, index) => {
+                const barHeight = (value / maxValue) * chartHeight;
+                const x = 40 + index * (barWidth + 10);
+                const y = canvas.height - 40 - barHeight;
+
+                // Bar
+                ctx.fillStyle = metric === 'ds' ? '#10B981' : '#3B82F6';
+                ctx.fillRect(x, y, barWidth, barHeight);
+
+                // Value label with appropriate formatting
+                ctx.fillStyle = '#1F2937';
+                ctx.font = '12px sans-serif';
+                ctx.textAlign = 'center';
+                const displayValue = metric === 'lfz-std' ? value.toFixed(1) :
+                                   metric === 'ds' ? value.toFixed(2) : value;
+                ctx.fillText(displayValue, x + barWidth/2, y - 5);
+
+                // X-axis label
+                ctx.fillText(barLabels[index], x + barWidth/2, canvas.height - 20);
+            });
+        }
         
         // Y-axis
         ctx.strokeStyle = '#E5E7EB';
@@ -2758,19 +3105,52 @@
         ctx.stroke();
     }
 
+    let currentMetric = 'ds'; // Default metric
+    let currentTimeFilter = 'day'; // Default time filter
+
     function changeChartFilter(filter) {
+        currentTimeFilter = filter;
         // Update button styles
         const buttons = document.querySelectorAll('.chart-filter-btn');
         buttons.forEach(btn => {
             btn.className = 'chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600';
         });
         event.target.className = 'chart-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800';
-        
-        // Redraw chart
+
+        // Redraw chart with current metric and time filter
+        updateChart();
+    }
+
+    function changeMetricFilter(metric) {
+        currentMetric = metric;
+        // Update button styles
+        const buttons = document.querySelectorAll('.metric-filter-btn');
+        buttons.forEach(btn => {
+            btn.className = 'metric-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600';
+        });
+        event.target.className = 'metric-filter-btn px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800';
+
+        // Update chart title based on selected metric
+        const chartTitle = document.getElementById('chart-title');
+        if (chartTitle) {
+            const titles = {
+                'ds': 'Diligence-Scores im Vergleich',
+                'lfz': 'Lieferscheinzahl',
+                'lfz-ss': 'Lieferscheinzahl nach Skill-Level',
+                'lfz-std': 'Lieferscheine pro Stunde'
+            };
+            chartTitle.textContent = titles[metric] || 'Diligence-Scores im Vergleich';
+        }
+
+        // Redraw chart with new metric
+        updateChart();
+    }
+
+    function updateChart() {
         const canvas = document.getElementById('casesChart');
         if (canvas) {
             const ctx = canvas.getContext('2d');
-            drawBarChart(ctx, filter);
+            drawBarChart(ctx, currentTimeFilter, currentMetric);
         }
     }
 
@@ -2935,16 +3315,12 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Positionen</label>
                                 <div class="flex flex-wrap gap-2">
                                     <label class="inline-flex items-center">
-                                        <input type="checkbox" class="comparison-filter" data-type="position" value="junior" checked class="rounded border-gray-300 text-indigo-600">
-                                        <span class="ml-2 text-sm">Junior</span>
+                                        <input type="checkbox" class="comparison-filter" data-type="position" value="neuling" checked class="rounded border-gray-300 text-indigo-600">
+                                        <span class="ml-2 text-sm">Neuling</span>
                                     </label>
                                     <label class="inline-flex items-center">
-                                        <input type="checkbox" class="comparison-filter" data-type="position" value="sachbearbeiter" checked class="rounded border-gray-300 text-indigo-600">
-                                        <span class="ml-2 text-sm">Lagerarbeiter</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" class="comparison-filter" data-type="position" value="senior" checked class="rounded border-gray-300 text-indigo-600">
-                                        <span class="ml-2 text-sm">Senior</span>
+                                        <input type="checkbox" class="comparison-filter" data-type="position" value="normal" checked class="rounded border-gray-300 text-indigo-600">
+                                        <span class="ml-2 text-sm">Normal</span>
                                     </label>
                                     <label class="inline-flex items-center">
                                         <input type="checkbox" class="comparison-filter" data-type="position" value="experte" checked class="rounded border-gray-300 text-indigo-600">
