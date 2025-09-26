@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatisierungs-Modul UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .sidebar {
+            transition: width 0.3s ease;
+        }
+        .sidebar-icon {
+            flex-shrink: 0;
+        }
+        .sidebar-text {
+            white-space: nowrap;
+            overflow: hidden;
+            transition: opacity 0.3s ease;
+        }
+        .main-content {
+            transition: margin-left 0.3s ease;
+        }
+        .node {
+            cursor: grab;
+            user-select: none;
+            position: absolute;
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .node:active {
+            cursor: grabbing;
+        }
+        .connector-panel {
+            background-color: #f8fafc;
+            border: 1px dashed #cbd5e1;
+        }
+        .connector-panel h3 {
+            color: #475569;
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="sidebar bg-slate-800 text-white w-64 space-y-6 py-7 px-2 flex flex-col justify-between">
+        <div>
+            <div class="text-white text-2xl font-bold px-4 flex items-center space-x-2">
+                <div class="bg-blue-500 p-2 rounded-lg">
+                    <i data-lucide="bot" class="w-6 h-6"></i>
+                </div>
+                <span class="sidebar-text">AutomateOS</span>
+            </div>
+            <nav class="mt-10">
+                <a href="#dashboard" class="nav-item flex items-center py-2.5 px-4 my-1 rounded transition duration-200 bg-slate-700 text-blue-400 border-l-4 border-blue-400">
+                    <i data-lucide="layout-dashboard" class="sidebar-icon"></i>
+                    <span class="sidebar-text ml-3">Dashboard</span>
+                </a>
+                <a href="#workflows" class="nav-item flex items-center py-2.5 px-4 my-1 rounded transition duration-200 hover:bg-slate-700">
+                    <i data-lucide="git-merge" class="sidebar-icon"></i>
+                    <span class="sidebar-text ml-3">Workflows</span>
+                </a>
+                <a href="#analytics" class="nav-item flex items-center py-2.5 px-4 my-1 rounded transition duration-200 hover:bg-slate-700">
+                    <i data-lucide="bar-chart-3" class="sidebar-icon"></i>
+                    <span class="sidebar-text ml-3">Analytics</span>
+                </a>
+                <a href="#templates" class="nav-item flex items-center py-2.5 px-4 my-1 rounded transition duration-200 hover:bg-slate-700">
+                    <i data-lucide="layout-grid" class="sidebar-icon"></i>
+                    <span class="sidebar-text ml-3">Vorlagen</span>
+                </a>
+                <a href="#integrations" class="nav-item flex items-center py-2.5 px-4 my-1 rounded transition duration-200 hover:bg-slate-700">
+                    <i data-lucide="plug-zap" class="sidebar-icon"></i>
+                    <span class="sidebar-text ml-3">Integrationen</span>
+                </a>
+            </nav>
+        </div>
+
+        <div>
+             <div class="px-4 py-3 border-t border-slate-700">
+                <div class="flex items-center">
+                    <img src="https://placehold.co/40x40/E2E8F0/4A5568?text=AV" alt="Avatar" class="h-10 w-10 rounded-full object-cover">
+                    <div class="sidebar-text ml-3">
+                        <p class="text-sm font-semibold">Anna Weber</p>
+                        <p class="text-xs text-slate-400">Administrator</p>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="flex items-center py-2.5 px-4 mt-2 rounded transition duration-200 hover:bg-slate-700">
+                <i data-lucide="settings" class="sidebar-icon"></i>
+                <span class="sidebar-text ml-3">Einstellungen</span>
+            </a>
+            <a href="#" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-slate-700">
+                <i data-lucide="log-out" class="sidebar-icon"></i>
+                <span class="sidebar-text ml-3">Abmelden</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="flex justify-between items-center p-4 bg-white border-b">
+            <h1 id="page-title" class="text-2xl font-bold text-slate-800">Dashboard</h1>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
+                    <input type="text" placeholder="Workflows durchsuchen..." class="pl-10 pr-4 py-2 w-64 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <button class="p-2 rounded-full hover:bg-slate-100">
+                    <i data-lucide="bell" class="text-slate-600"></i>
+                </button>
+                 <button class="bg-blue-600 text-white flex items-center font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                    <i data-lucide="plus" class="mr-2 w-5 h-5"></i> Neuer Workflow
+                </button>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-f0f2f5 p-6">
+            
+            <!-- Dashboard View -->
+            <div id="dashboard" class="page-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white p-5 rounded-lg shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-slate-500 font-medium">Aktive Workflows</h3>
+                                <p class="text-3xl font-bold text-slate-800">28</p>
+                            </div>
+                            <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                                <i data-lucide="git-merge"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow">
+                         <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-slate-500 font-medium">Aufgaben (Monat)</h3>
+                                <p class="text-3xl font-bold text-slate-800">14.821</p>
+                            </div>
+                            <div class="p-2 bg-green-100 text-green-600 rounded-lg">
+                                <i data-lucide="check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow">
+                         <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-slate-500 font-medium">Erstellte Rechnungen</h3>
+                                <p class="text-3xl font-bold text-slate-800">1.204</p>
+                            </div>
+                             <div class="p-2 bg-yellow-100 text-yellow-600 rounded-lg">
+                                <i data-lucide="file-text"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow">
+                         <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-slate-500 font-medium">Fehlerrate</h3>
+                                <p class="text-3xl font-bold text-slate-800">0.2%</p>
+                            </div>
+                            <div class="p-2 bg-red-100 text-red-600 rounded-lg">
+                                <i data-lucide="alert-triangle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Workflow Performance -->
+                    <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-lg text-slate-800 mb-4">Workflow Performance (Letzte 30 Tage)</h3>
+                        <!-- Placeholder for a chart -->
+                        <div class="h-80 bg-slate-50 rounded-lg flex items-center justify-center">
+                            <i data-lucide="bar-chart-2" class="w-16 h-16 text-slate-300"></i>
+                             <p class="text-slate-400 ml-4">Chart-Daten werden geladen...</p>
+                        </div>
+                    </div>
+                    <!-- Recent Activity -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                         <h3 class="font-bold text-lg text-slate-800 mb-4">Letzte Aktivitäten</h3>
+                         <div class="space-y-4 h-80 overflow-y-auto no-scrollbar">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">Rechnung #2024-1832 erstellt</p>
+                                    <p class="text-xs text-slate-500">Workflow "Vertriebsabschluss" für Kunde AG</p>
+                                    <p class="text-xs text-slate-400">vor 2 Minuten</p>
+                                </div>
+                            </div>
+                             <div class="flex items-start">
+                                <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                    <i data-lucide="mail" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">Follow-Up E-Mail gesendet</p>
+                                    <p class="text-xs text-slate-500">Workflow "Lead Nurturing" für Lead 'max@beispiel.de'</p>
+                                    <p class="text-xs text-slate-400">vor 15 Minuten</p>
+                                </div>
+                            </div>
+                             <div class="flex items-start">
+                                <div class="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                    <i data-lucide="phone-off" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">Anruf-Routing fehlgeschlagen</p>
+                                    <p class="text-xs text-slate-500">Kein Mitarbeiter verfügbar für "Callback-Anfrage"</p>
+                                    <p class="text-xs text-slate-400">vor 3 Stunden</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                    <i data-lucide="user-plus" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">Neuer Lead zugewiesen</p>
+                                    <p class="text-xs text-slate-500">Workflow "Webseiten-Lead" an M. Mustermann</p>
+                                    <p class="text-xs text-slate-400">vor 5 Stunden</p>
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflows View -->
+            <div id="workflows" class="page-content hidden h-full">
+                <div class="flex h-full gap-4">
+                    <!-- Sidebar with nodes -->
+                    <div class="w-72 bg-white rounded-lg shadow p-4 flex-shrink-0">
+                        <h3 class="font-bold text-slate-800 mb-4">Bausteine</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-500 mb-2">Auslöser (Trigger)</h4>
+                                <div class="space-y-2">
+                                    <div class="bg-amber-100 border border-amber-300 p-3 rounded-lg flex items-center space-x-3 draggable-node">
+                                        <i data-lucide="user-plus" class="text-amber-700"></i>
+                                        <span class="font-medium text-sm text-amber-800">Neuer Lead im CRM</span>
+                                    </div>
+                                    <div class="bg-amber-100 border border-amber-300 p-3 rounded-lg flex items-center space-x-3 draggable-node">
+                                        <i data-lucide="edit" class="text-amber-700"></i>
+                                        <span class="font-medium text-sm text-amber-800">Status-Änderung</span>
+                                    </div>
+                                </div>
+                            </div>
+                             <div>
+                                <h4 class="text-sm font-semibold text-slate-500 mb-2">Aktionen</h4>
+                                <div class="space-y-2">
+                                     <div class="bg-blue-100 border border-blue-300 p-3 rounded-lg flex items-center space-x-3 draggable-node">
+                                        <i data-lucide="mail" class="text-blue-700"></i>
+                                        <span class="font-medium text-sm text-blue-800">E-Mail senden</span>
+                                    </div>
+                                    <div class="bg-blue-100 border border-blue-300 p-3 rounded-lg flex items-center space-x-3 draggable-node">
+                                        <i data-lucide="file-text" class="text-blue-700"></i>
+                                        <span class="font-medium text-sm text-blue-800">Rechnung erstellen</span>
+                                    </div>
+                                    <div class="bg-blue-100 border border-blue-300 p-3 rounded-lg flex items-center space-x-3 draggable-node">
+                                        <i data-lucide="phone-call" class="text-blue-700"></i>
+                                        <span class="font-medium text-sm text-blue-800">Anruf zuweisen</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-500 mb-2">Bedingungen</h4>
+                                <div class="space-y-2">
+                                     <div class="bg-violet-100 border border-violet-300 p-3 rounded-lg flex items-center space-x-3 draggable-node">
+                                        <i data-lucide="split" class="text-violet-700"></i>
+                                        <span class="font-medium text-sm text-violet-800">Wenn / Sonst</span>
+                                    </div>
+                                    <div class="bg-violet-100 border border-violet-300 p-3 rounded-lg flex items-center space-x-3 draggable-node">
+                                        <i data-lucide="timer" class="text-violet-700"></i>
+                                        <span class="font-medium text-sm text-violet-800">Verzögerung</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Canvas -->
+                    <div class="flex-1 bg-white rounded-lg shadow p-4 relative overflow-hidden" id="canvas">
+                        <div class="absolute inset-0 bg-repeat" style="background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2720%27 height=%2720%27%3E%3Cpath d=%27M.5.5h1v1h-1z%27 fill=%27%23e2e8f0%27/%3E%3C/svg%3E');"></div>
+                        <svg class="absolute inset-0 w-full h-full" id="connector-svg">
+                             <!-- Example connector line -->
+                             <line x1="260" y1="110" x2="390" y2="180" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+                             <line x1="260" y1="110" x2="390" y2="280" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+                             <line x1="560" y1="180" x2="690" y2="180" stroke="#94a3b8" stroke-width="2"/>
+                        </svg>
+
+                        <!-- Example Nodes -->
+                        <div class="node bg-white rounded-lg p-4 w-64" style="left: 20px; top: 50px;">
+                            <div class="flex items-center space-x-3 border-b pb-3 mb-3 border-amber-200">
+                                <i data-lucide="user-plus" class="text-amber-700"></i>
+                                <span class="font-bold text-slate-800">Neuer Lead (Trigger)</span>
+                            </div>
+                            <p class="text-sm text-slate-600">Startet, wenn ein neuer Lead im CRM System erstellt wird.</p>
+                        </div>
+
+                        <div class="node bg-white rounded-lg p-4 w-64" style="left: 350px; top: 100px;">
+                            <div class="flex items-center space-x-3 border-b pb-3 mb-3 border-violet-200">
+                                <i data-lucide="split" class="text-violet-700"></i>
+                                <span class="font-bold text-slate-800">Bedingung: Wert > 5000€</span>
+                            </div>
+                            <div class="space-y-2 text-sm text-slate-600">
+                                <div class="flex justify-between items-center"><span>Pfad A (Ja)</span><i data-lucide="arrow-right" class="w-4 h-4 text-green-500"></i></div>
+                                <div class="flex justify-between items-center"><span>Pfad B (Nein)</span><i data-lucide="arrow-right" class="w-4 h-4 text-red-500"></i></div>
+                            </div>
+                        </div>
+
+                         <div class="node bg-white rounded-lg p-4 w-64" style="left: 650px; top: 50px;">
+                             <div class="flex items-center space-x-3 border-b pb-3 mb-3 border-blue-200">
+                                <i data-lucide="mail" class="text-blue-700"></i>
+                                <span class="font-bold text-slate-800">Sende E-Mail</span>
+                            </div>
+                            <p class="text-sm text-slate-600">Sendet "Großkunde Willkommen" Vorlage.</p>
+                        </div>
+                        
+                         <div class="node bg-white rounded-lg p-4 w-64" style="left: 350px; top: 250px;">
+                            <div class="flex items-center space-x-3 border-b pb-3 mb-3 border-blue-200">
+                                <i data-lucide="mail" class="text-blue-700"></i>
+                                <span class="font-bold text-slate-800">Sende E-Mail</span>
+                            </div>
+                            <p class="text-sm text-slate-600">Sendet "Standard Willkommen" Vorlage.</p>
+                        </div>
+                        
+                        <div class="connector-panel rounded-lg p-6 w-80 h-40 flex items-center justify-center" style="position: absolute; left: 650px; top: 200px;">
+                            <h3 class="font-semibold text-center">Nächste Aktion hierhin ziehen</h3>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics View -->
+            <div id="analytics" class="page-content hidden">
+                 <!-- Content for analytics -->
+                 <div class="text-center p-10 bg-white rounded-lg shadow">
+                    <i data-lucide="construction" class="w-16 h-16 text-slate-400 mx-auto mb-4"></i>
+                    <h2 class="text-xl font-bold text-slate-700">Analytics in Entwicklung</h2>
+                    <p class="text-slate-500">Dieser Bereich wird bald detaillierte Auswertungen Ihrer Workflows anzeigen.</p>
+                 </div>
+            </div>
+
+            <!-- Templates View -->
+            <div id="templates" class="page-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg shadow overflow-hidden group">
+                        <div class="p-6">
+                             <div class="flex items-start justify-between">
+                                <div class="p-3 bg-blue-100 text-blue-600 rounded-lg">
+                                    <i data-lucide="user-check"></i>
+                                </div>
+                                <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-2 py-1 rounded-full">Vertrieb</span>
+                             </div>
+                             <h3 class="font-bold text-lg text-slate-800 mt-4">Lead Nurturing</h3>
+                             <p class="text-sm text-slate-500 mt-1 h-10">Automatisches Senden von Follow-Up E-Mails, um Leads zu qualifizieren.</p>
+                        </div>
+                        <div class="bg-slate-50 px-6 py-3">
+                             <button class="font-semibold text-blue-600 hover:text-blue-800 text-sm">Vorlage verwenden &rarr;</button>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow overflow-hidden group">
+                        <div class="p-6">
+                             <div class="flex items-start justify-between">
+                                <div class="p-3 bg-green-100 text-green-600 rounded-lg">
+                                    <i data-lucide="file-text"></i>
+                                </div>
+                                <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-2 py-1 rounded-full">Finanzen</span>
+                             </div>
+                             <h3 class="font-bold text-lg text-slate-800 mt-4">Automatisierte Rechnung</h3>
+                             <p class="text-sm text-slate-500 mt-1 h-10">Erstellt und versendet automatisch Rechnungen nach erfolgreichem Geschäftsabschluss.</p>
+                        </div>
+                        <div class="bg-slate-50 px-6 py-3">
+                             <button class="font-semibold text-blue-600 hover:text-blue-800 text-sm">Vorlage verwenden &rarr;</button>
+                        </div>
+                    </div>
+                     <div class="bg-white rounded-lg shadow overflow-hidden group">
+                        <div class="p-6">
+                             <div class="flex items-start justify-between">
+                                <div class="p-3 bg-red-100 text-red-600 rounded-lg">
+                                    <i data-lucide="phone"></i>
+                                </div>
+                                <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-2 py-1 rounded-full">Service</span>
+                             </div>
+                             <h3 class="font-bold text-lg text-slate-800 mt-4">Callback-Anfrage</h3>
+                             <p class="text-sm text-slate-500 mt-1 h-10">Leitet Rückrufanfragen intelligent an den nächsten verfügbaren Mitarbeiter weiter.</p>
+                        </div>
+                        <div class="bg-slate-50 px-6 py-3">
+                             <button class="font-semibold text-blue-600 hover:text-blue-800 text-sm">Vorlage verwenden &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integrations View -->
+            <div id="integrations" class="page-content hidden">
+                 <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="font-bold text-lg text-slate-800 mb-6">Verbundene Applikationen</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Integration Card -->
+                        <div class="border rounded-lg p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <img src="https://placehold.co/48x48/00A1E0/FFFFFF?text=SF" alt="Salesforce Logo" class="rounded-md">
+                                <div>
+                                    <h4 class="font-bold text-slate-700">Salesforce</h4>
+                                    <p class="text-sm text-slate-500">CRM</p>
+                                </div>
+                            </div>
+                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                Verbunden
+                            </span>
+                        </div>
+                         <!-- Integration Card -->
+                        <div class="border rounded-lg p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <img src="https://placehold.co/48x48/FF7A59/FFFFFF?text=HS" alt="HubSpot Logo" class="rounded-md">
+                                <div>
+                                    <h4 class="font-bold text-slate-700">HubSpot</h4>
+                                    <p class="text-sm text-slate-500">CRM</p>
+                                </div>
+                            </div>
+                             <button class="font-semibold text-blue-600 hover:text-blue-800 text-sm">Verbinden</button>
+                        </div>
+                         <!-- Integration Card -->
+                        <div class="border rounded-lg p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <img src="https://placehold.co/48x48/DE3E35/FFFFFF?text=G" alt="Gmail Logo" class="rounded-md">
+                                <div>
+                                    <h4 class="font-bold text-slate-700">Google Mail</h4>
+                                    <p class="text-sm text-slate-500">E-Mail</p>
+                                </div>
+                            </div>
+                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                Verbunden
+                            </span>
+                        </div>
+                         <!-- Integration Card -->
+                        <div class="border rounded-lg p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <img src="https://placehold.co/48x48/F25022/FFFFFF?text=TW" alt="Twilio Logo" class="rounded-md">
+                                <div>
+                                    <h4 class="font-bold text-slate-700">Twilio</h4>
+                                    <p class="text-sm text-slate-500">Telefonie</p>
+                                </div>
+                            </div>
+                            <button class="font-semibold text-blue-600 hover:text-blue-800 text-sm">Verbinden</button>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Basic navigation logic
+        const navItems = document.querySelectorAll('.nav-item');
+        const pageContents = document.querySelectorAll('.page-content');
+        const pageTitle = document.getElementById('page-title');
+
+        const pageTitles = {
+            'dashboard': 'Dashboard',
+            'workflows': 'Workflow Editor: Vertriebsabschluss',
+            'analytics': 'Analytics',
+            'templates': 'Vorlagen',
+            'integrations': 'Integrationen'
+        };
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                // Update nav item styles
+                navItems.forEach(i => {
+                    i.classList.remove('bg-slate-700', 'text-blue-400', 'border-l-4', 'border-blue-400');
+                });
+                item.classList.add('bg-slate-700', 'text-blue-400', 'border-l-4', 'border-blue-400');
+
+                // Show correct page content
+                const targetId = item.getAttribute('href').substring(1);
+                pageContents.forEach(content => {
+                    if (content.id === targetId) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+
+                // Update page title
+                pageTitle.textContent = pageTitles[targetId];
+            });
+        });
+
+        // Simple drag and drop simulation for workflow nodes
+        const canvas = document.getElementById('canvas');
+        const nodes = canvas.querySelectorAll('.node');
+
+        nodes.forEach(node => {
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            node.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                offsetX = e.clientX - node.getBoundingClientRect().left;
+                offsetY = e.clientY - node.getBoundingClientRect().top;
+                node.style.zIndex = 10;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const canvasRect = canvas.getBoundingClientRect();
+                let x = e.clientX - canvasRect.left - offsetX;
+                let y = e.clientY - canvasRect.top - offsetY;
+
+                // Clamp position to be within the canvas
+                x = Math.max(0, Math.min(x, canvasRect.width - node.offsetWidth));
+                y = Math.max(0, Math.min(y, canvasRect.height - node.offsetHeight));
+
+                node.style.left = `${x}px`;
+                node.style.top = `${y}px`;
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                node.style.zIndex = 1;
+            });
+        });
+
+    </script>
+</body>
+</html>
